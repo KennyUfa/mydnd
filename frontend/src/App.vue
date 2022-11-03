@@ -54,7 +54,7 @@ export default {
       race: 'defaultt',
       world_outlook: 'defaultt',
       account: 'defaultt',
-      experience: 'defaultt',
+      experience: 'default',
       lvl: 1,
     };
   },
