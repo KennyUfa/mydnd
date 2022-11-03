@@ -1,0 +1,44 @@
+html {
+  display: block;
+  background-color: lightcyan;
+}
+
+
+.head_content{
+  display:flex ;
+  justify-content: space-between;
+}
+
+.date {
+  text-align: center;
+}
+
+.main-logo {
+  display: flex;
+  width: auto;
+  height: 100px;
+}
+
+.login {
+  display: flex;
+  border: 3px solid bisque;
+  padding: 10px;
+}
+
+.player-info{
+  border: solid 1px black;
+}
+
+.player-name{
+  border: solid 1px black;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.stat {
+  border: solid 1px black;
+}
+
+.info{
+  text-align: center;
+}
