@@ -1,9 +1,11 @@
 <template>
   <div class="container-fluid">
+    <button @click="getInfo">test</button>
     <div class="row">
       <div class="player-name col-md-3">
         <p class="info">Имя персонажа</p>
-        <p class="info">{{ name_champion }}</p>
+        <p class="info"><input
+        v-model="name_champion"></p>
       </div>
       <div class="col-md-9">
         <div class="row">
@@ -29,11 +31,13 @@
           <div class="col player-info p-1">
             <div id="row counter">
               <button @click="plus"
-                      :disabled="$data.lvl>19">+</button>
+                      :disabled="$data.lvl>19">+
+              </button>
 
               <div id="buttonCountNumber">{{ lvl }}</div>
               <button @click="minus"
-              :disabled="$data.lvl<2">-</button>
+                      :disabled="$data.lvl<2">-
+              </button>
             </div>
           </div>
         </div>
@@ -59,16 +63,12 @@ export default {
     };
   },
   methods: {
-    plus () {
-      this.lvl += 1
+    getInfo() {
+      fetch('http://127.0.0.1:8000/users/')
+          .then(Response => Response.json())
+          // .then(datajson => console.log(datajson[0].username))
+          .then(datajson => this.name_champion = datajson[0].username)
     },
-    minus () {
-      this.lvl -= 1
-    },
-    decrement () {
-      if (this.lvl === 20) return
-      this.lvl -= 1
-    }
   }
 };
 
