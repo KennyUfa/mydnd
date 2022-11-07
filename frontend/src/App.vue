@@ -1,11 +1,16 @@
 <template>
   <div class="container-fluid">
+    <div>
+      <input v-model="login" type="text" placeholder="Логин"/>
+      <input v-model="password" type="password" placeholder="Пароль"/>
+      <button @click="setLogin">Войти</button>
+    </div>
     <button @click="getInfo">test</button>
     <div class="row">
       <div class="player-name col-md-3">
         <p class="info">Имя персонажа</p>
         <p class="info"><input
-        v-model="name_champion"></p>
+            v-model="name_champion"></p>
       </div>
       <div class="col-md-9">
         <div class="row">
@@ -52,6 +57,8 @@ export default {
 
   data() {
     return {
+      login: '',
+      password: '',
       name_champion: 'defaultt',
       class_name: 'defaultt',
       pre_history: 'defaultt',
@@ -62,6 +69,13 @@ export default {
       lvl: 1,
     };
   },
+  computed: {
+    auth() {
+      if (sessionStorage.getItem("auth_token")) {
+        return true
+      }
+    }
+  },
   methods: {
     getInfo() {
       fetch('http://127.0.0.1:8000/users/')
@@ -69,7 +83,26 @@ export default {
           // .then(datajson => console.log(datajson[0].username))
           .then(datajson => this.name_champion = datajson[0].username)
     },
-  }
-};
+    setLogin() {
+      fetch("http://127.0.0.1:8000/api/token/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: this.login,
+          password: this.password,
+        }),
+      })
+          .then(responce => responce.json())
+          .then(response => localStorage.setItem('Token',response.access));
+          // .then(gg => console.log(gg.access));
+
+
+    },
+  },
+
+}
+;
 
 </script>
