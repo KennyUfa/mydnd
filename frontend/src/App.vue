@@ -78,10 +78,16 @@ export default {
   },
   methods: {
     getInfo() {
-      fetch('http://127.0.0.1:8000/users/')
-          .then(Response => Response.json())
-          // .then(datajson => console.log(datajson[0].username))
-          .then(datajson => this.name_champion = datajson[0].username)
+      const token = localStorage.getItem('Bearer');
+
+      const response = fetch('http://127.0.0.1:8000/dnd/character/', {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${token}`, // notice the Bearer before your token
+        },
+        // body: JSON.stringify(yourNewData)
+      }).then(resp => console.log(resp))
     },
     setLogin() {
       fetch("http://127.0.0.1:8000/api/token/", {
@@ -95,8 +101,8 @@ export default {
         }),
       })
           .then(responce => responce.json())
-          .then(response => localStorage.setItem('Token',response.access));
-          // .then(gg => console.log(gg.access));
+          .then(response => localStorage.setItem('Bearer', response.access));
+      // .then(gg => console.log(gg.access));
 
 
     },

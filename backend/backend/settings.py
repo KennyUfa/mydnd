@@ -81,7 +81,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "http://localhost:8000",
     "http://127.0.0.1:9000",
-    "http://localhost:5174"
+    "http://localhost:5173",
 ]
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
