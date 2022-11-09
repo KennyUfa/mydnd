@@ -42,9 +42,8 @@ class CharacterView(viewsets.ModelViewSet):
     serializer_class = CharlistSerializer
     queryset = Character.objects.all()
     def get(self, request):
-        print(request)
         info = Character.objects.filter(account=self.request.user)
-        return Response(CharlistSerializer(info, many=True).data)
+        return Response(CharlistSerializer(info, many=True).data[0])
 
 
 def roll_dice(request):
