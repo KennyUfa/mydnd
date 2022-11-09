@@ -1,6 +1,8 @@
 <template>
   <div class="container-fluid">
-    <div>
+    <div class="user_login" v-if="auth">{{ this.login }}</div>
+
+    <div class="user_login" v-if="auth">
       <input v-model="login" type="text" placeholder="Логин"/>
       <input v-model="password" type="password" placeholder="Пароль"/>
       <button @click="setLogin">Войти</button>
@@ -10,38 +12,38 @@
       <div class="player-name col-md-3">
         <p class="info">Имя персонажа</p>
         <p class="info"><input
-            v-model="name_champion"></p>
+            v-model="data_champion.name_champion"></p>
       </div>
       <div class="col-md-9">
         <div class="row">
           <div class="div col player-info p-1">
-            <p>Класс - {{ class_name }}</p>
+            <p>Класс - {{ data_champion.champion_class }}</p>
           </div>
           <div class="div col player-info p-1">
-            <p>предистория - {{ pre_history }}</p>
+            <p>предистория - {{ data_champion.pre_history }}</p>
           </div>
           <div class="div col player-info p-1">
-            <p>Имя игрока - {{ account }}</p></div>
+            <p>Имя игрока - {{ data_champion.account }}</p></div>
         </div>
         <div class="row">
           <div class="col player-info p-1"><p>
-            Расса - {{ race }}
+            Расса - {{ data_champion.race }}
           </p></div>
           <div class="col player-info p-1">
             <p>Мировозрение
-              - {{ world_outlook }}</p>
+              - {{ data_champion.world_outlook }}</p>
           </div>
           <div class="col player-info p-1"><p>Опыт
-            - {{ experience }}</p></div>
+            - {{ data_champion.experience }}</p></div>
           <div class="col player-info p-1">
             <div id="row counter">
-              <button @click="plus"
-                      :disabled="$data.lvl>19">+
+              <button @click="data_champion.lvl++"
+                      :disabled="data_champion.lvl>19">+
               </button>
 
-              <div id="buttonCountNumber">{{ lvl }}</div>
-              <button @click="minus"
-                      :disabled="$data.lvl<2">-
+              <div id="buttonCountNumber">{{ data_champion.lvl }}</div>
+              <button @click="data_champion.lvl--"
+                      :disabled="data_champion.lvl<2">-
               </button>
             </div>
           </div>
@@ -59,56 +61,70 @@ export default {
     return {
       login: '',
       password: '',
-      name_champion: 'defaultt',
-      class_name: 'defaultt',
-      pre_history: 'defaultt',
-      race: 'defaultt',
-      world_outlook: 'defaultt',
-      account: 'defaultt',
-      experience: 'default',
-      lvl: 1,
-    };
+      data_champion: {
+        name_champion: 'default',
+        champion_class: 'default',
+        re_history: 'default',
+        race: 'default',
+        world_outlook: 'default',
+        account: 'default',
+        experience: 'default',
+        lvl: 1,
+      },
+    }
   },
   computed: {
     auth() {
-      if (sessionStorage.getItem("auth_token")) {
+      if (localStorage.getItem("Bearer")) {
         return true
       }
     }
-  },
+  }
+  ,
   methods: {
-    getInfo() {
+    async getInfo() {
       const token = localStorage.getItem('Bearer');
 
-      const response = fetch('http://127.0.0.1:8000/dnd/character/', {
+      const res = await fetch('http://127.0.0.1:8000/dnd/character/', {
         method: 'GET',
         headers: {
           'Content-type': 'application/json',
           'Authorization': `Bearer ${token}`, // notice the Bearer before your token
-        },
-        // body: JSON.stringify(yourNewData)
-      }).then(resp => console.log(resp))
+        }
+      });
+      this.data_champion = await res.json();
     },
-    setLogin() {
+    reLogin() {
       fetch("http://127.0.0.1:8000/api/token/", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           username: this.login,
           password: this.password,
         }),
       })
-          .then(responce => responce.json())
-          .then(response => localStorage.setItem('Bearer', response.access));
-      // .then(gg => console.log(gg.access));
-
-
     },
+    setLogin() {
+      fetch("http://127.0.0.1:8000/api/token/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: this.login,
+          password: this.password,
+        }),
+      })
+          .then(response => response.json())
+          .then(response => localStorage.setItem('Bearer', response.access));
+    }
   },
 
-}
-;
+  mounted() {
+    this.getInfo();
+  }
 
+}
 </script>
