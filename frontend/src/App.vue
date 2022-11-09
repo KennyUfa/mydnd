@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="user_login" v-if="auth">{{ this.login }}</div>
 
-    <div class="user_login" v-if="auth">
+    <div class="user_login" v-else>
       <input v-model="login" type="text" placeholder="Логин"/>
       <input v-model="password" type="password" placeholder="Пароль"/>
       <button @click="setLogin">Войти</button>
@@ -75,9 +75,8 @@ export default {
   },
   computed: {
     auth() {
-      if (localStorage.getItem("Bearer")) {
-        return true
-      }
+      return !!localStorage.getItem("username");
+
     }
   },
 
@@ -92,14 +91,14 @@ export default {
           'Authorization': `Bearer ${token}`, // notice the Bearer before your token
         }
       }).catch(err => {
-        console.log(err);
-        return false
+        return console.log(err);
       });
-
       if (res.status === 401) {
-        await this.refreshToken();
+        await this.refreshToken()
+      } else if (res.status === 200) {
+        this.data_champion = await res.json()
       }
-      this.data_champion = await res.json();
+      return false
     },
 
 
@@ -115,12 +114,15 @@ export default {
             }),
       }).catch(err => {
         localStorage.clear();
-        console.log(err)
+        console.log(err);
+        return false;
       });
-      let response;
-      response = res.json()
-          .then(response => localStorage.setItem('Bearer', response.access));
-      await this.getInfo()
+      if (res.status === 200) {
+        let response;
+        response = res.json()
+            .then(response => localStorage.setItem('Bearer', response.access));
+        return true
+      }
     },
 
     setLogin() {
@@ -143,11 +145,12 @@ export default {
           .then(() => console.log('login ok'))
 
     }
+
   },
 
   mounted() {
     this.getInfo();
-  }
+  },
 
 }
 </script>
