@@ -54,6 +54,11 @@
 </template>
 
 <script>
+import axios from "axios";
+
+axios.defaults.baseURL = 'http://127.0.0.1:8000';
+axios.defaults.headers.post['Content-Type'] = 'applicacccdwtion/json';
+
 export default {
   name: "App",
 
@@ -62,7 +67,6 @@ export default {
       login: '',
       password: '',
       data_champion: {
-        name_champion: 'default',
         champion_class: 'default',
         re_history: 'default',
         race: 'default',
@@ -126,30 +130,22 @@ export default {
     },
 
     setLogin() {
-      fetch("http://127.0.0.1:8000/api/token/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          username: this.login,
-          password: this.password,
-        }),
+      axios.post("/api/token/", {
+        username: this.login,
+        password: this.password,
+
       })
-          .then(response => response.json())
           .then(response => {
-            localStorage.setItem('refresh', response.refresh);
-            localStorage.setItem('Bearer', response.access);
+            localStorage.setItem('refresh', response.data.refresh)
+            localStorage.setItem('Bearer', response.data.access);
             localStorage.setItem('username', this.login);
           })
-          .then(() => console.log('login ok'))
-
     }
 
   },
 
   mounted() {
-    this.getInfo();
+    // this.getInfo();
   },
 
 }
