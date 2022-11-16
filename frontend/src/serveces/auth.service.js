@@ -1,0 +1,30 @@
+import api from "./api";
+import TokenService from "./token.service";
+
+class AuthService {
+  async login( username, password ) {
+    const response = await api
+          .post("/api/token/", {
+              username,
+              password
+          });
+      if (response.data) {
+          TokenService.setUser(response.data);
+      }
+      return response.data;
+  }
+
+  logout() {
+    TokenService.removeUser();
+  }
+
+  register({ username, email, password }) {
+    return api.post("/auth/signup", {
+      username,
+      email,
+      password
+    });
+  }
+}
+
+export default new AuthService();

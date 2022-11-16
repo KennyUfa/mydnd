@@ -55,6 +55,10 @@
 
 <script>
 import axios from "axios";
+import AuthService from "./serveces/auth.service";
+import TokenService from './serveces/token.service';
+import api from'./serveces/api';
+
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000';
 axios.defaults.headers.post['Content-Type'] = 'applicacccdwtion/json';
@@ -86,23 +90,25 @@ export default {
 
   methods: {
     async getInfo() {
-      const token = localStorage.getItem('Bearer');
-
-      const res = await fetch('http://127.0.0.1:8000/dnd/character/', {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json',
-          'Authorization': `Bearer ${token}`, // notice the Bearer before your token
-        }
-      }).catch(err => {
-        return console.log(err);
-      });
-      if (res.status === 401) {
-        await this.refreshToken()
-      } else if (res.status === 200) {
-        this.data_champion = await res.json()
+      const req = api.interceptors.request.use(
+    (config) => {
+      const token = TokenService.getLocalAccessToken();
+      if (token) {
+        config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end
       }
-      return false
+      return config;
+    })
+    const res = await api.get('dnd/character/').then(res=>console.log(res))
+      // const res = await fetch('http://127.0.0.1:8000/dnd/character/', {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-type': 'application/json',
+      //     'Authorization': `Bearer ${token}`,
+      //   }
+      // }).catch(err => {
+      //   return console.log(err);
+      // });
+      // return false
     },
 
 
@@ -130,16 +136,7 @@ export default {
     },
 
     setLogin() {
-      axios.post("/api/token/", {
-        username: this.login,
-        password: this.password,
-
-      })
-          .then(response => {
-            localStorage.setItem('refresh', response.data.refresh)
-            localStorage.setItem('Bearer', response.data.access);
-            localStorage.setItem('username', this.login);
-          })
+      AuthService.login(this.login,this.password);
     }
 
   },
