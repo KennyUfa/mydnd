@@ -1,24 +1,21 @@
-
 import { createWebHistory, createRouter } from "vue-router";
-import Login from './components/Login.vue';
-import CharlistView from './components/CharlistView.vue';
+import LoginView from "./components/LoginView.vue";
+import CharList from './components/CharList.vue'
 
 const routes = [
-    {
-      path: "/charlist",
-      name: "charlist",
-      component: CharlistView,
-    },
-    {
-      path: "/login",
-      component: Login,
-      alias:'/'
-    },
-]
+
+  {
+    path: "/login",
+    component: LoginView,
+  },
+  {
+    path: "/",
+    component: CharList,
+  },
+];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes,
-  });
-
+  history: createWebHistory(),
+  routes,
+});
 export default router;

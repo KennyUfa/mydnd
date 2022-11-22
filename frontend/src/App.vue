@@ -1,149 +1,75 @@
 <template>
   <div class="container-fluid">
-    <div class="user_login" v-if="auth">{{ this.login }}</div>
-
-    <div class="user_login" v-else>
-      <input v-model="login" type="text" placeholder="Логин"/>
-      <input v-model="password" type="password" placeholder="Пароль"/>
-      <button @click="setLogin">Войти</button>
-    </div>
-    <button @click="getInfo">test</button>
-    <div class="row">
-      <div class="player-name col-md-3">
-        <p class="info">Имя персонажа</p>
-        <p class="info"><input
-            v-model="data_champion.name_champion"></p>
-      </div>
-      <div class="col-md-9">
-        <div class="row">
-          <div class="div col player-info p-1">
-            <p>Класс - {{ data_champion.champion_class }}</p>
-          </div>
-          <div class="div col player-info p-1">
-            <p>предистория - {{ data_champion.pre_history }}</p>
-          </div>
-          <div class="div col player-info p-1">
-            <p>Имя игрока - {{ data_champion.account }}</p></div>
-        </div>
-        <div class="row">
-          <div class="col player-info p-1"><p>
-            Расса - {{ data_champion.race }}
-          </p></div>
-          <div class="col player-info p-1">
-            <p>Мировозрение
-              - {{ data_champion.world_outlook }}</p>
-          </div>
-          <div class="col player-info p-1"><p>Опыт
-            - {{ data_champion.experience }}</p></div>
-          <div class="col player-info p-1">
-            <div id="row counter">
-              <button @click="data_champion.lvl++"
-                      :disabled="data_champion.lvl>19">+
-              </button>
-
-              <div id="buttonCountNumber">{{ data_champion.lvl }}</div>
-              <button @click="data_champion.lvl--"
-                      :disabled="data_champion.lvl<2">-
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import AuthService from "./serveces/auth.service";
-import TokenService from './serveces/token.service';
-import api from'./serveces/api';
-
-
-axios.defaults.baseURL = 'http://127.0.0.1:8000';
-axios.defaults.headers.post['Content-Type'] = 'applicacccdwtion/json';
-
 export default {
   name: "App",
-
-  data() {
-    return {
-      login: '',
-      password: '',
-      data_champion: {
-        champion_class: 'default',
-        re_history: 'default',
-        race: 'default',
-        world_outlook: 'default',
-        account: 'default',
-        experience: 'default',
-        lvl: 1,
-      },
-    }
-  },
   computed: {
-    auth() {
-      return !!localStorage.getItem("username");
+    currentUser() {
+      return this.$store.state.auth.user;
+    },}
 
-    }
-  },
+    // data() {
+    //   return {
+    //     data_champion: {
+    //       champion_class: 'default',
+    //       re_history: 'default',
+    //       race: 'default',
+    //       world_outlook: 'default',
+    //       account: 'default',
+    //       experience: 'default',
+    //       lvl: 1,
+    //     },
+    //   }
+    // },
 
-  methods: {
-    async getInfo() {
-      const req = api.interceptors.request.use(
-    (config) => {
-      const token = TokenService.getLocalAccessToken();
-      if (token) {
-        config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end
-      }
-      return config;
-    })
-    const res = await api.get('dnd/character/').then(res=>console.log(res))
-      // const res = await fetch('http://127.0.0.1:8000/dnd/character/', {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-type': 'application/json',
-      //     'Authorization': `Bearer ${token}`,
-      //   }
-      // }).catch(err => {
-      //   return console.log(err);
-      // });
-      // return false
-    },
+    /*  methods: {
+        async getInfo() {
+          const token = localStorage.getItem('Bearer');
 
-
-    async refreshToken() {
-      const res = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
+          const res = await fetch('http://127.0.0.1:8000/dnd/character/', {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json',
+              'Authorization': `Bearer ${token}`, // notice the Bearer before your token
+            }
+          }).catch(err => {
+            return console.log(err);
+          });
+          if (res.status === 401) {
+            await this.refreshToken()
+          } else if (res.status === 200) {
+            this.data_champion = await res.json()
+          }
+          return false
         },
-        body:
-            JSON.stringify({
-              'refresh': localStorage.getItem('refresh'),
-            }),
-      }).catch(err => {
-        localStorage.clear();
-        console.log(err);
-        return false;
-      });
-      if (res.status === 200) {
-        let response;
-        response = res.json()
-            .then(response => localStorage.setItem('Bearer', response.access));
-        return true
-      }
-    },
 
-    setLogin() {
-      AuthService.login(this.login,this.password);
-    }
 
-  },
-
-  mounted() {
-    // this.getInfo();
-  },
-
-}
+        async refreshToken() {
+          const res = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body:
+                JSON.stringify({
+                  'refresh': localStorage.getItem('refresh'),
+                }),
+          }).catch(err => {
+            localStorage.clear();
+            console.log(err);
+            return false;
+          });
+          if (res.status === 200) {
+            let response;
+            response = res.json()
+                .then(response => localStorage.setItem('Bearer', response.access));
+            return true
+          }
+        },
+      },*/
+  }
 </script>

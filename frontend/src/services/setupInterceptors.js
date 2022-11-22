@@ -5,9 +5,9 @@ const setup = (store) => {
   axiosInstance.interceptors.request.use(
     (config) => {
       const token = TokenService.getLocalAccessToken();
+      console.log('1')
       if (token) {
-        config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end
-        // config.headers["x-access-token"] = token; // for Node.js Express back-end
+        config.headers["Authorization"] = 'Bearer ' + token;
       }
       return config;
     },
@@ -23,13 +23,13 @@ const setup = (store) => {
     async (err) => {
       const originalConfig = err.config;
 
-      if (originalConfig.url !== "api-auth/" && err.response) {
+      if (originalConfig.url !== "/auth/signin" && err.response) {
         // Access Token was expired
         if (err.response.status === 401 && !originalConfig._retry) {
           originalConfig._retry = true;
 
           try {
-            const rs = await axiosInstance.post("api/token/refresh/", {
+            const rs = await axiosInstance.post("/auth/refreshtoken", {
               refreshToken: TokenService.getLocalRefreshToken(),
             });
 
