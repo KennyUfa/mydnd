@@ -21,6 +21,8 @@ export default {
     setLogin() {
       AuthService.login(this.log, this.password);
     }
+  },
+  mounted() {
   }
 }
 </script>
