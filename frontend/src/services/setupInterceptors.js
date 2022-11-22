@@ -5,7 +5,7 @@ const setup = (store) => {
   axiosInstance.interceptors.request.use(
     (config) => {
       const token = TokenService.getLocalAccessToken();
-      console.log('1')
+      console.log('interseptlogin')
       if (token) {
         config.headers["Authorization"] = 'Bearer ' + token;
       }
@@ -32,6 +32,7 @@ const setup = (store) => {
             const rs = await axiosInstance.post("/auth/refreshtoken", {
               refreshToken: TokenService.getLocalRefreshToken(),
             });
+            console.log('interseptrefresh');
 
             const { accessToken } = rs.data;
 

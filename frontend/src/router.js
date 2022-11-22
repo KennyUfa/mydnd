@@ -5,11 +5,11 @@ import CharList from './components/CharList.vue'
 const routes = [
 
   {
-    path: "/login",
+    path: "/",
     component: LoginView,
   },
   {
-    path: "/",
+    path: "/charlist",
     component: CharList,
   },
 ];
