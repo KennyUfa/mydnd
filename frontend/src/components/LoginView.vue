@@ -17,13 +17,19 @@ export default {
       password: '',
     }
   },
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },},
   methods: {
     setLogin() {
-      AuthService.login(this.log, this.password);
+      AuthService.login(this.log, this.password)
+      this.$store.commit('auth/loginSuccess');
+      if(this.loggedIn){
+        this.$router.push({ path: '/charlist' });
+      }
     }
   },
-  mounted() {
-  }
 }
 </script>
 <style scoped>
