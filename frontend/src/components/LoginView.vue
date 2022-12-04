@@ -2,12 +2,12 @@
   <div class="user_login">
     <input v-model="log" type="text" placeholder="Логин"/>
     <input v-model="password" type="password" placeholder="Пароль"/>
-    <button @click="setLogin">Войти</button>
+    <button @click="login">Войти</button>
   </div>
 </template>
 
 <script>
-import AuthService from "@/services/auth.service";
+import { useAttrs } from '@vue/runtime-core';
 
 export default {
   name: "LoginView",
@@ -18,19 +18,23 @@ export default {
     }
   },
   computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    },},
-  methods: {
-    setLogin() {
-      AuthService.login(this.log, this.password)
-      this.$store.commit('auth/loginSuccess');
-      if(this.loggedIn){
-        this.$router.push({ path: '/charlist' });
-      }
-    }
+
   },
-}
+  methods: {
+    logged() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+    login() {
+      console.log(this.logged)
+        return this.$store.dispatch('auth/login',{username:this.log,
+          password:this.password}).then(()=>
+          {if (this.logged) {
+          this.$router.push({path: '/charlist'})}
+        // if (this.logged()) {
+        //   this.$router.push({path: '/charlist'});
+        // }
+    });
+  },},}
 </script>
 <style scoped>
 

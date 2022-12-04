@@ -1,17 +1,16 @@
 <template>
   <div class="container-fluid">
+    <navbar-view></navbar-view>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+import NavbarView from './components/NavbarView.vue';
 export default {
+  components: { NavbarView },
   name: "App",
-  computed: {
-    currentUser() {
-      return this.$store.state.auth.user;
-    },}
-
+}
     // data() {
     //   return {
     //     data_champion: {
@@ -71,5 +70,4 @@ export default {
           }
         },
       },*/
-  }
 </script>

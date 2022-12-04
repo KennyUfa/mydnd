@@ -35,7 +35,7 @@ const setup = (store) => {
             console.log('interseptrefresh');
 
             const { accessToken } = rs.data;
-
+            console.log('interseptrefresh')
             store.dispatch('auth/refreshToken', accessToken);
             TokenService.updateLocalAccessToken(accessToken);
 

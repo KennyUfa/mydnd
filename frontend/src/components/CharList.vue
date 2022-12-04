@@ -1,5 +1,7 @@
 <template>
-чарлист
+  <div class="container">
+    CHAMPIONLIST
+  </div>
 </template>
 
 <script>
@@ -14,8 +16,9 @@ export default {
     }
   },
   mounted() {
-    console.log(this.currentUser)
-    if (!this.currentUser) {
+    console.log(store.getters['auth/isAuthenticated']);
+    // console.log(this.currentUser)
+    if (!store.getters['auth/isAuthenticated']) {
       this.$router.push({ path: '/' });
     }
   }

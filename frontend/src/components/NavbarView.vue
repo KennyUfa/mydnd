@@ -41,6 +41,9 @@
           <button type="button" class="btn btn-primary me-3">
             Login
           </button>
+          <button type="button" class="btn btn-primary me-3" @click="logout">
+            Logout
+          </button>
         </div>
       </div>
       <!-- Collapsible wrapper -->
@@ -49,3 +52,15 @@
   </nav>
   <!-- Navbar -->
 </template>
+<script>
+
+export default {
+  name: "LoginView",
+  methods:{
+    logout(){
+      this.$store.dispatch('auth/logout');
+      this.$router.push({ path: '/' });
+    }
+  }
+}
+</script>

@@ -10,7 +10,7 @@ export const auth = {
   state: initialState,
   actions: {
     login({ commit }, user) {
-      return AuthService.login(user).then(
+      return AuthService.login(user.username,user.password).then(
         user => {
           commit('loginSuccess', user);
           return Promise.resolve(user);
@@ -63,6 +63,14 @@ export const auth = {
     refreshToken(state, accessToken) {
       state.status.loggedIn = true;
       state.user = { ...state.user, accessToken: accessToken };
+    }
+  },
+  getters: {
+    token(state) {
+      return state.status.loggedIn
+    },
+    isAuthenticated(_, getters) {
+      return !!getters.token
     }
   }
 };
