@@ -3,7 +3,9 @@ html {
   background-color: lightcyan;
 }
 
-
+.navbar{
+  background-color: rgb(15, 227, 227);
+}
 .head_content{
   display:flex ;
   justify-content: space-between;

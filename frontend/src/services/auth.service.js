@@ -4,7 +4,7 @@ import TokenService from "./token.service";
 class AuthService {
   async login( username, password ) {
     const response = await api
-      .post("api/token/", {
+      .post("authapp/login/", {
         username,
         password
       });

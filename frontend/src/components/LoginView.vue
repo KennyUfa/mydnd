@@ -7,8 +7,6 @@
 </template>
 
 <script>
-import { useAttrs } from '@vue/runtime-core';
-
 export default {
   name: "LoginView",
   data() {
@@ -17,24 +15,19 @@ export default {
       password: '',
     }
   },
-  computed: {
-
-  },
   methods: {
     logged() {
-      return this.$store.state.auth.status.loggedIn;
+      return this.$store.state.auth.user;
     },
     login() {
-      console.log(this.logged)
         return this.$store.dispatch('auth/login',{username:this.log,
           password:this.password}).then(()=>
           {if (this.logged) {
           this.$router.push({path: '/charlist'})}
-        // if (this.logged()) {
-        //   this.$router.push({path: '/charlist'});
-        // }
     });
-  },},}
+  },
+  },
+  }
 </script>
 <style scoped>
 

@@ -5,7 +5,6 @@ const setup = (store) => {
   axiosInstance.interceptors.request.use(
     (config) => {
       const token = TokenService.getLocalAccessToken();
-      console.log('interseptlogin')
       if (token) {
         config.headers["Authorization"] = 'Bearer ' + token;
       }
@@ -24,21 +23,16 @@ const setup = (store) => {
       const originalConfig = err.config;
 
       if (originalConfig.url !== "/authapp/signin" && err.response) {
-        // Access Token was expired
         if (err.response.status === 401 && !originalConfig._retry) {
           originalConfig._retry = true;
 
           try {
             const rs = await axiosInstance.post("api/token/refresh/", {
-              refreshToken: TokenService.getLocalRefreshToken(),
+              refresh: TokenService.getLocalRefreshToken(),
             });
-            console.log('interseptrefresh');
-
             const { accessToken } = rs.data;
-            console.log('interseptrefresh')
             store.dispatch('auth/refreshToken', accessToken);
             TokenService.updateLocalAccessToken(accessToken);
-
             return axiosInstance(originalConfig);
           } catch (_error) {
             return Promise.reject(_error);

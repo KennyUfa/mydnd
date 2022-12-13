@@ -2,8 +2,8 @@ import AuthService from '../services/auth.service';
 
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user
-  ? { status: { loggedIn: true }, user }
-  : { status: { loggedIn: false }, user: null };
+  ? { status: { loggedIn: true }, user , name : user.name }
+  : { status: { loggedIn: false }, user: null, name : false  };
 
 export const auth = {
   namespaced: true,
@@ -45,14 +45,17 @@ export const auth = {
     loginSuccess(state, user) {
       state.status.loggedIn = true;
       state.user = user;
+      state.name = user.name;
     },
     loginFailure(state) {
       state.status.loggedIn = false;
       state.user = null;
+      state.name = false;
     },
     logout(state) {
       state.status.loggedIn = false;
       state.user = null;
+      state.name = false;
     },
     registerSuccess(state) {
       state.status.loggedIn = false;
@@ -71,6 +74,6 @@ export const auth = {
     },
     isAuthenticated(_, getters) {
       return !!getters.token
-    }
+    },
   }
 };
