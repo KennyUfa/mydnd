@@ -1,6 +1,6 @@
 <template>
-    <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand me-2" href="/">
         <img
@@ -8,20 +8,20 @@
           height="30"
           alt="MDB Logo"
           loading="lazy"
-          style="margin-top: -1px;"
+          style="margin-top: -1px"
         />
       </a>
-      <div class="navbar-collapse" >
-        <ul class="navbar-nav me-auto ">
+      <div class="navbar-collapse">
+        <ul class="navbar-nav me-auto">
           <li class="nav-item">
             <a class="nav-link" href="/charlist">CharList</a>
           </li>
         </ul>
-        <div class="align-items-center" >
+        <div class="align-items-center">
           <button type="button" v-if="$store.state.auth.name" class="btn me-3">
-            Имя аккаунта {{$store.state.auth.name}}
+            Имя аккаунта {{ $store.state.auth.name }}
           </button>
-          <button type="button"  class="btn btn-primary  me-3" @click="logout">
+          <button type="button" class="btn btn-primary me-3" @click="logout">
             Logout
           </button>
         </div>
@@ -30,20 +30,13 @@
   </nav>
 </template>
 <script>
-
 export default {
-  data(){
-    return {
-      now: this.$store.getters['auth/isAuthenticated'],
-      name: this.$store.getters['auth/name'],
-    }
-  },
   name: "LoginView",
-  methods:{
-    logout(){
-      this.$store.dispatch('auth/logout');
-      this.$router.push({ path: '/' });
-    }
-  }
-}
+  methods: {
+    logout() {
+      this.$store.dispatch("auth/logout");
+      this.$router.push({ path: "/" });
+    },
+  },
+};
 </script>

@@ -2,12 +2,11 @@ import api from "./api";
 import TokenService from "./token.service";
 
 class AuthService {
-  async login( username, password ) {
-    const response = await api
-      .post("authapp/login/", {
-        username,
-        password
-      });
+  async login(username, password) {
+    const response = await api.post("authapp/login/", {
+      username,
+      password,
+    });
     if (response.data.access) {
       TokenService.setUser(response.data);
     }
@@ -22,7 +21,7 @@ class AuthService {
     return api.post("/auth/signup", {
       username,
       email,
-      password
+      password,
     });
   }
 }
