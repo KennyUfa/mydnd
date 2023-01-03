@@ -1,8 +1,8 @@
 import api from "./api";
 
 class ChampionApi {
-  async getChampionData() {
-    const response = await api.get("dnd/character");
+  async getChampionData(id) {
+    const response = await api.get("dnd/character/" + id + "/");
     if (response.data) {
       return response.data;
     } else {

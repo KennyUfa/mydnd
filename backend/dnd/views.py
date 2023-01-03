@@ -34,7 +34,11 @@ class CharacterView(viewsets.ModelViewSet):
         return Character.objects.filter(account = self.request.user)
 
     def create(self, request, *args, **kwargs):
-        request.data.update({'account': request.user.id})
+        # if request.data:
+        print(request.data)
+        #     request.data._mutable = True
+        #     request.data.update({'account': request.user.id})
+        #     request.data._mutable = False
         return super(CharacterView, self).create(request, *args, **kwargs)
 
 
