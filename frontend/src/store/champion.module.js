@@ -28,7 +28,8 @@ export const champion = {
       state.listInfo = null;
     },
     updateName_champion(state, name_champion) {
-      state.listInfo.name_champion = name_champion
+      state.listInfo.name_champion = name_champion;
+
     },
 }
 }

@@ -1,19 +1,11 @@
-import json
-
 from django.contrib.auth.models import User, Group
-from rest_framework import viewsets, views
-from rest_framework import permissions, response
-from rest_framework.response import Response
+from rest_framework import viewsets
+from rest_framework import permissions
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .serializers import UserSerializer, GroupSerializer, CharlistSerializer
-from django.contrib import auth
-from django.contrib.auth.views import LoginView
-from django.shortcuts import render
-from django.http import JsonResponse
-from random import randint
 from dnd.models import DndSpell, Character
-from django.views.generic import ListView
-
+from rest_framework import generics
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -33,61 +25,19 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-def home(request):
-    return render(request, 'dnd/home.html')
-
-
 class CharacterView(viewsets.ModelViewSet):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = CharlistSerializer
     queryset = Character.objects.all()
-    def get(self, request):
-        info = Character.objects.filter(account=self.request.user)
-        return Response(CharlistSerializer(info, many=True).data[0])
+
+    def get_queryset(self):
+        return Character.objects.filter(account = self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        request.data.update({'account': request.user.id})
+        return super(CharacterView, self).create(request, *args, **kwargs)
 
 
-def roll_dice(request):
-    if request.method == "GET":
-        return render(request, 'dnd/dice_roller.html')
-    elif request.method == "POST":
-        rolls, result = hit_dice_roll(request.POST["amount"], request.POST[
-            "dice_type"])
-        start_amount = request.POST["amount"]
-        start_dice_type = request.POST["dice_type"]
 
-        return render(request, 'dnd/dice_roller.html',
-                      {"rolls": rolls, "roll": result, "start": start_amount,
-                       'start_dice_type': start_dice_type})
-
-
-def hit_dice_roll(amount, dice_type):
-    rolls = []
-    for i in range(int(amount)):
-        rolls.append(randint(1, int(dice_type)))
-    result = sum(rolls)
-    return rolls, result
-
-
-class SpellView(ListView):
+class SpellView(generics.ListAPIView):
     model = DndSpell
-
-
-def get_spell(request, spell_id):
-    spell = DndSpell.objects.get(id=spell_id)
-    return render(request, 'dnd/spell.html', {'spell': spell})
-
-
-class LoginDnd(LoginView):
-    next_page = '/'
-
-
-def todo(request):
-    x = Character.objects.get()
-    x.lvl += 1
-    x.save()
-
-    return JsonResponse({'lvl': Character.objects.get().lvl}, safe=False)
-
-
-def testvue(request):
-    return render(request, 'todolist.html')

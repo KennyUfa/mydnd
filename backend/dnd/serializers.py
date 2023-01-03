@@ -25,13 +25,17 @@ class DndSpellSerializer(serializers.ModelSerializer):
 
 
 class CharlistSerializer(serializers.ModelSerializer):
-    champion_class = serializers.CharField(source='champion_class.class_name')
-    account = serializers.CharField(source='account.username')
-    pre_history = serializers.CharField(source='pre_history.history')
-    race = serializers.CharField(source='race.race')
-    world_outlook = serializers.CharField(source='world_outlook.world_outlook')
+    champion_class = serializers.CharField(
+    source='champion_class.class_name',read_only=True)
+    account = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    pre_history = serializers.CharField(source='pre_history.history',
+                                        default='Нет',read_only=True)
+    race = serializers.CharField(source='race.race',default='Нет',read_only=True)
+    world_outlook = serializers.CharField(
+        source='world_outlook.world_outlook',default='Нет',read_only=True)
     spells = DndSpellSerializer(many=True, read_only=True)
-
     class Meta:
         model = Character
         fields = '__all__'
+
+

@@ -3,13 +3,18 @@
     <div class="row">
       <div class="player-name col-md-3">
         <p class="info">Имя персонажа</p>
-        <p class="info">{{ $store.state.champion.listInfo.name_champion }}</p>
-        <input :value="name_champion" @input="updateName" />
-
-        <b-button size="sm" class="mb-2">
-          <b-icon icon="bell-fill" class="border rounded p-2"></b-icon>
-          <b-icon icon="gear-fill" aria-hidden="true"></b-icon> Settings
-        </b-button>
+        <input
+          class="info"
+          v-if="show"
+          :value="name_champion"
+          @input="updateName"
+        />
+        <p class="info" v-if="!show">
+          {{ $store.state.champion.listInfo.name_champion }}
+        </p>
+        <div class="btn m-1 btn-outline-secondary" v-on:click="show = !show">
+          <i class="bi bi-pen"></i>
+        </div>
       </div>
       <div class="col-md-9">
         <div class="row">
@@ -66,17 +71,6 @@
       <transition name="fade">
         <p v-if="show">привет</p>
       </transition>
-    </div>
-    <div class="tab">
-      <button
-        class="tablinks"
-        onclick="openCity(event, 'One')"
-        id="defaultOpen"
-      >
-        one
-      </button>
-      <button class="tablinks" onclick="openCity(event, 'Two')">two</button>
-      <button class="tablinks" onclick="openCity(event, 'three')">three</button>
     </div>
     <div id="One" class="tabcontent">
       <div class="row">
@@ -350,17 +344,6 @@
           <div class="col"></div>
         </div>
       </div>
-    </div>
-    <div id="Two" class="tabcontent">
-      <h3>Магия</h3>
-      <p>Тут будет магия</p>
-      <div class="btn">
-        <button id="ggg" data-url="{% url 'todo' %}">тут будет</button>
-      </div>
-    </div>
-    <div id="three" class="tabcontent">
-      <h3>Заметки</h3>
-      <p>Тут будут заметки</p>
     </div>
   </div>
 </template>

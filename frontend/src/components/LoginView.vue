@@ -24,7 +24,7 @@ export default {
         .dispatch("auth/login", { username: this.log, password: this.password })
         .then(() => {
           if (this.logged) {
-            this.$router.push({ path: "/charlist" });
+            this.$router.push({ path: "/characters" });
           }
         });
     },

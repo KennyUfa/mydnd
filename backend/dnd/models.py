@@ -1,7 +1,6 @@
 from django.db import models
 
 
-# Create your models here.
 class DndSpell(models.Model):
     link = models.CharField(max_length=100, verbose_name='ссылка')
     name = models.CharField(max_length=100, verbose_name='название')
@@ -46,28 +45,32 @@ class PreHistory(models.Model):
 class Race(models.Model):
     race = models.CharField(max_length=100, blank=True)
 
+    def __str__(self):
+        return self.race
 
 class WorldOutlook(models.Model):
     world_outlook = models.CharField(max_length=100, blank=True)
-
+    def __str__(self):
+        return self.world_outlook
 
 class Character(models.Model):
     account = models.ForeignKey('auth.User', related_name='account',
                                 on_delete=models.CASCADE)
-    name_champion = models.CharField(max_length=100, blank=True)
+    name_champion = models.CharField(max_length=100, blank=True,
+                                     default='Безымянный герой')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     is_active = models.BooleanField(default=True)
-    lvl = models.IntegerField(blank=True)
+    lvl = models.IntegerField(blank=True,default=1)
     spells = models.ManyToManyField(DndSpell,
                                     blank=True)
-    champion_class = models.ForeignKey(BaseClassCh, on_delete=models.CASCADE,
-                                       blank=True)
-    pre_history = models.ForeignKey(PreHistory, on_delete=models.CASCADE,
-                                    blank=True)
-    race = models.ForeignKey(Race, on_delete=models.CASCADE, blank=True)
-    world_outlook = models.ForeignKey(WorldOutlook, on_delete=models.CASCADE,
-                                      blank=True)
+    champion_class = models.ForeignKey(BaseClassCh, on_delete=models.PROTECT,
+                                       blank=True,null=True)
+    pre_history = models.ForeignKey(PreHistory, on_delete=models.PROTECT,
+                                    blank=True,null=True)
+    race = models.ForeignKey(Race, on_delete=models.PROTECT, blank=True,null=True)
+    world_outlook = models.ForeignKey(WorldOutlook, on_delete=models.PROTECT,
+                                      blank=True,null=True)
     experience = models.IntegerField(blank=True, default=0)
 
     def __str__(self):
