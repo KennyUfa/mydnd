@@ -5,10 +5,10 @@ from rest_framework import routers
 from .views import *
 
 router = routers.SimpleRouter()
-router.register('character',CharacterView)
-router.register('bc',BaseClassChViewSet)
-
+router.register('character', CharacterView)
+# router.register('bc', BaseClassChViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('bc/', BaseClassChViewSet.as_view(), name='user-list')
 ]

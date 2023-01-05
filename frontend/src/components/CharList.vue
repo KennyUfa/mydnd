@@ -10,7 +10,7 @@
           @input="updateName"
         />
         <p class="info" v-if="!show">
-          {{ $store.state.champion.listInfo.name_champion }}
+          {{ this.$store.state.champion.listInfo.name_champion }}
         </p>
         <div class="btn m-1 btn-outline-secondary" v-on:click="show = !show">
           <i class="bi bi-pen"></i>
@@ -358,7 +358,7 @@ export default {
       show: false,
     };
   },
-  beforeCreate() {
+  mounted() {
     if (!store.getters["auth/isAuthenticated"]) {
       return this.$router.push({ path: "/" });
     }
@@ -373,7 +373,6 @@ export default {
       return store.state.auth.status.loggedIn;
     },
   },
-  mounted() {},
   methods: {
     updateName(e) {
       this.$store.commit("champion/updateName_champion", e.target.value);

@@ -1,3 +1,4 @@
+import time
 
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -25,13 +26,14 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class BaseClassChViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
+class BaseClassChViewSet(generics.ListAPIView):
     queryset = BaseClassCh.objects.all()
     serializer_class = BaseClassChSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # time.sleep(3)
+        return BaseClassCh.objects.all()
 
 
 class CharacterView(viewsets.ModelViewSet):
@@ -40,6 +42,7 @@ class CharacterView(viewsets.ModelViewSet):
     queryset = Character.objects.all()
 
     def get_queryset(self):
+        # time.sleep(3)
         return Character.objects.filter(account = self.request.user)
 
 
