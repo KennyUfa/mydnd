@@ -28,11 +28,11 @@ class DndSpell(models.Model):
 
 
 class BaseClassCh(models.Model):
-    class_name = models.CharField(max_length=100, blank=True)
-    meta_class = models.CharField(max_length=100, blank=True)
+    champion_class = models.CharField(max_length=100, blank=True)
+
 
     def __str__(self):
-        return self.class_name
+        return self.champion_class
 
 
 class PreHistory(models.Model):

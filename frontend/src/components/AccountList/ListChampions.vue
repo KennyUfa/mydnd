@@ -4,7 +4,7 @@
       v-for="mychampion in this.$store.state.champion.mychampions"
       v-bind:key="mychampion"
   >
-    <button @click="ChampionLink(mychampion.id)">
+    <button @click="championLink(mychampion.id)">
       <div class="champ">name -{{ mychampion.name_champion }}</div>
       <div class="champ">class - {{ mychampion.champion_class }}</div>
       <div class="champ">lvl - {{ mychampion.lvl }}</div>
@@ -18,13 +18,17 @@
 
 export default {
   name: "ListChampions",
-  created() {
+  mounted() {
     this.$store.dispatch("champion/getChampions");
   },
   methods: {
     deleteChampion(id) {
-      this.$store.dispatch("champion/deleteChampion",{id});
-    }
+      this.$store.dispatch("champion/deleteChampion",id);
+    },
+    championLink(id) {
+      this.$store.commit("champion/change", id);
+      this.$router.push({path: "/charlist"});
+    },
   }
 }
 </script>

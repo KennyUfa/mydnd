@@ -6,6 +6,7 @@ from .views import *
 
 router = routers.SimpleRouter()
 router.register('character',CharacterView)
+router.register('bc',BaseClassChViewSet)
 
 
 urlpatterns = [

@@ -27,7 +27,7 @@
             </p>
           </div>
           <div class="div col player-info p-1">
-            <p>Имя игрока - {{ $store.state.champion.listInfo.account }}</p>
+            <p>Имя игрока - {{ $store.state.auth.user.name }}</p>
           </div>
         </div>
         <div class="row">
@@ -349,7 +349,7 @@
 </template>
 
 <script>
-import store from "@/store";
+import store from "../store";
 import { mapState } from "vuex";
 
 export default {

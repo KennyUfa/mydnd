@@ -1,10 +1,10 @@
-from django.contrib.auth.models import User, Group
+
 from rest_framework import viewsets
 from rest_framework import permissions
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .serializers import UserSerializer, GroupSerializer, CharlistSerializer
-from dnd.models import DndSpell, Character
+
+from .serializers import *
+from dnd.models import *
 from rest_framework import generics
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -25,6 +25,15 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
+class BaseClassChViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = BaseClassCh.objects.all()
+    serializer_class = BaseClassChSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
 class CharacterView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CharlistSerializer
@@ -32,15 +41,6 @@ class CharacterView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Character.objects.filter(account = self.request.user)
-
-    def create(self, request, *args, **kwargs):
-        # if request.data:
-        print(request.data)
-        #     request.data._mutable = True
-        #     request.data.update({'account': request.user.id})
-        #     request.data._mutable = False
-        return super(CharacterView, self).create(request, *args, **kwargs)
-
 
 
 class SpellView(generics.ListAPIView):

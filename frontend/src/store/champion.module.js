@@ -3,12 +3,16 @@ import DndListService from "../services/charlist.service.js";
 export const champion = {
     namespaced: true,
 
-
     state: {
         mychampions: [],
-        levl: 1,
+        lvl: 1,
         champion_id: 1,
         listInfo: NaN,
+        create_champion: {
+            name_champion: "",
+            lvl: 1,
+            champion_class:"",
+        },
     },
 
     actions: {
@@ -36,10 +40,10 @@ export const champion = {
                 }
             );
         },
-        deleteChampion({commit, state},id) {
-            return DndListService.deleteChampion(id.id).then(
+        deleteChampion({commit, state}, id) {
+            return DndListService.deleteChampion(id).then(
                 (data) => {
-                    commit("DeleteMychampions", data);
+                    commit("DeleteMychampions", id);
                     return Promise.resolve(data);
                 },
                 (error) => {
@@ -47,7 +51,19 @@ export const champion = {
                     return Promise.reject(error);
                 }
             );
-        }
+        },
+        createChampion({commit, state}) {
+            return DndListService.createPostChampion(state.create_champion).then(
+                (data) => {
+                    commit("CreateMychampions", data);
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
     },
     mutations: {
         dataSuccess(state, data) {
@@ -65,9 +81,12 @@ export const champion = {
         updateMychampions(state, mychampions) {
             state.mychampions = mychampions;
         },
-        // доделать тут
         DeleteMychampions(state, id) {
-            console.log(id)
-        }
+            state.mychampions=state.mychampions.filter((ch) => ch.id !== id)
+        },
+        CreateMychampions(state, data) {
+            console.log('create mut');
+            state.mychampions.push(data)
+        },
     },
-    };
+};
