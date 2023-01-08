@@ -6,7 +6,7 @@ const setup = (store) => {
     (config) => {
       const token = TokenService.getLocalAccessToken();
       if (token) {
-        config.headers["Authorization"] = 'Bearer ' + token;
+        config.headers["Authorization"] = "Bearer " + token;
       }
       return config;
     },
@@ -22,21 +22,19 @@ const setup = (store) => {
     async (err) => {
       const originalConfig = err.config;
 
-      if (originalConfig.url !== "/authapp/signin" && err.response) {
-        if (err.response.status === 401 && !originalConfig._retry) {
-          originalConfig._retry = true;
+      if (err.response.status === 401 && !originalConfig._retry) {
+        originalConfig._retry = true;
 
-          try {
-            const rs = await axiosInstance.post("api/token/refresh/", {
-              refresh: TokenService.getLocalRefreshToken(),
-            });
-            const { accessToken } = rs.data;
-            store.dispatch('auth/refreshToken', accessToken);
-            TokenService.updateLocalAccessToken(accessToken);
-            return axiosInstance(originalConfig);
-          } catch (_error) {
-            return Promise.reject(_error);
-          }
+        try {
+          const rs = await axiosInstance.post("api/token/refresh/", {
+            refresh: TokenService.getLocalRefreshToken(),
+          });
+          const { accessToken } = rs.data;
+          store.dispatch("auth/refreshToken", accessToken);
+          TokenService.updateLocalAccessToken(accessToken);
+          return axiosInstance(originalConfig);
+        } catch (_error) {
+          return Promise.reject(_error);
         }
       }
 

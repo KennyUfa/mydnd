@@ -1,13 +1,14 @@
 import DndListService from "../services/charlist.service.js";
 
 
-const initialChampion_id= JSON.parse(localStorage.getItem("champion_id"))
+const initialChampion_id = JSON.parse(localStorage.getItem("champion_id"))
 
 export const champion = {
     namespaced: true,
 
     state: {
         classlist: NaN,
+        racelist: NaN,
         isLoading: false,
         mychampions: [],
         lvl: 1,
@@ -16,6 +17,7 @@ export const champion = {
         create_champion: {
             name_champion: "",
             lvl: 1,
+            race: "Выберите рассу",
             champion_class: "Выбрать класс",
         },
     },
@@ -24,7 +26,7 @@ export const champion = {
         getData({commit, state}) {
             return DndListService.getChampionData(state.champion_id).then(
                 (data) => {
-                    localStorage.setItem("champion_id",state.champion_id)
+                    localStorage.setItem("champion_id", state.champion_id)
                     commit("dataSuccess", data);
                     return Promise.resolve(data);
                 },
@@ -86,8 +88,28 @@ export const champion = {
                 }
             );
         },
+        loadRaceList({commit, state}) {
+            return DndListService.getRaceList().then(
+                (data) => {
+                    commit("raceListEdit", data);
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
         changeClass({commit}, selected) {
             return commit("mutChangeClass", selected);
+        },
+
+        changeRace({commit}, selected) {
+            return commit("mutChangeRace", selected);
+        },
+        changeLvl({commit}, selected) {
+            return commit("mutChangeLvl", selected);
         }
     },
     mutations: {
@@ -123,8 +145,17 @@ export const champion = {
         classListEdit(state, data) {
             state.classlist = data
         },
+        raceListEdit(state, data) {
+            state.racelist = data
+        },
         mutChangeClass(state, data) {
             state.create_champion.champion_class = data
+        },
+        mutChangeRace(state, data) {
+            state.create_champion.race = data
+        },
+        mutChangeLvl(state, data) {
+            state.create_champion.lvl = data
         },
     },
 };

@@ -2,7 +2,6 @@ import api from "./api";
 
 class ChampionApi {
     async getChampionData(id) {
-        console.log(id)
         const response = await api.get("dnd/character/" + id + "/");
         if (response.data) {
             return response.data;
@@ -43,7 +42,7 @@ class ChampionApi {
         if (response.data) {
             return response.data;
         } else {
-            return 'delet'+id
+            return 'delet' + id
         }
     }
 
@@ -58,7 +57,16 @@ class ChampionApi {
     }
 
     async getClassList() {
-        const response = await api.get("dnd/bc/");
+        const response = await api.get("dnd/classlist/");
+        if (response.data) {
+            return response.data;
+        } else {
+            console.log(response);
+        }
+    }
+
+    async getRaceList() {
+        const response = await api.get("dnd/racelist/");
         if (response.data) {
             return response.data;
         } else {

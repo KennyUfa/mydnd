@@ -7,11 +7,10 @@
 
 <script>
 import NavbarView from "./components/NavbarView.vue";
-import ListChampions from "./components/AccountList/ListChampions.vue";
-import FormAddchampion from "./components/AccountList/FormAddсhampion.vue";
+
 
 export default {
-  components: { NavbarView, ListChampions, FormAddchampion },
+  components: { NavbarView,},
   name: "App",
 };
 </script>

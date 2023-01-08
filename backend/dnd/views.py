@@ -3,10 +3,10 @@ import time
 from rest_framework import viewsets
 from rest_framework import permissions
 
-
 from .serializers import *
 from dnd.models import *
 from rest_framework import generics
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -36,6 +36,16 @@ class BaseClassChViewSet(generics.ListAPIView):
         return BaseClassCh.objects.all()
 
 
+class RaceViewSet(generics.ListAPIView):
+    queryset = Race.objects.all()
+    serializer_class = RaceSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # time.sleep(3)
+        return Race.objects.all()
+
+
 class CharacterView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CharlistSerializer
@@ -43,7 +53,7 @@ class CharacterView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         # time.sleep(3)
-        return Character.objects.filter(account = self.request.user)
+        return Character.objects.filter(account=self.request.user)
 
 
 class SpellView(generics.ListAPIView):

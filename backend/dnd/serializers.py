@@ -20,6 +20,13 @@ class BaseClassChSerializer(serializers.ModelSerializer):
         fields = ['champion_class']
 
 
+
+class RaceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Race
+        fields = ['race']
+
+
 class DndSpellSerializer(serializers.ModelSerializer):
     class Meta:
         model = DndSpell
@@ -31,6 +38,8 @@ class DndSpellSerializer(serializers.ModelSerializer):
 
 class CharlistSerializer(serializers.ModelSerializer):
     champion_class = serializers.SlugRelatedField(slug_field='champion_class',queryset = BaseClassCh.objects.all())
+    race = serializers.SlugRelatedField(slug_field='race',queryset =
+    Race.objects.all())
     account = serializers.HiddenField(default=serializers.CurrentUserDefault())
     # pre_history = serializers.CharField(source='pre_history.history',
     #                                     default='Нет',read_only=True)
