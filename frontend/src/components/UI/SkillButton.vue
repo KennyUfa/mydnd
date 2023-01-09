@@ -2,7 +2,10 @@
   <div class="card-body stat">
     <h5 class="card-title">{{ skillName }}</h5>
     <p class="card-text ">
-      {{ skillValue }}
+      всего {{ skillValue }}
+    </p>
+    <p class="card-text ">
+      бонус {{Math.floor((skillValue - 10)/2) }}
     </p>
     <div id="row counter" v-if="show">
       <button
