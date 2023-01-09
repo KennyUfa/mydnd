@@ -31,21 +31,47 @@ class ChampionApi {
     async getChampionsList() {
         const response = await api.get("dnd/character/");
         if (response.data) {
-            return response.data
+            return response.data;
         } else {
             console.log(response);
         }
     }
 
     async deleteChampion(id) {
-        console.log(id);
         const response = await api.delete("dnd/character/" + id + "/");
         if (response.data) {
-            return response.data
+            return response.data;
+        } else {
+            return 'delet' + id
+        }
+    }
+
+    async createPostChampion(data) {
+
+        const response = await api.post("dnd/character/", data);
+        if (response.data) {
+            return response.data;
         } else {
             console.log(response);
         }
+    }
 
+    async getClassList() {
+        const response = await api.get("dnd/classlist/");
+        if (response.data) {
+            return response.data;
+        } else {
+            console.log(response);
+        }
+    }
+
+    async getRaceList() {
+        const response = await api.get("dnd/racelist/");
+        if (response.data) {
+            return response.data;
+        } else {
+            console.log(response);
+        }
     }
 }
 

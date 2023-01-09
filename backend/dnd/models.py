@@ -28,11 +28,10 @@ class DndSpell(models.Model):
 
 
 class BaseClassCh(models.Model):
-    class_name = models.CharField(max_length=100, blank=True)
-    meta_class = models.CharField(max_length=100, blank=True)
+    champion_class = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
-        return self.class_name
+        return self.champion_class
 
 
 class PreHistory(models.Model):
@@ -48,10 +47,13 @@ class Race(models.Model):
     def __str__(self):
         return self.race
 
+
 class WorldOutlook(models.Model):
     world_outlook = models.CharField(max_length=100, blank=True)
+
     def __str__(self):
         return self.world_outlook
+
 
 class Character(models.Model):
     account = models.ForeignKey('auth.User', related_name='account',
@@ -61,17 +63,32 @@ class Character(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     is_active = models.BooleanField(default=True)
-    lvl = models.IntegerField(blank=True,default=1)
+    lvl = models.IntegerField(blank=True, default=1)
     spells = models.ManyToManyField(DndSpell,
                                     blank=True)
     champion_class = models.ForeignKey(BaseClassCh, on_delete=models.PROTECT,
-                                       blank=True,null=True)
+                                       blank=True, null=True)
     pre_history = models.ForeignKey(PreHistory, on_delete=models.PROTECT,
-                                    blank=True,null=True)
-    race = models.ForeignKey(Race, on_delete=models.PROTECT, blank=True,null=True)
+                                    blank=True, null=True)
+    race = models.ForeignKey(Race, on_delete=models.PROTECT, blank=True,
+                             null=True)
     world_outlook = models.ForeignKey(WorldOutlook, on_delete=models.PROTECT,
-                                      blank=True,null=True)
+                                      blank=True, null=True)
     experience = models.IntegerField(blank=True, default=0)
+
+    # характеристики
+    strength = models.PositiveSmallIntegerField(verbose_name="Сила",
+                                                blank=True, default=10)
+    dexterity = models.PositiveSmallIntegerField(verbose_name="Ловкость",
+                                               blank=True, default=10)
+    constitution = models.PositiveSmallIntegerField(verbose_name="Телосложение",
+                                                blank=True, default=10)
+    intelligence = models.PositiveSmallIntegerField(verbose_name="Интиллект",
+                                                 blank=True, default=10)
+    wisdom = models.PositiveSmallIntegerField(verbose_name="Мудрость",
+                                              blank=True, default=10)
+    charisma = models.PositiveSmallIntegerField(verbose_name="Харизма",
+                                                blank=True, default=10)
 
     def __str__(self):
         return self.name_champion

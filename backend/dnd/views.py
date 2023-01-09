@@ -1,11 +1,12 @@
-from django.contrib.auth.models import User, Group
+import time
+
 from rest_framework import viewsets
 from rest_framework import permissions
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .serializers import UserSerializer, GroupSerializer, CharlistSerializer
-from dnd.models import DndSpell, Character
+from .serializers import *
+from dnd.models import *
 from rest_framework import generics
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -25,22 +26,34 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
+class BaseClassChViewSet(generics.ListAPIView):
+    queryset = BaseClassCh.objects.all()
+    serializer_class = BaseClassChSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # time.sleep(3)
+        return BaseClassCh.objects.all()
+
+
+class RaceViewSet(generics.ListAPIView):
+    queryset = Race.objects.all()
+    serializer_class = RaceSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # time.sleep(3)
+        return Race.objects.all()
+
+
 class CharacterView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CharlistSerializer
     queryset = Character.objects.all()
 
     def get_queryset(self):
-        return Character.objects.filter(account = self.request.user)
-
-    def create(self, request, *args, **kwargs):
-        # if request.data:
-        print(request.data)
-        #     request.data._mutable = True
-        #     request.data.update({'account': request.user.id})
-        #     request.data._mutable = False
-        return super(CharacterView, self).create(request, *args, **kwargs)
-
+        # time.sleep(3)
+        return Character.objects.filter(account=self.request.user)
 
 
 class SpellView(generics.ListAPIView):

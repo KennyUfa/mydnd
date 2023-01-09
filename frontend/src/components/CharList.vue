@@ -27,7 +27,7 @@
             </p>
           </div>
           <div class="div col player-info p-1">
-            <p>Имя игрока - {{ $store.state.champion.listInfo.account }}</p>
+            <p>Имя игрока - {{ $store.state.auth.user.name }}</p>
           </div>
         </div>
         <div class="row">
@@ -66,62 +66,14 @@
         </div>
       </div>
     </div>
-    <div id="send-button">
-      <button v-on:click="show = !show">Переключить</button>
-      <transition name="fade">
-        <p v-if="show">привет</p>
-      </transition>
-    </div>
     <div id="One" class="tabcontent">
       <div class="row">
         <div class="col player-info">
           <div class="row">
             <div class="col player-info">
-              <div class="card">
-                <div class="card-body stat">
-                  <h5 class="card-title">Сила</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-                <div class="card-body stat">
-                  <h5 class="card-title">Ловкость</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-                <div class="card-body stat">
-                  <h5 class="card-title">Телосложение</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-                <div class="card-body stat">
-                  <h5 class="card-title">Интелект</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-                <div class="card-body stat">
-                  <h5 class="card-title">Мудрость</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-                <div class="card-body stat">
-                  <h5 class="card-title">Харизма</h5>
-                  <p class="card-text">
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
-                  </p>
-                </div>
-              </div>
+              <skills-view></skills-view>
             </div>
+
             <div class="col player-info">
               <div class="row">
                 <div class="card stat">
@@ -349,16 +301,15 @@
 </template>
 
 <script>
-import store from "@/store";
+import store from "../store";
 import { mapState } from "vuex";
+import SkillsView from "./HeroListView/SkillsView.vue";
 
 export default {
-  data() {
-    return {
-      show: false,
-    };
+    components: {
+    SkillsView,
   },
-  beforeCreate() {
+  mounted() {
     if (!store.getters["auth/isAuthenticated"]) {
       return this.$router.push({ path: "/" });
     }
@@ -369,15 +320,6 @@ export default {
     ...mapState({
       name_champion: (state) => state.champion.listInfo.name_champion,
     }),
-    currentUser() {
-      return store.state.auth.status.loggedIn;
-    },
-  },
-  mounted() {},
-  methods: {
-    updateName(e) {
-      this.$store.commit("champion/updateName_champion", e.target.value);
-    },
   },
 };
 </script>

@@ -2,54 +2,103 @@
   <form @submit.prevent>
     <input
         type="text"
-        v-model="create_champion.name_champion"
-        placeholder="namechampion"
+        v-model="this.$store.state.champion.create_champion.name_champion"
+        placeholder="Имя персонажа"
     />
-    <input type="text" v-model="create_champion.lvl" placeholder="lvl"/>
-    <button class="btn btn-primary" @click="createChampion">
-      создать нового чемпиона
-    </button>
+
+    <div class="btn-group">
+      <button type="button"
+              class="btn btn-danger">
+        {{ this.$store.state.champion.create_champion.champion_class }}
+      </button>
+      <button type="button" @click="loadClassList"
+              class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown" aria-expanded="false">
+      </button>
+      <ul class="dropdown-menu">
+        <a v-if="!this.$store.state.champion.classlist" class="dropdown-item"
+           href="#">
+          Загрузка</a>
+        <div v-else v-for="classHero in this.$store.state.champion.classlist">
+          <a class="dropdown-item" href="#"
+             @click="changeClass(classHero.champion_class)">{{
+              classHero.champion_class
+            }}</a>
+        </div>
+      </ul>
+    </div>
+
+
+    <div class="btn-group">
+      <button type="button"
+              class="btn btn-danger">
+        {{ this.$store.state.champion.create_champion.race }}
+      </button>
+      <button type="button" @click="loadRaceList"
+              class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown" aria-expanded="false">
+      </button>
+      <ul class="dropdown-menu">
+        <a v-if="!this.$store.state.champion.racelist" class="dropdown-item"
+           href="#">
+          Загрузка</a>
+        <div v-else v-for="classHero in this.$store.state.champion.racelist">
+          <a class="dropdown-item" href="#"
+             @click="changeRace(classHero.race)">{{
+              classHero.race
+            }}</a>
+        </div>
+      </ul>
+    </div>
+
+    <div class="btn-group">
+      <button type="button"
+              class="btn btn-danger">
+        {{ this.$store.state.champion.create_champion.lvl }}
+      </button>
+      <button type="button"
+              class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown" aria-expanded="false">
+      </button>
+      <ul class="dropdown-menu">
+        <div v-for="n in 20" :key="n">
+          <a class="dropdown-item" @click="changeLvl(n)"
+             href="#">{{ n }}</a>
+        </div>
+      </ul>
+    </div>
+
   </form>
+  <button class="btn btn-primary" @click="createChampion">
+    создать нового чемпиона
+  </button>
 </template>
 
 <script>
-import api from "@/services/api";
-
 export default {
   name: "FormAddсhampion",
-  data() {
-    return {
-      create_champion: {
-        name_champion: "",
-        lvl: '',
-      },
-    };
-  },
   methods: {
-    async createChampion() {
-      const response = await api.post("dnd/character/", {
-        name_champion: this.create_champion.name_champion,
-        lvl: this.create_champion.lvl,
-      });
-      if (response.data) {
-        return this.mychampions.push(response.data);
-      } else {
-        console.log(response);
-      }
+    createChampion() {
+      this.$store.dispatch("champion/createChampion");
     },
-    async DeleteChampion(id) {
-      const response = await api.delete("dnd/character/" + id + "/");
-      console.log(response.data);
-      this.mychampions.pop(this.mychampions.id == id);
+    loadClassList() {
+      this.$store.dispatch("champion/loadClassList");
     },
-    ChampionLink(id) {
-      this.$store.commit("champion/change", id);
-      this.$router.push({path: "/charlist"});
+    loadRaceList() {
+      this.$store.dispatch("champion/loadRaceList");
+    },
+    changeClass(selected) {
+      this.$store.dispatch("champion/changeClass", selected);
+    },
+    changeRace(selected) {
+      this.$store.dispatch("champion/changeRace", selected);
+    },
+    changeLvl(selected) {
+      this.$store.dispatch("champion/changeLvl", selected);
     },
   },
-}
+};
 </script>
 
 <style scoped>
-
 </style>
