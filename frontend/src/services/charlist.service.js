@@ -63,10 +63,19 @@ class ChampionApi {
         } else {
             console.log(response);
         }
-    }
+    };
 
     async getRaceList() {
         const response = await api.get("dnd/racelist/");
+        if (response.data) {
+            return response.data;
+        } else {
+            console.log(response);
+        }
+    };
+    async postSkills(data) {
+        await console.log(data,'2')
+        const response = await api.patch("dnd/character/" + data.id + "/",data);
         if (response.data) {
             return response.data;
         } else {

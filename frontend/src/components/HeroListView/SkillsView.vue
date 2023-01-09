@@ -1,5 +1,8 @@
 <template>
-  <button v-on:click="show = !show">{{ this.show }}</button>
+  <button v-if="!show" v-on:click="show = !show">{{ this.show }} не
+    видно
+  </button>
+  <button v-if="show" v-on:click="postSkills">{{ this.show }} видно</button>
 
   <div class="card">
     <skill-button skillName="Сила"
@@ -44,7 +47,13 @@ export default {
     }
   },
   name: "SkillsView",
-  computed: mapState(['champion'])
+  computed: mapState(['champion']),
+  methods: {
+    postSkills() {
+      this.$store.dispatch("champion/postSkills");
+      this.show = !this.show
+    },
+  }
 }
 </script>
 
