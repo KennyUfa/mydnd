@@ -14,11 +14,11 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ['url', 'name']
 
+
 class BaseClassChSerializer(serializers.ModelSerializer):
     class Meta:
         model = BaseClassCh
         fields = ['champion_class']
-
 
 
 class RaceSerializer(serializers.ModelSerializer):
@@ -37,10 +37,12 @@ class DndSpellSerializer(serializers.ModelSerializer):
 
 
 class CharlistSerializer(serializers.ModelSerializer):
-    champion_class = serializers.SlugRelatedField(slug_field='champion_class',queryset = BaseClassCh.objects.all())
-    race = serializers.SlugRelatedField(slug_field='race',queryset =
+    champion_class = serializers.SlugRelatedField(slug_field='champion_class',
+                                                  queryset=BaseClassCh.objects.all())
+    race = serializers.SlugRelatedField(slug_field='race', queryset=
     Race.objects.all())
     account = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     # pre_history = serializers.CharField(source='pre_history.history',
     #                                     default='Нет',read_only=True)
     # race = serializers.CharField(source='race.race',default='Нет',read_only=True)
@@ -49,13 +51,11 @@ class CharlistSerializer(serializers.ModelSerializer):
     # spells = DndSpellSerializer(many=True, read_only=True)
 
     class Meta:
-
         model = Character
         fields = '__all__'
 
 
 class ChampionClassSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = BaseClassCh
         fields = '__all__'

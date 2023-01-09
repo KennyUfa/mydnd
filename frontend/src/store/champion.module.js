@@ -88,6 +88,28 @@ export const champion = {
                 }
             );
         },
+        postSkills({commit, state}) {
+            const data = {
+                "strength": state.listInfo.strength,
+                'id': state.listInfo.id,
+                "dexterity": state.listInfo.dexterity,
+                "constitution": state.listInfo.constitution,
+                "intelligence": state.listInfo.intelligence,
+                "wisdom": state.listInfo.wisdom,
+                "charisma": state.listInfo.charisma,
+            };
+            return DndListService.postSkills(data).then(
+                (data) => {
+                    commit("raceListEdit", data);
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
         loadRaceList({commit, state}) {
             return DndListService.getRaceList().then(
                 (data) => {

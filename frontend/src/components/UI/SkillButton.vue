@@ -1,5 +1,4 @@
 <template>
-
   <div class="card-body stat">
     <h5 class="card-title">{{ skillName }}</h5>
     <p class="card-text ">
@@ -33,9 +32,15 @@ export default {
       this.onUserChange()
     }
   },
+  data(){
+    return{
+      saveSkill:true,
+    }
+  },
   methods: {
     onUserChange: function () {
-      this.$emit('update:skillValue', this.skillValue)
+      this.$emit('update:skillValue', this.skillValue);
+      this.saveSkill=false;
     }
   }
 }
