@@ -3,18 +3,10 @@
     <div class="row">
       <div class="player-name col-md-3">
         <p class="info">Имя персонажа</p>
-        <input
-          class="info"
-          v-if="show"
-          :value="name_champion"
-          @input="updateName"
-        />
-        <p class="info" v-if="!show">
+        <p class="info">
           {{ $store.state.champion.listInfo.name_champion }}
         </p>
-        <div class="btn m-1 btn-outline-secondary" v-on:click="show = !show">
-          <i class="bi bi-pen"></i>
-        </div>
+
       </div>
       <div class="col-md-9">
         <div class="row">
