@@ -1,63 +1,6 @@
 <template>
   <div class="container">
-    <div class="row">
-      <div class="player-name col-md-3">
-        <p class="info">Имя персонажа</p>
-        <p class="info">
-          {{ $store.state.champion.listInfo.name_champion }}
-        </p>
-
-      </div>
-      <div class="col-md-9">
-        <div class="row">
-          <div class="div col player-info p-1">
-            <p>Класс - {{ $store.state.champion.listInfo.champion_class }}</p>
-          </div>
-          <div class="div col player-info p-1">
-            <p>
-              предистория - {{ $store.state.champion.listInfo.pre_history }}
-            </p>
-          </div>
-          <div class="div col player-info p-1">
-            <p>Имя игрока - {{ $store.state.auth.user.name }}</p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col player-info p-1">
-            <p>Расса - {{ $store.state.champion.listInfo.race }}</p>
-          </div>
-          <div class="col player-info p-1">
-            <p>
-              Мировозрение - {{ $store.state.champion.listInfo.world_outlook }}
-            </p>
-          </div>
-          <div class="col player-info p-1">
-            <p>Опыт - {{ $store.state.champion.listInfo.experience }}</p>
-          </div>
-          <div class="col player-info p-1">
-            <div id="row counter">
-              <div id="buttonCountNumber" class="col">
-                {{ $store.state.champion.listInfo.lvl }}
-              </div>
-              <button
-                class="col"
-                @click="$store.state.champion.listInfo.lvl++"
-                :disabled="$store.state.champion.listInfo.lvl > 19"
-              >
-                +
-              </button>
-              <button
-                class="col"
-                @click="$store.state.champion.listInfo.lvl--"
-                :disabled="$store.state.champion.listInfo.lvl < 2"
-              >
-                -
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <MainInfoView></MainInfoView>
     <div id="One" class="tabcontent">
       <div class="row">
         <div class="col player-info">
@@ -76,88 +19,10 @@
                 </div>
               </div>
               <div class="row card stat">
-                <div class="">
-                  <h5 class="card-title">Сила</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">Ловкость</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">Телосложение</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">Интеллект</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">Мудрость</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">Харизма</h5>
-                </div>
-                <div class="">
-                  <h6 class="card-title" style="text-align: center">
-                    Спасброски
-                  </h6>
-                </div>
+                <saving-throw-view></saving-throw-view>
               </div>
               <div class="row card stat">
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h5 class="card-title">рыбааааааа</h5>
-                </div>
-                <div class="">
-                  <h6 class="card-title" style="text-align: center">Навыки</h6>
-                </div>
+                <ability-view></ability-view>
               </div>
             </div>
             <div class="card">
@@ -296,10 +161,13 @@
 import store from "../store";
 import { mapState } from "vuex";
 import SkillsView from "./HeroListView/SkillsView.vue";
+import MainInfoView from "./HeroListView/MainInfoView.vue";
+import SavingThrowView from "./HeroListView/SavingThrowView.vue";
+import AbilityView from "./HeroListView/АbilityView.vue";
 
 export default {
     components: {
-    SkillsView,
+    SkillsView, MainInfoView,SavingThrowView,AbilityView
   },
   mounted() {
     if (!store.getters["auth/isAuthenticated"]) {
