@@ -96,3 +96,13 @@ class Character(models.Model):
     class Meta:
         verbose_name_plural = 'персонажи'
         verbose_name = 'пресонаж'
+
+
+class ChModel(models.Model):
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('B', 'BBBBB'),
+        ('D', 'DDDDD'),
+    )
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
