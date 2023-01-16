@@ -6,7 +6,7 @@ from .views import *
 
 router = routers.SimpleRouter()
 router.register('character', CharacterView)
-# router.register('ff', PreHistoryView)
+router.register('bg', BackgroundView)
 
 
 urlpatterns = [

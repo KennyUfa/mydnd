@@ -49,10 +49,29 @@ class WorldOutlook(models.Model):
 
 
 class PreHistoryModel(models.Model):
-    pre_history_choices = models.CharField(max_length=100, blank=True, null=True)
+    pre_history_choices = models.CharField(max_length=100, blank=True,
+                                           null=True)
 
     def __str__(self):
         return self.pre_history_choices
+
+
+class BackgroundModel(models.Model):
+    personality_traits = models.CharField(max_length=1500, blank=True,
+                                          default='черты характера')
+    ideals = models.CharField(max_length=1500, blank=True,
+                              default="идеалы")
+    bonds = models.CharField(max_length=1500, blank=True,
+                             default="узы")
+    flaws = models.CharField(max_length=1500, blank=True,
+                             default="недостатки")
+
+
+def default_background():
+    bkground = BackgroundModel()
+    bkground.save()
+    return bkground.pk
+
 
 class Character(models.Model):
     account = models.ForeignKey('auth.User', related_name='account',
@@ -93,6 +112,9 @@ class Character(models.Model):
     pre_history = models.ForeignKey(PreHistoryModel, verbose_name="test",
                                     on_delete=models.CASCADE,
                                     blank=True, null=True)
+    background = models.OneToOneField(BackgroundModel,
+                                      on_delete=models.CASCADE,
+                                      default=default_background())
 
     def __str__(self):
         return self.name_champion

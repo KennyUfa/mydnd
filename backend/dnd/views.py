@@ -62,6 +62,15 @@ class CharacterView(viewsets.ModelViewSet):
 class SpellView(generics.ListAPIView):
     model = DndSpell
 
+class BackgroundView(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = BackgroundSerializer
+    queryset = BackgroundModel.objects.all()
+
+    def get_queryset(self):
+        # time.sleep(3)
+        return BackgroundModel.objects.filter(account=self.request.user)
+
 
 class PreHistoryView(generics.ListAPIView):
     queryset = PreHistoryModel.objects.all()

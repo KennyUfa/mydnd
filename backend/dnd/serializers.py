@@ -43,7 +43,11 @@ class PreHistorySerializer(serializers.ModelSerializer):
         model = PreHistoryModel
         fields = '__all__'
 
+class BackgroundSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = BackgroundModel
+        fields = '__all__'
 class CharlistSerializer(serializers.ModelSerializer):
     champion_class = serializers.SlugRelatedField(slug_field='champion_class',
                                                   queryset=BaseClassCh.objects.all())
@@ -58,6 +62,8 @@ class CharlistSerializer(serializers.ModelSerializer):
     world_outlook = serializers.SlugRelatedField(
         slug_field='world_outlook',
         queryset=WorldOutlook.objects.all(),required=False)
+
+    background = BackgroundSerializer(required=False)
 
     # race = serializers.CharField(source='race.race',default='Нет',read_only=True)
     # world_outlook = serializers.CharField()

@@ -143,7 +143,7 @@ export default {
   name: "CharList",
   computed: {
     ...mapState({
-      name_champion: (state) => state.champion.listInfo.name_champion,
+      name_champion: (state) => state.champion.listInfo,
     }),
   },
 };
