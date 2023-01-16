@@ -34,11 +34,11 @@ class BaseClassCh(models.Model):
         return self.champion_class
 
 
-class PreHistory(models.Model):
-    history = models.CharField(max_length=100, blank=True)
-
-    def __str__(self):
-        return self.history
+# class PreHistory(models.Model):
+#     history = models.CharField(max_length=100, blank=True)
+#
+#     def __str__(self):
+#         return self.history
 
 
 class Race(models.Model):
@@ -55,6 +55,12 @@ class WorldOutlook(models.Model):
         return self.world_outlook
 
 
+class PreHistoryModel(models.Model):
+    pre_history_choices = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.pre_history_choices
+
 class Character(models.Model):
     account = models.ForeignKey('auth.User', related_name='account',
                                 on_delete=models.CASCADE)
@@ -66,13 +72,15 @@ class Character(models.Model):
     lvl = models.IntegerField(blank=True, default=1)
     spells = models.ManyToManyField(DndSpell,
                                     blank=True)
-    champion_class = models.ForeignKey(BaseClassCh, on_delete=models.PROTECT,
+    champion_class = models.ForeignKey(BaseClassCh,
+                                       on_delete=models.PROTECT,
                                        blank=True, null=True)
-    pre_history = models.ForeignKey(PreHistory, on_delete=models.PROTECT,
-                                    blank=True, null=True)
+    # pre_history = models.ForeignKey(PreHistoryModel, on_delete=models.PROTECT,
+    #                                 blank=True, null=True)
     race = models.ForeignKey(Race, on_delete=models.PROTECT, blank=True,
                              null=True)
-    world_outlook = models.ForeignKey(WorldOutlook, on_delete=models.PROTECT,
+    world_outlook = models.ForeignKey(WorldOutlook,
+                                      on_delete=models.PROTECT,
                                       blank=True, null=True)
     experience = models.IntegerField(blank=True, default=0)
 
@@ -80,15 +88,20 @@ class Character(models.Model):
     strength = models.PositiveSmallIntegerField(verbose_name="Сила",
                                                 blank=True, default=10)
     dexterity = models.PositiveSmallIntegerField(verbose_name="Ловкость",
-                                               blank=True, default=10)
-    constitution = models.PositiveSmallIntegerField(verbose_name="Телосложение",
-                                                blank=True, default=10)
-    intelligence = models.PositiveSmallIntegerField(verbose_name="Интиллект",
                                                  blank=True, default=10)
+    constitution = models.PositiveSmallIntegerField(
+        verbose_name="Телосложение",
+        blank=True, default=10)
+    intelligence = models.PositiveSmallIntegerField(
+        verbose_name="Интиллект",
+        blank=True, default=10)
     wisdom = models.PositiveSmallIntegerField(verbose_name="Мудрость",
                                               blank=True, default=10)
     charisma = models.PositiveSmallIntegerField(verbose_name="Харизма",
                                                 blank=True, default=10)
+    pre_history = models.ForeignKey(PreHistoryModel, verbose_name="test",
+                                    on_delete=models.CASCADE,
+                                    blank=True, null=True)
 
     def __str__(self):
         return self.name_champion
@@ -96,13 +109,3 @@ class Character(models.Model):
     class Meta:
         verbose_name_plural = 'персонажи'
         verbose_name = 'пресонаж'
-
-
-class ChModel(models.Model):
-    GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('B', 'BBBBB'),
-        ('D', 'DDDDD'),
-    )
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)

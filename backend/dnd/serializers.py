@@ -36,6 +36,14 @@ class DndSpellSerializer(serializers.ModelSerializer):
         return instance.name
 
 
+class PreHistorySerializer(serializers.ModelSerializer):
+    pre_history_choices = serializers.CharField()
+
+    class Meta:
+        model = PreHistoryModel
+        fields = '__all__'
+
+
 class CharlistSerializer(serializers.ModelSerializer):
     champion_class = serializers.SlugRelatedField(slug_field='champion_class',
                                                   queryset=BaseClassCh.objects.all())
@@ -43,9 +51,16 @@ class CharlistSerializer(serializers.ModelSerializer):
     Race.objects.all())
     account = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
-    pre_history = serializers.CharField()
+    pre_history = serializers.SlugRelatedField(slug_field='pre_history_choices',
+                                               queryset=
+                                               PreHistoryModel.objects.all(),
+                                               required=False)
+    world_outlook = serializers.SlugRelatedField(
+        slug_field='world_outlook',
+        queryset=WorldOutlook.objects.all(),required=False)
+
     # race = serializers.CharField(source='race.race',default='Нет',read_only=True)
-    world_outlook = serializers.CharField()
+    # world_outlook = serializers.CharField()
     # spells = DndSpellSerializer(many=True, read_only=True)
 
     class Meta:
@@ -57,5 +72,3 @@ class ChampionClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = BaseClassCh
         fields = '__all__'
-
-

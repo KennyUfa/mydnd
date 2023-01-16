@@ -16,6 +16,7 @@ class DndAdmin(admin.ModelAdmin):
 admin.site.register(DndSpell, DndAdmin)
 admin.site.register(Character)
 admin.site.register(BaseClassCh)
-admin.site.register(PreHistory)
+# admin.site.register(PreHistory)
 admin.site.register(Race)
 admin.site.register(WorldOutlook)
+admin.site.register(PreHistoryModel)

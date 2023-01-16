@@ -55,6 +55,14 @@ class CharacterView(viewsets.ModelViewSet):
         # time.sleep(3)
         return Character.objects.filter(account=self.request.user)
 
+    # def create(self, request, *args, **kwargs):
+    #     return super(CharacterView, self).create(request, *args, **kwargs)
+
 
 class SpellView(generics.ListAPIView):
     model = DndSpell
+
+
+class PreHistoryView(generics.ListAPIView):
+    queryset = PreHistoryModel.objects.all()
+    serializer_class = PreHistorySerializer
