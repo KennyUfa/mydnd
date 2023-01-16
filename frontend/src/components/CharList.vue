@@ -100,53 +100,17 @@
           </div>
         </div>
         <div class="col player-info">
-          <div class="col">
-            <div class="card-body stat">
-              <h5 class="card-title">ЧЕРТЫ ХАРАКТЕРА</h5>
-              <p class="card-text">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Dolorem est iusto laboriosam nulla quidem. Alias corporis cum
-                quo tempore? Adipisci enim laboriosam nihil nobis omnis?
-                Deleniti earum numquam quae repellat.
-              </p>
-            </div>
-            <div class="card-body stat">
-              <h5 class="card-title">ИДЕАЛЫ</h5>
-              <p class="card-text">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Dolorem est iusto laboriosam nulla quidem. Alias corporis cum
-                quo tempore? Adipisci enim laboriosam nihil nobis omnis?
-                Deleniti earum numquam quae repellat.
-              </p>
-            </div>
-            <div class="card-body stat">
-              <h5 class="card-title">ПРИВЯЗАННОСТИ</h5>
-              <p class="card-text">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Dolorem est iusto laboriosam nulla quidem. Alias corporis cum
-                quo tempore? Adipisci enim laboriosam nihil nobis omnis?
-                Deleniti earum numquam quae repellat.
-              </p>
-            </div>
-            <div class="card-body stat">
-              <h5 class="card-title">СЛАБОСТИ</h5>
-              <p class="card-text">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Dolorem est iusto laboriosam nulla quidem. Alias corporis cum
-                quo tempore? Adipisci enim laboriosam nihil nobis omnis?
-                Deleniti earum numquam quae repellat.
-              </p>
-            </div>
-            <div class="card-body stat">
-              <h5 class="card-title">УМЕНИЯ И СПОСОБНОСТИ</h5>
-              <p class="card-text">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Dolorem est iusto laboriosam nulla quidem. Alias corporis cum
-                quo tempore? Adipisci enim laboriosam nihil nobis omnis?
-                Deleniti earum numquam quae repellat.
-              </p>
-            </div>
+        <background-view></background-view>
+          <div class="card-body stat">
+            <h5 class="card-title">УМЕНИЯ И СПОСОБНОСТИ</h5>
+            <p class="card-text">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Dolorem est iusto laboriosam nulla quidem. Alias corporis cum
+              quo tempore? Adipisci enim laboriosam nihil nobis omnis?
+              Deleniti earum numquam quae repellat.
+            </p>
           </div>
+
           <div class="col"></div>
           <div class="col"></div>
           <div class="col"></div>
@@ -159,19 +123,20 @@
 
 <script>
 import store from "../store";
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 import SkillsView from "./HeroListView/SkillsView.vue";
 import MainInfoView from "./HeroListView/MainInfoView.vue";
 import SavingThrowView from "./HeroListView/SavingThrowView.vue";
 import AbilityView from "./HeroListView/АbilityView.vue";
+import BackgroundView from "./HeroListView/BackgroundView.vue";
 
 export default {
-    components: {
-    SkillsView, MainInfoView,SavingThrowView,AbilityView
+  components: {
+    SkillsView, MainInfoView, SavingThrowView, AbilityView,BackgroundView
   },
   mounted() {
     if (!store.getters["auth/isAuthenticated"]) {
-      return this.$router.push({ path: "/" });
+      return this.$router.push({path: "/"});
     }
     this.$store.dispatch("champion/getData");
   },

@@ -34,13 +34,6 @@ class BaseClassCh(models.Model):
         return self.champion_class
 
 
-# class PreHistory(models.Model):
-#     history = models.CharField(max_length=100, blank=True)
-#
-#     def __str__(self):
-#         return self.history
-
-
 class Race(models.Model):
     race = models.CharField(max_length=100, blank=True)
 
@@ -75,8 +68,6 @@ class Character(models.Model):
     champion_class = models.ForeignKey(BaseClassCh,
                                        on_delete=models.PROTECT,
                                        blank=True, null=True)
-    # pre_history = models.ForeignKey(PreHistoryModel, on_delete=models.PROTECT,
-    #                                 blank=True, null=True)
     race = models.ForeignKey(Race, on_delete=models.PROTECT, blank=True,
                              null=True)
     world_outlook = models.ForeignKey(WorldOutlook,
