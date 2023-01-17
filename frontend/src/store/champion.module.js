@@ -23,7 +23,7 @@ export const champion = {
     },
 
     actions: {
-        getData({commit, state}) {
+         getData({commit, state}) {
             return DndListService.getChampionData(state.champion_id).then(
                 (data) => {
                     localStorage.setItem("champion_id", state.champion_id)
@@ -40,7 +40,7 @@ export const champion = {
             return DndListService.getChampionsList(state.champion_id).then(
                 (data) => {
                     commit("updateMychampions", data);
-                    commit("dataSuccess", data);
+                    // commit("dataSuccess", data);
                     return Promise.resolve(data);
                 },
                 (error) => {
@@ -137,19 +137,9 @@ export const champion = {
     mutations: {
         dataSuccess(state, data) {
             state.listInfo = data;
-            state.isLoading = true;
         },
         dataFailure(state) {
             state.listInfo = null;
-        },
-
-        // Статус загрузки
-        isLoadingStart(state) {
-            state.isLoading = false;
-        },
-
-        updateName_champion(state, name_champion) {
-            state.listInfo.name_champion = name_champion;
         },
         change(state, id) {
             state.champion_id = id;

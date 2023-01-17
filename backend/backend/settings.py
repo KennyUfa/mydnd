@@ -35,11 +35,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drf_yasg',
     'rest_framework',
     'rest_framework_simplejwt',
     "corsheaders",
     'dnd',
     'authapp',
+
 ]
 
 MIDDLEWARE = [
@@ -53,6 +55,19 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 ]
+
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {
+        "JWT [Bearer {JWT}]": {
+            "name": "Authorization",
+            "type": "apiKey",
+            "in": "header",
+        }
+    },
+    "USE_SESSION_AUTH": False,
+}
+
+FORCE_SCRIPT_NAME = "/"
 
 ROOT_URLCONF = 'backend.urls'
 

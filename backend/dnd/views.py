@@ -52,11 +52,8 @@ class CharacterView(viewsets.ModelViewSet):
     queryset = Character.objects.all()
 
     def get_queryset(self):
-        # time.sleep(3)
+        time.sleep(1)
         return Character.objects.filter(account=self.request.user)
-
-    # def create(self, request, *args, **kwargs):
-    #     return super(CharacterView, self).create(request, *args, **kwargs)
 
 
 class SpellView(generics.ListAPIView):
@@ -68,7 +65,7 @@ class BackgroundView(viewsets.ModelViewSet):
     queryset = BackgroundModel.objects.all()
 
     def get_queryset(self):
-        # time.sleep(3)
+        time.sleep(1)
         return BackgroundModel.objects.filter(account=self.request.user)
 
 

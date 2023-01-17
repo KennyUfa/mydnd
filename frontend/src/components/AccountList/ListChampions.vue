@@ -1,7 +1,6 @@
 <template>
   <transition-group name="list-champions">
     <div
-        v-if="this.$store.state.champion.isLoading"
         class="champion row"
         v-for="mychampion in this.$store.state.champion.mychampions"
         v-bind:key="mychampion"
@@ -18,17 +17,12 @@
 
 
     </div>
-    <div v-else>Идет загрузка</div>
   </transition-group>
 
 </template>
 <script>
 
 export default {
-  data() {
-    return {}
-  },
-
   name: "ListChampions",
   mounted() {
     this.$store.dispatch("champion/getChampions");

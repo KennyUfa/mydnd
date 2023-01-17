@@ -73,6 +73,10 @@ class CharlistSerializer(serializers.ModelSerializer):
         model = Character
         fields = '__all__'
 
+    def update(self, instance, validated_data):
+        print(self)
+        return instance
+
 
 class ChampionClassSerializer(serializers.ModelSerializer):
     class Meta:

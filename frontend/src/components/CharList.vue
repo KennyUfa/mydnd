@@ -122,7 +122,6 @@
 </template>
 
 <script>
-import store from "../store";
 import {mapState} from "vuex";
 import SkillsView from "./HeroListView/SkillsView.vue";
 import MainInfoView from "./HeroListView/MainInfoView.vue";
@@ -134,18 +133,12 @@ export default {
   components: {
     SkillsView, MainInfoView, SavingThrowView, AbilityView,BackgroundView
   },
-  mounted() {
-    if (!store.getters["auth/isAuthenticated"]) {
-      return this.$router.push({path: "/"});
-    }
-    this.$store.dispatch("champion/getData");
-  },
   name: "CharList",
-  computed: {
-    ...mapState({
-      name_champion: (state) => state.champion.listInfo,
-    }),
-  },
+  // computed: {
+  //   ...mapState({
+  //     name_champion: (state) => state.champion.listInfo,
+  //   }),
+  // },
 };
 </script>
 
