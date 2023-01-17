@@ -51,9 +51,9 @@ class CharacterView(viewsets.ModelViewSet):
     serializer_class = CharlistSerializer
     queryset = Character.objects.all()
 
-    def get_queryset(self):
-        time.sleep(1)
-        return Character.objects.filter(account=self.request.user)
+    # def get_queryset(self):
+    #     time.sleep(1)
+    #     return Character.objects.filter(account=self.request.user)
 
 
 class SpellView(generics.ListAPIView):
@@ -64,9 +64,9 @@ class BackgroundView(viewsets.ModelViewSet):
     serializer_class = BackgroundSerializer
     queryset = BackgroundModel.objects.all()
 
-    def get_queryset(self):
-        time.sleep(1)
-        return BackgroundModel.objects.filter(account=self.request.user)
+    # def get_queryset(self):
+    #     time.sleep(1)
+    #     return BackgroundModel.objects.filter(account=self.request.id)
 
 
 class PreHistoryView(generics.ListAPIView):

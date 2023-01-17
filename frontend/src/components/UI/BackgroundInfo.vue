@@ -1,20 +1,32 @@
 <template>
-  <div class="card-text">
+  <div class="card-text stat">
     <h4>{{ backgroundName }}</h4>
-    Описание: {{ backgroundValue }}
-
+    <strong>Описание</strong>:
+    <p v-if="!show">
+      {{ backgroundValue }}
+    </p>
+    <textarea v-else v-model="backgroundValue"></textarea>
   </div>
 </template>
 
 <script>
-import backgroundInfo from "./BackgroundInfo.vue";
-
 export default {
   name: "BackgroundInfo",
   props: ['backgroundName', 'backgroundValue', 'show'],
+  watch: {
+    backgroundValue() {
+      this.onUserChange()
+    }
+  },
+  data(){
+    return{
+      saveBackground:true,
+    }
+  },
   methods: {
-    backgroundInfo() {
-      return backgroundInfo
+    onUserChange: function () {
+      this.$emit('update:backgroundValue', this.backgroundValue);
+      this.saveBackground=false;
     }
   }
 }

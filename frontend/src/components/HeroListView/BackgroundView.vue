@@ -3,40 +3,24 @@
     <button v-if="!show" v-on:click="show = !show">{{ this.show }} не
       видно
     </button>
-    <button v-else v-on:click="postSkills">{{ this.show }}видно</button>
+    <button v-else v-on:click="postBackground">{{ this.show }}видно</button>
 
     <background-info backgroundName="черты характера"
                      v-model:backgroundValue="$store.state.champion.listInfo.background.personality_traits"
                      v-bind:show="show"
     ></background-info>
-
-    <!--    <div class="card-body stat">-->
-    <!--      <h5 class="card-title">ИДЕАЛЫ</h5>-->
-    <!--      <p class="card-text">-->
-    <!--        Lorem ipsum dolor sit amet, consectetur adipisicing elit.-->
-    <!--        Dolorem est iusto laboriosam nulla quidem. Alias corporis cum-->
-    <!--        quo tempore? Adipisci enim laboriosam nihil nobis omnis?-->
-    <!--        Deleniti earum numquam quae repellat.-->
-    <!--      </p>-->
-    <!--    </div>-->
-    <!--    <div class="card-body stat">-->
-    <!--      <h5 class="card-title">ПРИВЯЗАННОСТИ</h5>-->
-    <!--      <p class="card-text">-->
-    <!--        Lorem ipsum dolor sit amet, consectetur adipisicing elit.-->
-    <!--        Dolorem est iusto laboriosam nulla quidem. Alias corporis cum-->
-    <!--        quo tempore? Adipisci enim laboriosam nihil nobis omnis?-->
-    <!--        Deleniti earum numquam quae repellat.-->
-    <!--      </p>-->
-    <!--    </div>-->
-    <!--    <div class="card-body stat">-->
-    <!--      <h5 class="card-title">СЛАБОСТИ</h5>-->
-    <!--      <p class="card-text">-->
-    <!--        Lorem ipsum dolor sit amet, consectetur adipisicing elit.-->
-    <!--        Dolorem est iusto laboriosam nulla quidem. Alias corporis cum-->
-    <!--        quo tempore? Adipisci enim laboriosam nihil nobis omnis?-->
-    <!--        Deleniti earum numquam quae repellat.-->
-    <!--      </p>-->
-    <!--    </div>-->
+    <background-info backgroundName="ИДЕАЛЫ"
+                     v-model:backgroundValue="$store.state.champion.listInfo.background.ideals"
+                     v-bind:show="show"
+    ></background-info>
+    <background-info backgroundName="ПРИВЯЗАННОСТИ"
+                     v-model:backgroundValue="$store.state.champion.listInfo.background.bonds"
+                     v-bind:show="show"
+    ></background-info>
+    <background-info backgroundName="СЛАБОСТИ"
+                     v-model:backgroundValue="$store.state.champion.listInfo.background.flaws"
+                     v-bind:show="show"
+    ></background-info>
   </div>
 </template>
 
@@ -55,7 +39,8 @@ export default {
     }
   },
   methods: {
-    postSkills() {
+    postBackground() {
+      this.$store.dispatch("champion/postBackground");
       this.show = !this.show
     },
   }

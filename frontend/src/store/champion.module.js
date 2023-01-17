@@ -23,7 +23,7 @@ export const champion = {
     },
 
     actions: {
-         getData({commit, state}) {
+        getData({commit, state}) {
             return DndListService.getChampionData(state.champion_id).then(
                 (data) => {
                     localStorage.setItem("champion_id", state.champion_id)
@@ -100,7 +100,40 @@ export const champion = {
             };
             return DndListService.postSkills(data).then(
                 (data) => {
-                    commit("raceListEdit", data);
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
+        postBackground({commit, state}) {
+            const data = {
+                "personality_traits": state.listInfo.background.personality_traits,
+                "ideals": state.listInfo.background.ideals,
+                "bonds": state.listInfo.background.bonds,
+                "flaws": state.listInfo.background.flaws,
+            };
+            return DndListService.postBackground(data, state.listInfo.background.id).then(
+                (data) => {
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
+        patchMainInfo({commit, state}) {
+            const data = {
+                "name_champion": state.listInfo.name_champion,
+                'lvl': state.listInfo.lvl,
+            };
+            return DndListService.patchMainInfo(data, state.champion_id).then(
+                (data) => {
                     return Promise.resolve(data);
                 },
                 (error) => {
@@ -168,6 +201,9 @@ export const champion = {
         },
         mutChangeLvl(state, data) {
             state.create_champion.lvl = data
+        },
+        updateName(state, data) {
+            state.listInfo.name_champion = data
         },
     },
 };

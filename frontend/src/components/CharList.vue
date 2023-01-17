@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <MainInfoView></MainInfoView>
-    <div id="One" class="tabcontent">
+
       <div class="row">
         <div class="col player-info">
           <div class="row">
@@ -117,7 +117,6 @@
           <div class="col"></div>
         </div>
       </div>
-    </div>
   </div>
 </template>
 

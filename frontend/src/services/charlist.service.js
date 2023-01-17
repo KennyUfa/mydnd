@@ -73,8 +73,27 @@ class ChampionApi {
             console.log(response);
         }
     };
+
     async postSkills(data) {
-        const response = await api.patch("dnd/character/" + data.id + "/",data);
+        const response = await api.patch("dnd/character/" + data.id + "/", data);
+        if (response.data) {
+            return response.data;
+        } else {
+            console.log(response);
+        }
+    };
+
+    async postBackground(data, id) {
+        const response = await api.patch("dnd/bg/" + id + "/", data);
+        if (response.data) {
+            return response.data;
+        } else {
+            console.log(response);
+        }
+    };
+
+    async patchMainInfo(data, id) {
+        const response = await api.patch("dnd/character/" + id + "/",data);
         if (response.data) {
             return response.data;
         } else {
