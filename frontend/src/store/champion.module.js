@@ -9,6 +9,8 @@ export const champion = {
     state: {
         classlist: NaN,
         racelist: NaN,
+        prehistorylist:NaN,
+        worldoutlooklist:NaN,
         isLoading: false,
         mychampions: [],
         lvl: 1,
@@ -40,7 +42,7 @@ export const champion = {
             return DndListService.getChampionsList(state.champion_id).then(
                 (data) => {
                     commit("updateMychampions", data);
-                    commit("dataSuccess", data);
+                    // commit("dataSuccess", data);
                     return Promise.resolve(data);
                 },
                 (error) => {
@@ -88,6 +90,32 @@ export const champion = {
                 }
             );
         },
+        loadPreHistory({commit, state}) {
+            return DndListService.getPreHistory().then(
+                (data) => {
+                    commit("preHistoryListEdit", data);
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
+        loadWorldOutlook({commit, state}) {
+            return DndListService.getWorldOutlook().then(
+                (data) => {
+                    commit("WorldOutlookListEdit", data);
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
         postSkills({commit, state}) {
             const data = {
                 "strength": state.listInfo.strength,
@@ -100,7 +128,41 @@ export const champion = {
             };
             return DndListService.postSkills(data).then(
                 (data) => {
-                    commit("raceListEdit", data);
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
+        postBackground({commit, state}) {
+            const data = {
+                "personality_traits": state.listInfo.background.personality_traits,
+                "ideals": state.listInfo.background.ideals,
+                "bonds": state.listInfo.background.bonds,
+                "flaws": state.listInfo.background.flaws,
+            };
+            return DndListService.postBackground(data, state.listInfo.background.id).then(
+                (data) => {
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
+        patchMainInfo({commit, state}) {
+            const data = {
+                "name_champion": state.listInfo.name_champion,
+                'lvl': state.listInfo.lvl,
+                "pre_history":state.listInfo.pre_history,
+            };
+            return DndListService.patchMainInfo(data, state.champion_id).then(
+                (data) => {
                     return Promise.resolve(data);
                 },
                 (error) => {
@@ -132,24 +194,20 @@ export const champion = {
         },
         changeLvl({commit}, selected) {
             return commit("mutChangeLvl", selected);
-        }
+        },
+        changePreHistory({commit}, selected) {
+            return commit("mutChangePreHistory", selected);
+        },
+        changeWorldOutlook({commit}, selected) {
+            return commit("mutWorldOutlook", selected);
+        },
     },
     mutations: {
         dataSuccess(state, data) {
             state.listInfo = data;
-            state.isLoading = true;
         },
         dataFailure(state) {
             state.listInfo = null;
-        },
-
-        // Статус загрузки
-        isLoadingStart(state) {
-            state.isLoading = false;
-        },
-
-        updateName_champion(state, name_champion) {
-            state.listInfo.name_champion = name_champion;
         },
         change(state, id) {
             state.champion_id = id;
@@ -170,14 +228,29 @@ export const champion = {
         raceListEdit(state, data) {
             state.racelist = data
         },
+        preHistoryListEdit(state, data) {
+            state.prehistorylist = data
+        },
+        WorldOutlookListEdit(state, data) {
+            state.worldoutlooklist = data
+        },
         mutChangeClass(state, data) {
             state.create_champion.champion_class = data
+        },
+        mutChangePreHistory(state, data) {
+            state.listInfo.pre_history = data
+        },
+        mutWorldOutlook(state, data) {
+            state.listInfo.world_outlook = data
         },
         mutChangeRace(state, data) {
             state.create_champion.race = data
         },
         mutChangeLvl(state, data) {
             state.create_champion.lvl = data
+        },
+        updateName(state, data) {
+            state.listInfo.name_champion = data
         },
     },
 };

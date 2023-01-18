@@ -112,7 +112,7 @@ class Character(models.Model):
     pre_history = models.ForeignKey(PreHistoryModel, verbose_name="test",
                                     on_delete=models.CASCADE,
                                     blank=True, null=True)
-    background = models.OneToOneField(BackgroundModel,
+    background = models.ForeignKey(BackgroundModel,
                                       on_delete=models.CASCADE,
                                       default=default_background())
 

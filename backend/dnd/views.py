@@ -51,12 +51,9 @@ class CharacterView(viewsets.ModelViewSet):
     serializer_class = CharlistSerializer
     queryset = Character.objects.all()
 
-    def get_queryset(self):
-        # time.sleep(3)
-        return Character.objects.filter(account=self.request.user)
-
-    # def create(self, request, *args, **kwargs):
-    #     return super(CharacterView, self).create(request, *args, **kwargs)
+    # def get_queryset(self):
+    #     time.sleep(1)
+    #     return Character.objects.filter(account=self.request.user)
 
 
 class SpellView(generics.ListAPIView):
@@ -67,11 +64,25 @@ class BackgroundView(viewsets.ModelViewSet):
     serializer_class = BackgroundSerializer
     queryset = BackgroundModel.objects.all()
 
-    def get_queryset(self):
-        # time.sleep(3)
-        return BackgroundModel.objects.filter(account=self.request.user)
+    # def get_queryset(self):
+    #     time.sleep(1)
+    #     return BackgroundModel.objects.filter(account=self.request.id)
 
 
 class PreHistoryView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     queryset = PreHistoryModel.objects.all()
     serializer_class = PreHistorySerializer
+
+    def get_queryset(self):
+        # time.sleep(3)
+        return PreHistoryModel.objects.all()
+
+class WorldOutlookView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = WorldOutlook.objects.all()
+    serializer_class = WorldOutlookSerializer
+
+    def get_queryset(self):
+        time.sleep(1)
+        return WorldOutlook.objects.all()
