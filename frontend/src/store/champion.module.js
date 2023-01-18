@@ -9,6 +9,8 @@ export const champion = {
     state: {
         classlist: NaN,
         racelist: NaN,
+        prehistorylist:NaN,
+        worldoutlooklist:NaN,
         isLoading: false,
         mychampions: [],
         lvl: 1,
@@ -88,6 +90,32 @@ export const champion = {
                 }
             );
         },
+        loadPreHistory({commit, state}) {
+            return DndListService.getPreHistory().then(
+                (data) => {
+                    commit("preHistoryListEdit", data);
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
+        loadWorldOutlook({commit, state}) {
+            return DndListService.getWorldOutlook().then(
+                (data) => {
+                    commit("WorldOutlookListEdit", data);
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
         postSkills({commit, state}) {
             const data = {
                 "strength": state.listInfo.strength,
@@ -131,6 +159,7 @@ export const champion = {
             const data = {
                 "name_champion": state.listInfo.name_champion,
                 'lvl': state.listInfo.lvl,
+                "pre_history":state.listInfo.pre_history,
             };
             return DndListService.patchMainInfo(data, state.champion_id).then(
                 (data) => {
@@ -165,7 +194,13 @@ export const champion = {
         },
         changeLvl({commit}, selected) {
             return commit("mutChangeLvl", selected);
-        }
+        },
+        changePreHistory({commit}, selected) {
+            return commit("mutChangePreHistory", selected);
+        },
+        changeWorldOutlook({commit}, selected) {
+            return commit("mutWorldOutlook", selected);
+        },
     },
     mutations: {
         dataSuccess(state, data) {
@@ -193,8 +228,20 @@ export const champion = {
         raceListEdit(state, data) {
             state.racelist = data
         },
+        preHistoryListEdit(state, data) {
+            state.prehistorylist = data
+        },
+        WorldOutlookListEdit(state, data) {
+            state.worldoutlooklist = data
+        },
         mutChangeClass(state, data) {
             state.create_champion.champion_class = data
+        },
+        mutChangePreHistory(state, data) {
+            state.listInfo.pre_history = data
+        },
+        mutWorldOutlook(state, data) {
+            state.listInfo.world_outlook = data
         },
         mutChangeRace(state, data) {
             state.create_champion.race = data

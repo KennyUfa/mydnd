@@ -31,11 +31,37 @@
         <div class="div col player-info p-1">
           <p>Класс - {{ $store.state.champion.listInfo.champion_class }}</p>
         </div>
-        <div class="div col player-info p-1">
+
+        <div class="div col player-info p-1" v-if="!show">
           <p>
             предистория - {{ $store.state.champion.listInfo.pre_history }}
           </p>
         </div>
+
+        <div class="div col player-info p-1" v-else>
+          <p>
+            предистория - {{ $store.state.champion.listInfo.pre_history }}
+          </p>
+          <button type="button" @click="loadPreHistory"
+                  class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+          </button>
+          <ul class="dropdown-menu">
+            <a v-if="!this.$store.state.champion.prehistorylist"
+               class="dropdown-item"
+               href="#">
+              Загрузка</a>
+            <div v-else
+                 v-for="prehistory in this.$store.state.champion.prehistorylist">
+              <a class="dropdown-item" href="#"
+                 @click="changePreHistory(prehistory.pre_history_choices)">{{
+                  prehistory.pre_history_choices
+                }}</a>
+            </div>
+          </ul>
+        </div>
+
+
         <div class="div col player-info p-1">
           <p>Имя игрока - {{ $store.state.auth.user.name }}</p>
         </div>
@@ -44,11 +70,36 @@
         <div class="col player-info p-1">
           <p>Расса - {{ $store.state.champion.listInfo.race }}</p>
         </div>
-        <div class="col player-info p-1">
+
+        <div class="col player-info p-1" v-if="!show">
           <p>
             Мировозрение - {{ $store.state.champion.listInfo.world_outlook }}
           </p>
         </div>
+
+        <div class="div col player-info p-1" v-else>
+          <p>
+            Мировозрение - {{ $store.state.champion.listInfo.world_outlook }}
+          </p>
+          <button type="button" @click="loadWorldOutlook"
+                  class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+          </button>
+          <ul class="dropdown-menu">
+            <a v-if="!this.$store.state.champion.worldoutlooklist"
+               class="dropdown-item"
+               href="#">
+              Загрузка</a>
+            <div v-else
+                 v-for="wlook in this.$store.state.champion.worldoutlooklist">
+              <a class="dropdown-item" href="#"
+                 @click="changeWorldOutlook(wlook.world_outlook)">{{
+                  wlook.world_outlook
+                }}</a>
+            </div>
+          </ul>
+        </div>
+
         <div class="col player-info p-1">
           <p>Опыт - {{ $store.state.champion.listInfo.experience }}</p>
         </div>
@@ -92,6 +143,18 @@ export default {
     patchMainInfo() {
       this.$store.dispatch("champion/patchMainInfo");
       this.show = !this.show;
+    },
+    loadPreHistory() {
+      this.$store.dispatch("champion/loadPreHistory");
+    },
+    changePreHistory(selected) {
+      this.$store.dispatch("champion/changePreHistory", selected);
+    },
+    loadWorldOutlook() {
+      this.$store.dispatch("champion/loadWorldOutlook");
+    },
+    changeWorldOutlook(selected) {
+      this.$store.dispatch("champion/changeWorldOutlook", selected);
     },
   },
   computed: {

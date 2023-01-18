@@ -43,6 +43,12 @@ class PreHistorySerializer(serializers.ModelSerializer):
         model = PreHistoryModel
         fields = '__all__'
 
+class WorldOutlookSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = WorldOutlook
+        fields = '__all__'
+
 
 class BackgroundSerializer(serializers.ModelSerializer):
     class Meta:

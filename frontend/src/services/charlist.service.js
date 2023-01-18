@@ -65,8 +65,25 @@ class ChampionApi {
         }
     };
 
+    async getPreHistory() {
+        const response = await api.get("dnd/prehistory/");
+        if (response.data) {
+            return response.data;
+        } else {
+            console.log(response);
+        }
+    };
+
     async getRaceList() {
         const response = await api.get("dnd/racelist/");
+        if (response.data) {
+            return response.data;
+        } else {
+            console.log(response);
+        }
+    };
+    async getWorldOutlook() {
+        const response = await api.get("dnd/looklist/");
         if (response.data) {
             return response.data;
         } else {
@@ -93,7 +110,7 @@ class ChampionApi {
     };
 
     async patchMainInfo(data, id) {
-        const response = await api.patch("dnd/character/" + id + "/",data);
+        const response = await api.patch("dnd/character/" + id + "/", data);
         if (response.data) {
             return response.data;
         } else {
