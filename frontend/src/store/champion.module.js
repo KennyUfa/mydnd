@@ -160,6 +160,7 @@ export const champion = {
                 "name_champion": state.listInfo.name_champion,
                 'lvl': state.listInfo.lvl,
                 "pre_history":state.listInfo.pre_history,
+                "world_outlook":state.listInfo.world_outlook,
             };
             return DndListService.patchMainInfo(data, state.champion_id).then(
                 (data) => {
