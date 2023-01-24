@@ -66,16 +66,15 @@ class BackgroundModel(models.Model):
     flaws = models.CharField(max_length=1500, blank=True,
                              default="недостатки")
 
-
-def default_background():
-    bkground = BackgroundModel()
-    bkground.save()
-    return bkground.pk
+    @classmethod
+    def default_background(cls):
+        return cls.objects.get_or_create()
 
 
 class Character(models.Model):
     account = models.ForeignKey('auth.User', related_name='account',
-                                on_delete=models.CASCADE)
+                                on_delete=models.CASCADE,
+                                default='settings.AUTH_USER_MODEL')
     name_champion = models.CharField(max_length=100, blank=True,
                                      default='Безымянный герой')
     created = models.DateTimeField(auto_now_add=True)
@@ -109,12 +108,14 @@ class Character(models.Model):
                                               blank=True, default=10)
     charisma = models.PositiveSmallIntegerField(verbose_name="Харизма",
                                                 blank=True, default=10)
-    pre_history = models.ForeignKey(PreHistoryModel, verbose_name="test",
+    pre_history = models.ForeignKey(PreHistoryModel,
+                                    verbose_name="pre_history_champ",
                                     on_delete=models.CASCADE,
                                     blank=True, null=True)
     background = models.ForeignKey(BackgroundModel,
-                                      on_delete=models.CASCADE,
-                                      default=default_background())
+                                   on_delete=models.CASCADE,
+                                   default=BackgroundModel.default_background,
+                                   related_name='bac')
 
     def __str__(self):
         return self.name_champion

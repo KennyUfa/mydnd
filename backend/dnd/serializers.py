@@ -43,8 +43,8 @@ class PreHistorySerializer(serializers.ModelSerializer):
         model = PreHistoryModel
         fields = '__all__'
 
-class WorldOutlookSerializer(serializers.ModelSerializer):
 
+class WorldOutlookSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorldOutlook
         fields = '__all__'
@@ -53,6 +53,15 @@ class WorldOutlookSerializer(serializers.ModelSerializer):
 class BackgroundSerializer(serializers.ModelSerializer):
     class Meta:
         model = BackgroundModel
+        fields = '__all__'
+
+    def update(self, instance, validated_data):
+        print('!!!!!')
+
+
+class ChampionClassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BaseClassCh
         fields = '__all__'
 
 
@@ -73,20 +82,21 @@ class CharlistSerializer(serializers.ModelSerializer):
 
     background = BackgroundSerializer(required=False)
 
-    # race = serializers.CharField(source='race.race',default='Нет',read_only=True)
-    # world_outlook = serializers.CharField()
-    # spells = DndSpellSerializer(many=True, read_only=True)
-
     class Meta:
         model = Character
         fields = '__all__'
 
-    # def update(self, instance, validated_data):
-    #     print(self)
-    #     return instance
+    def update(self, instance, validated_data):
+        back = instance.background
+        history_data = validated_data.pop('background')
+        back.ideals = history_data.get('ideals', back.ideals)
+        back.save()
 
-
-class ChampionClassSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BaseClassCh
-        fields = '__all__'
+        return instance
+        # for d in history_data:
+        #     print(d)
+        #     pass
+        # album = Character.objects.create(**validated_data)
+        # for track_data in history_data:
+        #     Track.objects.create(album=album, **track_data)
+        # return album

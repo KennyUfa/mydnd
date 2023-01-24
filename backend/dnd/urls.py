@@ -8,6 +8,7 @@ router.register('character', CharacterView)
 router.register('bg', BackgroundView)
 
 
+
 urlpatterns = [
     path('', include(router.urls)),
     path('classlist/', BaseClassChViewSet.as_view(), name='class-list'),

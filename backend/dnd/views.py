@@ -51,13 +51,13 @@ class CharacterView(viewsets.ModelViewSet):
     serializer_class = CharlistSerializer
     queryset = Character.objects.all()
 
-    # def get_queryset(self):
-    #     time.sleep(1)
-    #     return Character.objects.filter(account=self.request.user)
+    def get_queryset(self):
+        return Character.objects.filter(account=self.request.user)
 
 
 class SpellView(generics.ListAPIView):
     model = DndSpell
+
 
 class BackgroundView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
@@ -78,6 +78,7 @@ class PreHistoryView(generics.ListAPIView):
         # time.sleep(3)
         return PreHistoryModel.objects.all()
 
+
 class WorldOutlookView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = WorldOutlook.objects.all()
@@ -86,3 +87,4 @@ class WorldOutlookView(generics.ListAPIView):
     def get_queryset(self):
         time.sleep(1)
         return WorldOutlook.objects.all()
+
