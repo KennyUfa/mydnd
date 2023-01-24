@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class DndSpell(models.Model):
@@ -56,19 +57,86 @@ class PreHistoryModel(models.Model):
         return self.pre_history_choices
 
 
+class ProtectStateModel(models.Model):
+    protect_state_strength = models.IntegerField(default=1, validators=[
+        MaxValueValidator(2), MinValueValidator(1)])
+    protect_state_dexterity = models.IntegerField(default=1, validators=[
+        MaxValueValidator(2), MinValueValidator(1)])
+    protect_state_constitution = models.IntegerField(default=1, validators=[
+        MaxValueValidator(2), MinValueValidator(1)])
+    protect_state_intelligence = models.IntegerField(default=1, validators=[
+        MaxValueValidator(2), MinValueValidator(1)])
+    protect_state_wisdom = models.IntegerField(default=1, validators=[
+        MaxValueValidator(2), MinValueValidator(1)])
+    protect_state_charisma = models.IntegerField(default=1, validators=[
+        MaxValueValidator(2), MinValueValidator(1)])
+
+    @classmethod
+    def default_protect_state(cls):
+        created = cls.objects.create()
+        return created.pk
+
+
+
+class SkillStateModel(models.Model):
+    athletics = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    acrobatics = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    sleight_of_hand = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    stealth = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    arcana = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    history = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    investigation = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    nature = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    religion = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    animal_handling = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    insight = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    medicine = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    perception = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    survival = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    deception = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    intimidation = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    performance = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+    persuasion = models.IntegerField(default=1, validators=[
+        MaxValueValidator(3), MinValueValidator(1)])
+
+    @classmethod
+    def default_skill_state(cls):
+        created = cls.objects.create()
+        return created.pk
+
+
+
 class BackgroundModel(models.Model):
-    personality_traits = models.CharField(max_length=1500, blank=True,
+    personality_traits = models.CharField(max_length=1500,
                                           default='черты характера')
-    ideals = models.CharField(max_length=1500, blank=True,
+    ideals = models.CharField(max_length=1500,
                               default="идеалы")
-    bonds = models.CharField(max_length=1500, blank=True,
+    bonds = models.CharField(max_length=1500,
                              default="узы")
-    flaws = models.CharField(max_length=1500, blank=True,
+    flaws = models.CharField(max_length=1500,
                              default="недостатки")
 
     @classmethod
-    def default_background(cls):
-        return cls.objects.get_or_create()
+    def default(cls):
+        created = cls.objects.create()
+        return created.pk
 
 
 class Character(models.Model):
@@ -92,6 +160,17 @@ class Character(models.Model):
                                       on_delete=models.PROTECT,
                                       blank=True, null=True)
     experience = models.IntegerField(blank=True, default=0)
+    protect_char_state = models.ForeignKey(ProtectStateModel,
+                                           on_delete=models.CASCADE,
+                                           default=ProtectStateModel.default_protect_state)
+    skill_char_state = models.ForeignKey(SkillStateModel,
+                                         on_delete=models.CASCADE,
+                                         default=SkillStateModel.default_skill_state)
+    background = models.ForeignKey(BackgroundModel,
+                                   on_delete=models.CASCADE,
+                                   default=BackgroundModel.default)
+    pre_history = models.ForeignKey(PreHistoryModel, on_delete=models.CASCADE,
+                                    blank=True, null=True)
 
     # характеристики
     strength = models.PositiveSmallIntegerField(verbose_name="Сила",
@@ -108,14 +187,6 @@ class Character(models.Model):
                                               blank=True, default=10)
     charisma = models.PositiveSmallIntegerField(verbose_name="Харизма",
                                                 blank=True, default=10)
-    pre_history = models.ForeignKey(PreHistoryModel,
-                                    verbose_name="pre_history_champ",
-                                    on_delete=models.CASCADE,
-                                    blank=True, null=True)
-    background = models.ForeignKey(BackgroundModel,
-                                   on_delete=models.CASCADE,
-                                   default=BackgroundModel.default_background,
-                                   related_name='bac')
 
     def __str__(self):
         return self.name_champion

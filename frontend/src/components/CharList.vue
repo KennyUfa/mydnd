@@ -121,7 +121,6 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
 import SkillsView from "./HeroListView/SkillsView.vue";
 import MainInfoView from "./HeroListView/MainInfoView.vue";
 import SavingThrowView from "./HeroListView/SavingThrowView.vue";
@@ -133,11 +132,6 @@ export default {
     SkillsView, MainInfoView, SavingThrowView, AbilityView,BackgroundView
   },
   name: "CharList",
-  // computed: {
-  //   ...mapState({
-  //     name_champion: (state) => state.champion.listInfo,
-  //   }),
-  // },
 };
 </script>
 

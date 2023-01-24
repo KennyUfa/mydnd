@@ -11,6 +11,11 @@
             style="margin-top: -1px"
         />
       </a>
+      <button
+          class="ui button big toggle"
+          @click="toggle"
+      >{{ isActive }}
+      </button>
       <div class="navbar-collapse">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
@@ -26,7 +31,7 @@
             Лист персонажей
           </button>
           <button type="button" class="btn btn-primary me-3" @click="logout">
-          Logout
+            Logout
           </button>
         </div>
       </div>
@@ -35,12 +40,32 @@
 </template>
 <script>
 export default {
+  data() {
+    return {
+      isActive: 1,
+    };
+  },
+
   name: "LoginView",
   methods: {
     logout() {
       this.$store.dispatch("auth/logout");
       this.$router.push({path: "/"});
     },
+    toggle() {
+      switch (this.isActive) {
+        case 1:
+          this.isActive = 2;
+          break;
+        case 2:
+          this.isActive = 3;
+          break;
+        case 3:
+          this.isActive = 1;
+          break;
+      }
+    },
+
   },
 };
 </script>

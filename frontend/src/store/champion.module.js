@@ -9,11 +9,12 @@ export const champion = {
     state: {
         classlist: NaN,
         racelist: NaN,
-        prehistorylist:NaN,
-        worldoutlooklist:NaN,
+        prehistorylist: NaN,
+        worldoutlooklist: NaN,
         isLoading: false,
         mychampions: [],
         lvl: 1,
+        bonus_mastery :2,
         champion_id: initialChampion_id,
         listInfo: NaN,
         create_champion: {
@@ -139,12 +140,24 @@ export const champion = {
         },
         postBackground({commit, state}) {
             const data = {
-                "personality_traits": state.listInfo.background.personality_traits,
-                "ideals": state.listInfo.background.ideals,
-                "bonds": state.listInfo.background.bonds,
-                "flaws": state.listInfo.background.flaws,
+                "background": state.listInfo.background
             };
-            return DndListService.postBackground(data, state.listInfo.background.id).then(
+            return DndListService.postBackground(data, state.champion_id).then(
+                (data) => {
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
+        patchProtectSkills({commit, state}) {
+            const data = {
+                "protect_char_state": state.listInfo.protect_char_state
+            };
+            return DndListService.postBackground(data, state.champion_id).then(
                 (data) => {
                     return Promise.resolve(data);
                 },
@@ -159,8 +172,8 @@ export const champion = {
             const data = {
                 "name_champion": state.listInfo.name_champion,
                 'lvl': state.listInfo.lvl,
-                "pre_history":state.listInfo.pre_history,
-                "world_outlook":state.listInfo.world_outlook,
+                "pre_history": state.listInfo.pre_history,
+                "world_outlook": state.listInfo.world_outlook,
             };
             return DndListService.patchMainInfo(data, state.champion_id).then(
                 (data) => {
@@ -253,5 +266,15 @@ export const champion = {
         updateName(state, data) {
             state.listInfo.name_champion = data
         },
+        switchProtectState(state, skill) {
+            switch (state.listInfo.protect_char_state[skill]) {
+                case 1:
+                    state.listInfo.protect_char_state[skill] = 2;
+                    break;
+                case 2:
+                    state.listInfo.protect_char_state[skill] = 1;
+                    break;
+            }
+        }
     },
 };

@@ -55,9 +55,9 @@ class CharacterView(viewsets.ModelViewSet):
         return Character.objects.filter(account=self.request.user)
 
 
+
 class SpellView(generics.ListAPIView):
     model = DndSpell
-
 
 class BackgroundView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
@@ -69,6 +69,19 @@ class BackgroundView(viewsets.ModelViewSet):
     #     return BackgroundModel.objects.filter(account=self.request.id)
 
 
+class ProtectStateView(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ProtectStateSerializer
+    queryset = ProtectStateModel.objects.all()
+
+class SkillStateView(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = SkillStateSerializer
+    queryset = SkillStateModel.objects.all()
+
+
+
+
 class PreHistoryView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = PreHistoryModel.objects.all()
@@ -78,7 +91,6 @@ class PreHistoryView(generics.ListAPIView):
         # time.sleep(3)
         return PreHistoryModel.objects.all()
 
-
 class WorldOutlookView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = WorldOutlook.objects.all()
@@ -87,4 +99,3 @@ class WorldOutlookView(generics.ListAPIView):
     def get_queryset(self):
         time.sleep(1)
         return WorldOutlook.objects.all()
-

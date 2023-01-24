@@ -14,9 +14,7 @@ const routes = [
         path: "/charlist",
         component: CharList,
         async beforeEnter(to, from, next) {
-            console.log('start')
             const res = await store.dispatch("champion/getData");
-            console.log(store.state.champion.listInfo);
             if (store.state.champion.listInfo) {
                 next()
             }

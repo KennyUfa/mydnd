@@ -44,6 +44,12 @@ class PreHistorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ChampionClassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BaseClassCh
+        fields = '__all__'
+
+
 class WorldOutlookSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorldOutlook
@@ -55,13 +61,16 @@ class BackgroundSerializer(serializers.ModelSerializer):
         model = BackgroundModel
         fields = '__all__'
 
-    def update(self, instance, validated_data):
-        print('!!!!!')
 
-
-class ChampionClassSerializer(serializers.ModelSerializer):
+class ProtectStateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = BaseClassCh
+        model = ProtectStateModel
+        fields = '__all__'
+
+
+class SkillStateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SkillStateModel
         fields = '__all__'
 
 
@@ -79,24 +88,26 @@ class CharlistSerializer(serializers.ModelSerializer):
     world_outlook = serializers.SlugRelatedField(
         slug_field='world_outlook',
         queryset=WorldOutlook.objects.all(), required=False)
-
     background = BackgroundSerializer(required=False)
+    protect_char_state = ProtectStateSerializer(required=False)
+    skill_char_state = SkillStateSerializer(required=False)
 
     class Meta:
         model = Character
         fields = '__all__'
 
+    # https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
     def update(self, instance, validated_data):
-        back = instance.background
-        history_data = validated_data.pop('background')
-        back.ideals = history_data.get('ideals', back.ideals)
-        back.save()
+        if 'background' in validated_data:
+            nested_serializer = self.fields['background']
+            nested_instance = instance.background
+            nested_data = validated_data.pop('background')
+            nested_serializer.update(nested_instance, nested_data)
 
-        return instance
-        # for d in history_data:
-        #     print(d)
-        #     pass
-        # album = Character.objects.create(**validated_data)
-        # for track_data in history_data:
-        #     Track.objects.create(album=album, **track_data)
-        # return album
+        if 'protect_char_state' in validated_data:
+            nested_serializer = self.fields['protect_char_state']
+            nested_instance = instance.protect_char_state
+            nested_data = validated_data.pop('protect_char_state')
+            nested_serializer.update(nested_instance, nested_data)
+        return super(CharlistSerializer, self).update(instance,
+                                                      validated_data)
