@@ -127,6 +127,7 @@ import SavingThrowView from "./HeroListView/SavingThrowView.vue";
 import AbilityView from "./HeroListView/АbilityView.vue";
 import BackgroundView from "./HeroListView/BackgroundView.vue";
 
+
 export default {
   components: {
     SkillsView, MainInfoView, SavingThrowView, AbilityView,BackgroundView

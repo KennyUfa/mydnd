@@ -14,7 +14,7 @@ export const champion = {
         isLoading: false,
         mychampions: [],
         lvl: 1,
-        bonus_mastery :2,
+        bonus_mastery: 2,
         champion_id: initialChampion_id,
         listInfo: NaN,
         create_champion: {
@@ -168,6 +168,21 @@ export const champion = {
                 }
             );
         },
+        patchAbilitySkills({commit, state}) {
+            const data = {
+                "skill_char_state": state.listInfo.skill_char_state
+            };
+            return DndListService.postBackground(data, state.champion_id).then(
+                (data) => {
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
         patchMainInfo({commit, state}) {
             const data = {
                 "name_champion": state.listInfo.name_champion,
@@ -273,6 +288,19 @@ export const champion = {
                     break;
                 case 2:
                     state.listInfo.protect_char_state[skill] = 1;
+                    break;
+            }
+        },
+        switchAbilityState(state, skill) {
+            switch (state.listInfo.skill_char_state[skill]) {
+                case 1:
+                    state.listInfo.skill_char_state[skill] = 2;
+                    break;
+                case 2:
+                    state.listInfo.skill_char_state[skill] = 3;
+                    break;
+                case 3:
+                    state.listInfo.skill_char_state[skill] = 1;
                     break;
             }
         }
