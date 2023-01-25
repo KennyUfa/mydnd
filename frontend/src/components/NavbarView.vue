@@ -11,11 +11,6 @@
             style="margin-top: -1px"
         />
       </a>
-      <button
-          class="ui button big toggle"
-          @click="toggle"
-      >{{ isActive }}
-      </button>
       <div class="navbar-collapse">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
@@ -52,20 +47,6 @@ export default {
       this.$store.dispatch("auth/logout");
       this.$router.push({path: "/"});
     },
-    toggle() {
-      switch (this.isActive) {
-        case 1:
-          this.isActive = 2;
-          break;
-        case 2:
-          this.isActive = 3;
-          break;
-        case 3:
-          this.isActive = 1;
-          break;
-      }
-    },
-
   },
 };
 </script>

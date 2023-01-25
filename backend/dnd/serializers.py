@@ -109,5 +109,10 @@ class CharlistSerializer(serializers.ModelSerializer):
             nested_instance = instance.protect_char_state
             nested_data = validated_data.pop('protect_char_state')
             nested_serializer.update(nested_instance, nested_data)
+        if 'skill_char_state' in validated_data:
+            nested_serializer = self.fields['skill_char_state']
+            nested_instance = instance.skill_char_state
+            nested_data = validated_data.pop('skill_char_state')
+            nested_serializer.update(nested_instance, nested_data)
         return super(CharlistSerializer, self).update(instance,
                                                       validated_data)
