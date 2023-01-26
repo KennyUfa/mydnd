@@ -25,7 +25,7 @@
           {{ champion.listInfo.protect_char_state[skillValue] }}
         </button>
         бонус {{
-          Math.floor((champion.listInfo[stat] - 10) / 2) + champion.bonus_mastery
+          Math.floor((champion.listInfo[stat] - 10) / 2) + champion.listInfo.possession_bonus
         }} {{
           skillName
         }}

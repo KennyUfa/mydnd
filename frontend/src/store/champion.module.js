@@ -14,7 +14,6 @@ export const champion = {
         isLoading: false,
         mychampions: [],
         lvl: 1,
-        bonus_mastery: 2,
         champion_id: initialChampion_id,
         listInfo: NaN,
         create_champion: {
@@ -201,6 +200,36 @@ export const champion = {
                 }
             );
         },
+        patchPossessionBonus({commit, state}) {
+            const data = {
+                "possession_bonus": state.listInfo.possession_bonus,
+            };
+            return DndListService.patchMainInfo(data, state.champion_id).then(
+                (data) => {
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
+        patchInspirationFrame({commit, state}) {
+            const data = {
+                "inspiration": state.listInfo.inspiration,
+            };
+            return DndListService.patchMainInfo(data, state.champion_id).then(
+                (data) => {
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
         loadRaceList({commit, state}) {
             return DndListService.getRaceList().then(
                 (data) => {
@@ -217,7 +246,6 @@ export const champion = {
         changeClass({commit}, selected) {
             return commit("mutChangeClass", selected);
         },
-
         changeRace({commit}, selected) {
             return commit("mutChangeRace", selected);
         },
@@ -305,4 +333,9 @@ export const champion = {
             }
         }
     },
+    getters: {
+        getInspiration(state) {
+            return state.listInfo.inspiration
+        }
+    }
 };

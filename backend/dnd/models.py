@@ -77,7 +77,6 @@ class ProtectStateModel(models.Model):
         return created.pk
 
 
-
 class SkillStateModel(models.Model):
     athletics = models.IntegerField(default=1, validators=[
         MaxValueValidator(3), MinValueValidator(1)])
@@ -120,7 +119,6 @@ class SkillStateModel(models.Model):
     def default_skill_state(cls):
         created = cls.objects.create()
         return created.pk
-
 
 
 class BackgroundModel(models.Model):
@@ -187,6 +185,9 @@ class Character(models.Model):
                                               blank=True, default=10)
     charisma = models.PositiveSmallIntegerField(verbose_name="Харизма",
                                                 blank=True, default=10)
+    possession_bonus = models.PositiveSmallIntegerField(default=2,
+                                                        verbose_name="bonus")
+    inspiration = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return self.name_champion
