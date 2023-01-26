@@ -189,6 +189,11 @@ class Character(models.Model):
                                                         verbose_name="bonus")
     inspiration = models.PositiveSmallIntegerField(default=0)
 
+    protection_class = models.PositiveSmallIntegerField(default=10,
+                                                        verbose_name="kz")
+    speed = models.PositiveSmallIntegerField(default=30,
+                                                        verbose_name="speed_ch")
+
     def __str__(self):
         return self.name_champion
 

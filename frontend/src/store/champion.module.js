@@ -214,6 +214,34 @@ export const champion = {
                     return Promise.reject(error);
                 }
             );
+        }, patchProtectionClass({commit, state}) {
+            const data = {
+                "protection_class": state.listInfo.protection_class,
+            };
+            return DndListService.patchMainInfo(data, state.champion_id).then(
+                (data) => {
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        }, patchSpeed({commit, state}) {
+            const data = {
+                "speed": state.listInfo.speed,
+            };
+            return DndListService.patchMainInfo(data, state.champion_id).then(
+                (data) => {
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
         },
         patchInspirationFrame({commit, state}) {
             const data = {

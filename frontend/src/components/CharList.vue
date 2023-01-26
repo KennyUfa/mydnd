@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <MainInfoView></MainInfoView>
-
     <div class="row">
       <div class="col-4 player-info">
         <div class="row">
@@ -21,9 +20,7 @@
             </div>
           </div>
           <div class="card">
-            <div class="card-body stat">
-              <p class="card-text">пассивная мудрость</p>
-            </div>
+            <passive-perception></passive-perception>
           </div>
           <div class="card">
             <div class="card-body stat">
@@ -40,15 +37,12 @@
       </div>
       <div class="col player-info">
         <div class="row gx-1">
-          <div class="col">
-            <div class="p-1 border bg-light">КЗ</div>
-          </div>
-          <div class="col">
-            <div class="p-1 border bg-light">Инициатива</div>
-          </div>
-          <div class="col">
-            <div class="p-1 border bg-light">Скорость</div>
-          </div>
+          <protection-class-view></protection-class-view>
+          <initiative-view></initiative-view>
+          <speed-view></speed-view>
+<!--          <div class="col">-->
+<!--            <div class="p-1 border bg-light">Скорость</div>-->
+<!--          </div>-->
         </div>
         <div class="col player-info">
           <div class="card">
@@ -123,17 +117,25 @@ import AbilityView from "./HeroListView/АbilityView.vue";
 import BackgroundView from "./HeroListView/BackgroundView.vue";
 import PossessionBonus from "./UI/PossessionBonus.vue";
 import InspirationFrame from "./UI/InspirationFrame.vue";
+import PassivePerception from "./HeroListView/PassivePerception.vue";
+import ProtectionClassView from "./HeroListView/ProtectionClassView.vue";
+import InitiativeView from "./HeroListView/InitiativeView.vue";
+import SpeedView from "./HeroListView/SpeedView.vue";
 
 
 export default {
   components: {
+    InitiativeView,
+    ProtectionClassView,
+    PassivePerception,
     InspirationFrame,
     SkillsView,
     MainInfoView,
     SavingThrowView,
     AbilityView,
     BackgroundView,
-    PossessionBonus
+    PossessionBonus,
+    SpeedView,
   },
   name: "CharList",
 };
