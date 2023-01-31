@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-mb_c521$4njpgnqdmb$c!v_)2y58_p4p3&9cp+dzbye*2&it10
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -96,7 +96,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:9000",
     "http://localhost:5173",
     'http://127.0.0.1:5173',
-    "http://192.168.1.24:3000"
+    "http://192.168.0.11:5173"
 ]
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -154,8 +154,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=5),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,

@@ -27,15 +27,6 @@ class RaceSerializer(serializers.ModelSerializer):
         fields = ['race']
 
 
-class DndSpellSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DndSpell
-        fields = ['name']
-
-    def to_representation(self, instance):
-        return instance.name
-
-
 class PreHistorySerializer(serializers.ModelSerializer):
     pre_history_choices = serializers.CharField()
 
@@ -74,6 +65,11 @@ class SkillStateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class DndSpellSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DndSpell
+        fields = '__all__'
+
 class CharlistSerializer(serializers.ModelSerializer):
     champion_class = serializers.SlugRelatedField(slug_field='champion_class',
                                                   queryset=BaseClassCh.objects.all())
@@ -91,6 +87,10 @@ class CharlistSerializer(serializers.ModelSerializer):
     background = BackgroundSerializer(required=False)
     protect_char_state = ProtectStateSerializer(required=False)
     skill_char_state = SkillStateSerializer(required=False)
+    spells = DndSpellSerializer(many=True, read_only=True)
+    spells_id = serializers.PrimaryKeyRelatedField(many=True,
+                                                   queryset=DndSpell.objects.all(),
+                                                   source='spells')
 
     class Meta:
         model = Character
@@ -98,21 +98,27 @@ class CharlistSerializer(serializers.ModelSerializer):
 
     # https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
     def update(self, instance, validated_data):
+        print(self.context['request'].data)
+
         if 'background' in validated_data:
             nested_serializer = self.fields['background']
             nested_instance = instance.background
             nested_data = validated_data.pop('background')
             nested_serializer.update(nested_instance, nested_data)
+            print(nested_instance)
+            print(nested_data)
 
         if 'protect_char_state' in validated_data:
             nested_serializer = self.fields['protect_char_state']
             nested_instance = instance.protect_char_state
             nested_data = validated_data.pop('protect_char_state')
             nested_serializer.update(nested_instance, nested_data)
+
         if 'skill_char_state' in validated_data:
             nested_serializer = self.fields['skill_char_state']
             nested_instance = instance.skill_char_state
             nested_data = validated_data.pop('skill_char_state')
             nested_serializer.update(nested_instance, nested_data)
+
         return super(CharlistSerializer, self).update(instance,
                                                       validated_data)

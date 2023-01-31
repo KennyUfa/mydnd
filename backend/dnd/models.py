@@ -148,7 +148,7 @@ class Character(models.Model):
     is_active = models.BooleanField(default=True)
     lvl = models.IntegerField(blank=True, default=1)
     spells = models.ManyToManyField(DndSpell,
-                                    blank=True)
+                                    blank=True, related_name='my_spells')
     champion_class = models.ForeignKey(BaseClassCh,
                                        on_delete=models.PROTECT,
                                        blank=True, null=True)
@@ -192,7 +192,7 @@ class Character(models.Model):
     protection_class = models.PositiveSmallIntegerField(default=10,
                                                         verbose_name="kz")
     speed = models.PositiveSmallIntegerField(default=30,
-                                                        verbose_name="speed_ch")
+                                             verbose_name="speed_ch")
 
     def __str__(self):
         return self.name_champion
