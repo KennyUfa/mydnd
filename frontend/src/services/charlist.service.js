@@ -101,8 +101,6 @@ class ChampionApi {
     };
 
     async postBackground(data, id) {
-        console.log(data)
-        console.log(id)
         const response = await api.patch("dnd/character/" + id + "/", data);
         if (response.data) {
             return response.data;
