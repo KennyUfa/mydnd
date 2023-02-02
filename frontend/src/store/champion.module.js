@@ -1,6 +1,5 @@
 import DndListService from "../services/charlist.service.js";
 
-
 const initialChampion_id = JSON.parse(localStorage.getItem("champion_id"))
 
 export const champion = {

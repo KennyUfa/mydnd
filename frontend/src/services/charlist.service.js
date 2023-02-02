@@ -8,25 +8,7 @@ class ChampionApi {
         } else {
             console.log(response);
         }
-    }
-
-    async postRename(name) {
-        const response = await api.get("dnd/character");
-        if (response.data) {
-            return response.data;
-        } else {
-            console.log(response);
-        }
-    }
-
-    async getCharacters() {
-        const response = await api.get("dnd/character");
-        if (response.data) {
-            return response.data;
-        } else {
-            console.log(response);
-        }
-    }
+    };
 
     async getChampionsList() {
         const response = await api.get("dnd/character/");
@@ -35,7 +17,7 @@ class ChampionApi {
         } else {
             console.log(response);
         }
-    }
+    };
 
     async deleteChampion(id) {
         const response = await api.delete("dnd/character/" + id + "/");
@@ -44,7 +26,7 @@ class ChampionApi {
         } else {
             return 'delet' + id
         }
-    }
+    };
 
     async createPostChampion(data) {
 
@@ -54,7 +36,7 @@ class ChampionApi {
         } else {
             console.log(response);
         }
-    }
+    };
 
     async getClassList() {
         const response = await api.get("dnd/classlist/");
@@ -82,6 +64,7 @@ class ChampionApi {
             console.log(response);
         }
     };
+
     async getWorldOutlook() {
         const response = await api.get("dnd/looklist/");
         if (response.data) {

@@ -40,9 +40,6 @@
           <protection-class-view></protection-class-view>
           <initiative-view></initiative-view>
           <speed-view></speed-view>
-<!--          <div class="col">-->
-<!--            <div class="p-1 border bg-light">Скорость</div>-->
-<!--          </div>-->
         </div>
         <div class="col player-info">
           <div class="card">
@@ -61,17 +58,7 @@
             <div class="p-1 border bg-light">Спасброски от смерти</div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-header">АТАКИ</div>
-          <div class="card-body">
-            <h5 class="card-title">Атаки и заклинания</h5>
-            <p class="card-text">
-              With supporting text below as a natural lead-in to additional
-              content.
-            </p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
+        <spell-view></spell-view>
         <div class="card">
           <div class="card-header">АТАКИ</div>
           <div class="card-body">
@@ -121,6 +108,7 @@ import PassivePerception from "./HeroListView/PassivePerception.vue";
 import ProtectionClassView from "./HeroListView/ProtectionClassView.vue";
 import InitiativeView from "./HeroListView/InitiativeView.vue";
 import SpeedView from "./HeroListView/SpeedView.vue";
+import SpellView from "./HeroListView/SpellView.vue";
 
 
 export default {
@@ -136,6 +124,7 @@ export default {
     BackgroundView,
     PossessionBonus,
     SpeedView,
+    SpellView,
   },
   name: "CharList",
 };

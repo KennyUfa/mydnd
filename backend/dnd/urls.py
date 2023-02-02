@@ -7,7 +7,7 @@ router = routers.SimpleRouter()
 router.register('character', CharacterView)
 router.register('prots', ProtectStateView)
 router.register('skillstate', SkillStateView)
-
+router.register('spell', SpellView, basename='spell')
 
 
 urlpatterns = [
