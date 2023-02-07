@@ -1,4 +1,5 @@
 import time
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -54,8 +55,9 @@ class CharacterView(viewsets.ModelViewSet):
 class SpellView(viewsets.ReadOnlyModelViewSet):
     queryset = DndSpell.objects.all()
     permission_classes = [permissions.AllowAny]
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter,DjangoFilterBackend]
     serializer_class = DndSpellBookSerializer
+    filterset_fields = ('lvl','name')
     search_fields = ['^name']
 
     # def list(self, request):
@@ -63,8 +65,8 @@ class SpellView(viewsets.ReadOnlyModelViewSet):
     #     return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        user = get_object_or_404(self.queryset, pk=pk)
-        serializer = ChampionSpellSerializer(user)
+        spell = get_object_or_404(self.queryset, pk=pk)
+        serializer = ChampionSpellSerializer(spell)
         return Response(serializer.data)
 
 

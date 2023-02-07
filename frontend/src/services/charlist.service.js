@@ -100,6 +100,14 @@ class ChampionApi {
             console.log(response);
         }
     }
+    async spellPatch(data, id) {
+        const response = await api.patch("dnd/character/" + id + "/", data);
+        if (response.data) {
+            return response.data;
+        } else {
+            console.log(response);
+        }
+    }
 }
 
 export default new ChampionApi();

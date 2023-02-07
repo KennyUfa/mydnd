@@ -8,8 +8,8 @@ export const spellbook = {
         spell_detail: NaN,
     },
     actions: {
-        getData({commit, state}) {
-            return SpellBookService.getSpellList('').then(
+        getData({commit, state},search) {
+            return SpellBookService.getSpellList(search).then(
                 (data) => {
                     commit("dataSuccess", data);
                     return Promise.resolve(data);
@@ -32,6 +32,7 @@ export const spellbook = {
                 }
             );
         },
+
     },
     mutations: {
         dataSuccess(state, data) {
