@@ -272,10 +272,26 @@ export const champion = {
         },
         addSpell({commit, state}, id) {
             state.listInfo.spells_id.push(id);
-             const data = {
+            const data = {
                 "spells_id": state.listInfo.spells_id
             };
-            return DndListService.spellPatch(data,state.champion_id).then(
+            return DndListService.spellPatch(data, state.champion_id).then(
+                (data) => {
+                    commit("dataSuccess", data);
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
+        deleteSpell({commit, state}, id) {
+            let res = state.listInfo.spells_id.filter(value => id !== value);
+            const data = {
+                "spells_id": res
+            };
+            return DndListService.spellPatch(data, state.champion_id).then(
                 (data) => {
                     commit("dataSuccess", data);
                     return Promise.resolve(data);

@@ -1,5 +1,6 @@
 <template>
   <h2>SpellBook</h2>
+  <router-link to="/charlist">Лист персонажа</router-link>
   <form id="search">
     Search <input name="query" v-model="search">
   </form>
@@ -16,6 +17,14 @@
       </div>
     </router-link>
     <button type="button" class="btn btn-success" @click="addSpell(spell.id)">+
+    </button>
+    {{this.$store.state.champion.listInfo.spells_id}}
+    {{spell.id}}
+    <button
+        v-if="this.$store.state.champion.listInfo.spells_id.includes(spell.id)"
+            type="button"
+            class="btn btn-danger"
+            @click="deleteSpell(spell.id)">-
     </button>
   </div>
 </template>
@@ -36,7 +45,7 @@ export default {
     },
   },
   watch: {
-    search(){
+    search() {
       this.patchSearch()
     }
   },
@@ -47,7 +56,7 @@ export default {
     },
     pollData() {
       this.polling = setTimeout(() => {
-        this.$store.dispatch("spellbook/getData",this.search);
+        this.$store.dispatch("spellbook/getData", this.search);
       }, 2000)
     },
     destroyInterval() {
@@ -58,8 +67,11 @@ export default {
     createTimer() {
       this.pollData()
     },
-    addSpell(id){
-      this.$store.dispatch("champion/addSpell",id);
+    addSpell(id) {
+      this.$store.dispatch("champion/addSpell", id);
+    },
+    deleteSpell(id) {
+      this.$store.dispatch("champion/deleteSpell", id);
     }
   }
 }

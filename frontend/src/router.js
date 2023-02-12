@@ -17,10 +17,8 @@ const routes = [
         component: SpellBookView,
         beforeEnter: (to, from, next) => {
             if (store.state.spellbook.spellList) {
-                console.log('!!!')
                 next()
             } else {
-                console.log('@@@')
                 return store.dispatch('spellbook/getData').then(resp => {
                     if (store.state.spellbook.spellList) {
                         next()

@@ -1,4 +1,6 @@
 <template>
+  <router-link to="/spellbook">книга заклинаний</router-link>
+  <router-link to="/charlist">Лист персонажа</router-link>
   <div>
     <div>{{ $store.state.spellbook.spell_detail.name }}</div>
     <div>{{ $store.state.spellbook.spell_detail.lvl }}</div>
