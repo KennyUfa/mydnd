@@ -257,6 +257,23 @@ export const champion = {
                 }
             );
         },
+        patchHit({commit, state}) {
+            const data = {
+                "max_hit": state.listInfo.max_hit,
+                "temp_hit": state.listInfo.temp_hit,
+                "current_hit": state.listInfo.current_hit,
+            };
+            return DndListService.patchMainInfo(data, state.champion_id).then(
+                (data) => {
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
         loadRaceList({commit, state}) {
             return DndListService.getRaceList().then(
                 (data) => {
@@ -290,6 +307,39 @@ export const champion = {
             let res = state.listInfo.spells_id.filter(value => id !== value);
             const data = {
                 "spells_id": res
+            };
+            return DndListService.spellPatch(data, state.champion_id).then(
+                (data) => {
+                    commit("dataSuccess", data);
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
+        heal({commit, state}, hit) {
+            commit("mutHealHit", hit);
+            const data = {
+                "current_hit": state.listInfo.current_hit,
+            };
+            return DndListService.spellPatch(data, state.champion_id).then(
+                (data) => {
+                    commit("dataSuccess", data);
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
+        damage({commit, state}, hit) {
+            commit("mutDamageHit", hit);
+            const data = {
+                "current_hit": state.listInfo.current_hit,
+                "temp_hit": state.listInfo.temp_hit,
             };
             return DndListService.spellPatch(data, state.champion_id).then(
                 (data) => {
@@ -364,6 +414,32 @@ export const champion = {
         },
         mutChangeLvl(state, data) {
             state.create_champion.lvl = data
+        },
+        mutHealHit(state, hit) {
+            let state_hit = state.listInfo.current_hit + hit;
+            if (state_hit > state.listInfo.max_hit) {
+                state.listInfo.current_hit = state.listInfo.max_hit
+            } else {
+                state.listInfo.current_hit = state_hit
+            }
+        },
+        mutDamageHit(state, hit) {
+            let state_hit = state.listInfo.temp_hit - hit;
+            if (state_hit > -1) {
+                state.listInfo.temp_hit = state_hit
+            } else {
+                if (state_hit < 0) {
+                    state.listInfo.temp_hit = 0
+                    let new_state_hit = state.listInfo.current_hit + state_hit;
+                    if (new_state_hit < state.listInfo.current_hit) {
+                        state.listInfo.current_hit = 0
+                    } else {
+                        state.listInfo.current_hit = new_state_hit
+                    }
+                } else {
+                    state.listInfo.temp_hit = state_hit
+                }
+            }
         },
         updateName(state, data) {
             state.listInfo.name_champion = data

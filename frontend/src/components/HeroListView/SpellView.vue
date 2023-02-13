@@ -17,6 +17,12 @@
             {{ spell.class_actor }}
           </div>
         </router-link>
+        <button
+            type="button"
+            class="btn btn-danger"
+            @click="deleteSpell(spell.id)">-
+        </button>
+
       </div>
 
     </div>
@@ -27,7 +33,12 @@
 
 <script>
 export default {
-  name: "SpellView"
+  name: "SpellView",
+  methods: {
+    deleteSpell(id) {
+      this.$store.dispatch("champion/deleteSpell", id);
+    }
+  }
 }
 </script>
 

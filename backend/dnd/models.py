@@ -171,6 +171,10 @@ class Character(models.Model):
     pre_history = models.ForeignKey(PreHistoryModel, on_delete=models.PROTECT,
                                     blank=True, null=True)
 
+    max_hit= models.PositiveSmallIntegerField(default=0)
+    temp_hit = models.PositiveSmallIntegerField(default=0)
+    current_hit = models.PositiveSmallIntegerField(default=0)
+
     # характеристики
     strength = models.PositiveSmallIntegerField(verbose_name="Сила",
                                                 blank=True, default=10)

@@ -42,13 +42,7 @@
           <speed-view></speed-view>
         </div>
         <div class="col player-info">
-          <div class="card">
-            <div class="card-body stat">
-              <h5 class="card-title">Максимум хитов</h5>
-              <h5 class="card-title">Текущие Хиты</h5>
-              <h5 class="card-title">Временные Хиты</h5>
-            </div>
-          </div>
+        <hit-vue></hit-vue>
         </div>
         <div class="row dx-1">
           <div class="col">
@@ -109,10 +103,12 @@ import ProtectionClassView from "./HeroListView/ProtectionClassView.vue";
 import InitiativeView from "./HeroListView/InitiativeView.vue";
 import SpeedView from "./HeroListView/SpeedView.vue";
 import SpellView from "./HeroListView/SpellView.vue";
+import HitVue from "./HeroListView/HitVue.vue";
 
 
 export default {
   components: {
+    HitVue,
     InitiativeView,
     ProtectionClassView,
     PassivePerception,

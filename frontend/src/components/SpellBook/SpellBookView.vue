@@ -18,8 +18,6 @@
     </router-link>
     <button type="button" class="btn btn-success" @click="addSpell(spell.id)">+
     </button>
-    {{this.$store.state.champion.listInfo.spells_id}}
-    {{spell.id}}
     <button
         v-if="this.$store.state.champion.listInfo.spells_id.includes(spell.id)"
             type="button"
