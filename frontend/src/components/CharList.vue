@@ -23,15 +23,7 @@
             <passive-perception></passive-perception>
           </div>
           <div class="card">
-            <div class="card-body stat">
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Architecto culpa dignissimos dolor dolore earum, eos excepturi
-                hic incidunt inventore ipsum iusto, natus quia recusandae
-                reprehenderit saepe similique velit vero voluptatibus!
-              </p>
-              <p class="card-text">ПРОЧИЕ ВЛАДЕНИЯ И ЯЗЫКИ</p>
-            </div>
+            <proficiencie-and-languages></proficiencie-and-languages>
           </div>
         </div>
       </div>
@@ -62,10 +54,6 @@
             <button class="button button1">зм</button>
             <button class="button button1">эм</button>
             <button class="button button1">пм</button>
-            <p class="card-text">
-              With supporting text below as a natural lead-in to additional
-              content.
-            </p>
           </div>
         </div>
       </div>
@@ -104,10 +92,13 @@ import InitiativeView from "./HeroListView/InitiativeView.vue";
 import SpeedView from "./HeroListView/SpeedView.vue";
 import SpellView from "./HeroListView/SpellView.vue";
 import HitVue from "./HeroListView/HitVue.vue";
+import ProficiencieAndLanguages
+  from "./HeroListView/ProficiencieAndLanguages.vue";
 
 
 export default {
   components: {
+    ProficiencieAndLanguages,
     HitVue,
     InitiativeView,
     ProtectionClassView,

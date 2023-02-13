@@ -151,6 +151,21 @@ export const champion = {
                 }
             );
         },
+        postProficienciesAndLanguages({commit, state}) {
+            const data = {
+                "ProficienciesAndLanguages": state.listInfo.ProficienciesAndLanguages
+            };
+            return DndListService.postBackground(data, state.champion_id).then(
+                (data) => {
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    console.log(error.request.responseText)
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
         patchProtectSkills({commit, state}) {
             const data = {
                 "protect_char_state": state.listInfo.protect_char_state
@@ -431,7 +446,7 @@ export const champion = {
                 if (state_hit < 0) {
                     state.listInfo.temp_hit = 0
                     let new_state_hit = state.listInfo.current_hit + state_hit;
-                    if (new_state_hit < state.listInfo.current_hit) {
+                    if (new_state_hit < 0) {
                         state.listInfo.current_hit = 0
                     } else {
                         state.listInfo.current_hit = new_state_hit

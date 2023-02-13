@@ -28,7 +28,6 @@ class DndSpell(models.Model):
         verbose_name = 'Заклинание'
 
 
-
 class BaseClassCh(models.Model):
     champion_class = models.CharField(max_length=100, blank=True)
 
@@ -170,8 +169,10 @@ class Character(models.Model):
                                    default=BackgroundModel.default)
     pre_history = models.ForeignKey(PreHistoryModel, on_delete=models.PROTECT,
                                     blank=True, null=True)
+    ProficienciesAndLanguages = models.CharField(max_length=4000,
+                                                 default="Список навыков и языков")
 
-    max_hit= models.PositiveSmallIntegerField(default=0)
+    max_hit = models.PositiveSmallIntegerField(default=0)
     temp_hit = models.PositiveSmallIntegerField(default=0)
     current_hit = models.PositiveSmallIntegerField(default=0)
 
@@ -198,8 +199,6 @@ class Character(models.Model):
                                                         verbose_name="kz")
     speed = models.PositiveSmallIntegerField(default=30,
                                              verbose_name="speed_ch")
-
-
 
     def __str__(self):
         return self.name_champion
