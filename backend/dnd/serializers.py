@@ -65,16 +65,24 @@ class SkillStateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class DndSpellSerializer(serializers.ModelSerializer):
+class ChampionSpellSerializer(serializers.ModelSerializer):
     class Meta:
         model = DndSpell
         fields = '__all__'
 
+
+class DndSpellBookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DndSpell
+        fields = ['id', 'name', 'lvl', 'class_actor']
+
+
 class CharlistSerializer(serializers.ModelSerializer):
     champion_class = serializers.SlugRelatedField(slug_field='champion_class',
-                                                  queryset=BaseClassCh.objects.all())
+                                                  queryset=BaseClassCh.objects.all(),
+                                                  required=False)
     race = serializers.SlugRelatedField(slug_field='race', queryset=
-    Race.objects.all())
+    Race.objects.all(), required=False)
     account = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     pre_history = serializers.SlugRelatedField(slug_field='pre_history_choices',
@@ -87,10 +95,11 @@ class CharlistSerializer(serializers.ModelSerializer):
     background = BackgroundSerializer(required=False)
     protect_char_state = ProtectStateSerializer(required=False)
     skill_char_state = SkillStateSerializer(required=False)
-    spells = DndSpellSerializer(many=True, read_only=True)
+    spells = ChampionSpellSerializer(many=True, read_only=True, required=False)
     spells_id = serializers.PrimaryKeyRelatedField(many=True,
                                                    queryset=DndSpell.objects.all(),
-                                                   source='spells')
+                                                   source='spells',
+                                                   required=False)
 
     class Meta:
         model = Character

@@ -167,8 +167,14 @@ class Character(models.Model):
     background = models.ForeignKey(BackgroundModel,
                                    on_delete=models.CASCADE,
                                    default=BackgroundModel.default)
-    pre_history = models.ForeignKey(PreHistoryModel, on_delete=models.CASCADE,
+    pre_history = models.ForeignKey(PreHistoryModel, on_delete=models.PROTECT,
                                     blank=True, null=True)
+    ProficienciesAndLanguages = models.CharField(max_length=4000,
+                                                 default="Список навыков и языков")
+
+    max_hit = models.PositiveSmallIntegerField(default=0)
+    temp_hit = models.PositiveSmallIntegerField(default=0)
+    current_hit = models.PositiveSmallIntegerField(default=0)
 
     # характеристики
     strength = models.PositiveSmallIntegerField(verbose_name="Сила",

@@ -24,15 +24,12 @@ export default {
   name: "PossessionBonus",
   data() {
     return {
-      count: 1,
-      timer: 0,
       polling: null
     }
   },
   methods: {
     patchP() {
       this.destroyInterval();
-      this.count += 1;
       this.createTimer();
     },
     pollData() {
