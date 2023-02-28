@@ -1,10 +1,12 @@
 <template>
   <div class="card">
-    <div class="card-header">Заклинания</div>
-    <div class="card-body">
+    <div class="card-header">Заклинания
       <router-link to="/spellbook" class="btn btn-primary">Книга
         заклинаний
       </router-link>
+    </div>
+    <div class="card-body">
+
       <div
           class="spellbook border border-primary"
           v-for="spell in this.$store.state.champion.listInfo.spells"

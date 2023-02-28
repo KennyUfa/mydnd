@@ -70,6 +70,15 @@ class ChampionSpellSerializer(serializers.ModelSerializer):
         model = DndSpell
         fields = '__all__'
 
+class WeaponSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Weapon
+        fields = '__all__'
+class ShieldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Shield
+        fields = '__all__'
+
 
 class DndSpellBookSerializer(serializers.ModelSerializer):
     class Meta:
@@ -92,6 +101,7 @@ class CharlistSerializer(serializers.ModelSerializer):
     world_outlook = serializers.SlugRelatedField(
         slug_field='world_outlook',
         queryset=WorldOutlook.objects.all(), required=False)
+    weapon = WeaponSerializer(required=False,many=True, read_only=True,)
     background = BackgroundSerializer(required=False)
     protect_char_state = ProtectStateSerializer(required=False)
     skill_char_state = SkillStateSerializer(required=False)

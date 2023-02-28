@@ -5,20 +5,20 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from drf_multiple_model.views import ObjectMultipleModelAPIView
+
 from .serializers import *
 from dnd.models import *
 from rest_framework import generics
 
 
 class UserViewSet(viewsets.ModelViewSet):
-
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny]
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -51,14 +51,14 @@ class CharacterView(viewsets.ModelViewSet):
         return Character.objects.filter(account=self.request.user)
 
 
-
 class SpellView(viewsets.ReadOnlyModelViewSet):
     queryset = DndSpell.objects.all()
     permission_classes = [permissions.AllowAny]
-    filter_backends = [filters.SearchFilter,filters.OrderingFilter,DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter,
+                       DjangoFilterBackend]
     serializer_class = DndSpellBookSerializer
-    filterset_fields = ('lvl','name')
-    search_fields = ['^name']
+    filterset_fields = ('lvl', 'name')
+    search_fields = ['^name', 'class_actor']
 
     # def list(self, request):
     #     serializer = DndSpellBookSerializer(self.queryset, many=True)
@@ -81,12 +81,11 @@ class ProtectStateView(viewsets.ModelViewSet):
     serializer_class = ProtectStateSerializer
     queryset = ProtectStateModel.objects.all()
 
+
 class SkillStateView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = SkillStateSerializer
     queryset = SkillStateModel.objects.all()
-
-
 
 
 class PreHistoryView(generics.ListAPIView):
@@ -98,6 +97,7 @@ class PreHistoryView(generics.ListAPIView):
         # time.sleep(3)
         return PreHistoryModel.objects.all()
 
+
 class WorldOutlookView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = WorldOutlook.objects.all()
@@ -106,3 +106,15 @@ class WorldOutlookView(generics.ListAPIView):
     def get_queryset(self):
         time.sleep(1)
         return WorldOutlook.objects.all()
+class ItemAPIView(ObjectMultipleModelAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    querylist = [
+        {
+            'queryset': Weapon.objects.all(),
+            'serializer_class': WeaponSerializer,
+        },
+        {
+            'queryset': Shield.objects.all(),
+            'serializer_class': ShieldSerializer,
+        },
+    ]

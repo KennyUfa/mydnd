@@ -28,6 +28,48 @@ class DndSpell(models.Model):
         verbose_name = 'Заклинание'
 
 
+class Properties(models.Model):
+    name = models.CharField(blank=True, null=True, max_length=200)
+    description = models.CharField(blank=True, null=True, max_length=2000)
+
+    @classmethod
+    def default_name(cls):
+        created = cls.objects.get_or_create()
+        return created.pk
+    def __str__(self):
+        return self.name
+
+
+class WeaponType(models.Model):
+    description = models.CharField(blank=True, null=True, max_length=200)
+
+    @classmethod
+    def default_description(cls):
+        created = cls.objects.get_or_create()
+        return created.pk
+    def __str__(self):
+        return self.description
+
+class Weapon(models.Model):
+    type = models.ForeignKey(WeaponType, on_delete=models.PROTECT,
+                             default=WeaponType.default_description)
+    name = models.CharField(blank=True, null=True, max_length=200)
+    damage = models.CharField(blank=True, null=True, max_length=10)
+    damage_universal = models.CharField(blank=True, null=True, max_length=10)
+    price = models.CharField(blank=True, null=True, max_length=200)
+    damage_type = models.CharField(blank=True, null=True, max_length=200)
+    weight = models.CharField(blank=True, null=True, max_length=100, default='')
+    properties = models.ManyToManyField(Properties, blank=True,default=Properties.default_name)
+    description = models.CharField(blank=True, null=True, max_length=3000)
+
+    def __str__(self):
+        return self.name
+
+class Shield(models.Model):
+    type = models.ForeignKey(WeaponType, on_delete=models.PROTECT)
+    name = models.CharField(blank=True, null=True, max_length=200)
+
+
 class BaseClassCh(models.Model):
     champion_class = models.CharField(max_length=100, blank=True)
 
@@ -149,6 +191,8 @@ class Character(models.Model):
     lvl = models.IntegerField(blank=True, default=1)
     spells = models.ManyToManyField(DndSpell,
                                     blank=True, related_name='my_spells')
+    weapon = models.ManyToManyField(Weapon,
+                                    blank=True, related_name='my_weapons')
     champion_class = models.ForeignKey(BaseClassCh,
                                        on_delete=models.PROTECT,
                                        blank=True, null=True)
@@ -206,3 +250,6 @@ class Character(models.Model):
     class Meta:
         verbose_name_plural = 'персонажи'
         verbose_name = 'пресонаж'
+
+
+
