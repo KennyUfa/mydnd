@@ -4,6 +4,15 @@ from django.db import migrations, transaction
 from dnd.inventory import weapon
 import inspect
 
+for name, obj in inspect.getmembers(weapon):
+    if inspect.isclass(obj):
+        if obj.__name__ in ('SimpleRangedWeapon', 'SimpleWeapon',
+                            'MilitaryHandToHandWeapon',
+                            'MilitaryRangedWeapons','Weapon'):
+            pass
+        else:
+            print(obj)
+
 
 def combine_names(apps, schema_editor):
     db_weapon = apps.get_model('dnd', 'Weapon')
@@ -13,7 +22,7 @@ def combine_names(apps, schema_editor):
         if inspect.isclass(obj):
             if obj.__name__ in ('SimpleRangedWeapon', 'SimpleWeapon',
                                 'MilitaryHandToHandWeapon',
-                                'MilitaryRangedWeapons','Weapon'):
+                                'MilitaryRangedWeapons'):
                 pass
             else:
                 wep = obj()
@@ -54,9 +63,8 @@ def combine_names(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('dnd', '0001_initial'),
+        ('dnd', '0004_task_shield_shield_weapon_weapon'),
     ]
 
     operations = [

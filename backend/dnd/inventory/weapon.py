@@ -11,15 +11,24 @@ class Weapon:
 
     def info(self):
         return self.type_usage, self.name, self.damage, \
-            self.damage_universal, self.price, self.damage_type, self.weight, \
-            self.properties, self.description
+               self.damage_universal, self.price, self.damage_type, self.weight, \
+               self.properties, self.description
 
 
 class SimpleWeapon(Weapon):
     type_usage = "Простое рукопашное оружие"
 
+
 class SimpleRangedWeapon(Weapon):
     type_usage = "Простое дальнобойное оружие"
+
+
+class MilitaryRangedWeapons(Weapon):
+    type_usage = "Воинское дальнобойное оружие"
+
+
+class MilitaryHandToHandWeapon(Weapon):
+    type_usage = "Воинское рукопашное оружие"
 
 class BattleStaff(SimpleWeapon):
     name = "Боевой посох"
@@ -39,7 +48,80 @@ class Mace(SimpleWeapon):
     weight = "4 фнт."
 
 
+class Club(SimpleWeapon):
+    name = 'Дубинка'
+    damage = '1к4'
+    price = '1 см.'
+    damage_type = 'дробящий'
+    weight = '2 фнт.'
+    properties = 'Лёгкое'
 
+
+class Dagger(SimpleWeapon):
+    name = 'Кинжал'
+    damage = '1к4'
+    price = '2 зм.'
+    damage_type = 'колющий'
+    weight = '1 фнт.'
+    properties = 'Лёгкое, метательное (дис. 20/60), фехтовальное'
+
+
+class Spear(SimpleWeapon):
+    name = 'Копье'
+    damage = '1к6'
+    price = '1 зм.'
+    damage_type = 'колющий'
+    weight = '3 фнт.'
+    properties = 'Метательное (дис. 20/60), универсальное (1к8)'
+    damage_universal = '1к8'
+
+
+class LightHammer(SimpleWeapon):
+    name = 'Копье'
+    damage = '1к4'
+    price = '2 зм.'
+    damage_type = 'дробящий'
+    weight = '2 фнт.'
+    properties = 'Лёгкое, метательное (дис. 20/60)'
+
+
+class ThrowingSpear(SimpleWeapon):
+    name = 'Метательное копье'
+    damage = '1к6'
+    price = '5 зм.'
+    damage_type = 'колющий'
+    weight = '2 фнт.'
+    properties = 'Метательное (дис. 30/120)'
+
+
+class Bat(SimpleWeapon):
+    name = 'Копье'
+    damage = '1к8'
+    price = '2 cм.'
+    damage_type = 'дробящий'
+    weight = '10 фнт.'
+    properties = 'Двуручное'
+
+
+class HandAx(SimpleWeapon):
+    name = 'Ручной топор'
+    damage = '1к6'
+    price = '5 зм.'
+    damage_type = 'рубящий'
+    weight = '2 фнт.'
+    properties = 'Лёгкое, метательное (дис. 20/60)'
+
+
+class Sickle(SimpleWeapon):
+    name = 'Серп'
+    damage = '1к4'
+    price = '1 зм.'
+    damage_type = 'рубящий'
+    weight = '2 фнт.'
+    properties = 'Лёгкое'
+
+
+# _______________________________________________
 
 class LightCrossbow(SimpleRangedWeapon):
     name = 'Арбалет, легкий'
@@ -49,6 +131,7 @@ class LightCrossbow(SimpleRangedWeapon):
     weight = '5 фнт.'
     properties = 'Боеприпас (дис. 80/320),двуручное, перезарядка'
 
+
 class ShortBow(SimpleRangedWeapon):
     name = 'Короткий лук'
     damage = '1к6'
@@ -57,47 +140,228 @@ class ShortBow(SimpleRangedWeapon):
     weight = '2 фнт.'
     properties = 'Боеприпас (дис. 80/320),двуручное'
 
-weapons = [BattleStaff, Mace,LightCrossbow,ShortBow]
-for w in weapons:
-    wep = w()
 
-    for i in wep.info()[7].split(','):
-        print(i.strip())
+class Dart(SimpleRangedWeapon):
+    name = 'Дротик'
+    damage = '1к4'
+    price = '5 мм.'
+    damage_type = 'колющий'
+    weight = '1/4 фнт.'
+    properties = 'Метательное (дис. 20/60), фехтовальное'
 
-# Дубинка	1 см.	1к4 дробящий	2 фнт.	Лёгкое
-# Кинжал	2 зм.	1к4 колющий	1 фнт.	Лёгкое, метательное (дис. 20/60), фехтовальное
-# Копье	1 зм.	1к6 колющий	3 фнт.	Метательное (дис. 20/60), универсальное (1к8)
-# Легкий молот	2 зм.	1к4 дробящий	2 фнт.	Лёгкое, метательное (дис. 20/60)
-# Метательное копье	5 см.	1к6 колющий	2 фнт.	Метательное (дис. 30/120)
-# Палица	2 см.	1к8 дробящий	10 фнт.	Двуручное
-# Ручной топор	5 зм.	1к6 рубящий	2 фнт.	Лёгкое, метательное (дис. 20/60)
-# Серп	1 зм.	1к4 рубящий	2 фнт.	Лёгкое
 
-# Простое дальнобойное оружие
-# Дротик	5 мм.	1к4 колющий	1/4 фнт.	Метательное (дис. 20/60), фехтовальное
-# Праща	1 см.	1к4 дробящий	-	Боеприпас (дис. 30/120)
-# Воинское рукопашное оружие
-# Алебарда	20 зм.	1к10 рубящий	6 фнт.	Двуручное, досягаемость, тяжёлое
-# Боевая кирка	5 зм.	1к8 колющий	2 фнт.	-
-# Боевой молот	15 зм.	1к8 дробящий	2 фнт.	Универсальное (1к10)
-# Боевой топор	10 зм.	1к8 рубящий	4 фнт.	Универсальное (1к10)
-# Глефа	20 зм.	1к10 рубящий	6 фнт.	Двуручное, досягаемость, тяжёлое
-# Двуручный меч	50 зм.	2к6 рубящий	6 фнт.	Двуручное, тяжёлое
-# Длинное копье	10 зм.	1к12 колющий	6 фнт.	Досягаемость, особое
-# Длинный меч	15 зм.	1к8 рубящий	3 фнт.	Универсальное (1к10)
-# Кнут	2 зм.	1к4 рубящий	3 фнт.	Досягаемость, фехтовальное
-# Короткий меч	10 зм.	1к6 колющий	2 фнт.	Лёгкое, фехтовальное
-# Молот	10 зм.	2к6 дробящий	10 фнт.	Двуручное, тяжёлое
-# Моргенштерн	15 зм.	1к8 колющий	4 фнт.	-
-# Пика	5 зм.	1к10 колющий	18 фнт.	Двуручное, досягаемость, тяжёлое
-# Рапира	25 зм.	1к8 колющий	2 фнт.	Фехтовальное
-# Секира	30 зм.	1к12 рубящий	7 фнт.	Двуручное, тяжёлое
-# Скимитар	25 зм.	1к6 рубящий	3 фнт.	Лёгкое, фехтовальное
-# Трезубец	5 зм.	1к6 колющий	4 фнт.	Метательное (дис. 20/60), Универсальное (1к8)
-# Цеп	10 зм.	1к8 дробящий	2 фнт.	-
-# Воинское дальнобойное оружие
-# Арбалет, ручной	75 зм.	1к6 колющий	3 фнт.	Боеприпас (дис. 30/120), легкое, перезарядка
-# Арбалет, тяжелый	50 зм.	1к10 колющий	18 фнт.	Боеприпас (дис. 100/400), двуручное, перезарядка, тяжёлое
-# Длинный лук	50 зм.	1к8 колющий	2 фнт.	Боеприпас (дис. 150/600), двуручное, тяжёлое
-# Духовая трубка	10 зм.	1 колющий	1 фнт.	Боеприпас (дис. 25/100), перезарядка
-# Сеть	1 зм.	-	3 фнт.	Метательное (дис. 5/15), особое
+class Sends(SimpleRangedWeapon):
+    name = 'Праща'
+    damage = '1к4'
+    price = '1 см.'
+    damage_type = 'дробящий'
+    properties = 'Боеприпас (дис. 30/120)'
+
+
+class Halberd(MilitaryHandToHandWeapon):
+    name = 'Алебарда'
+    damage = '1к10'
+    price = '20 зм.'
+    damage_type = 'рубящий'
+    weight = '6 фнт.'
+    properties = 'Двуручное, досягаемость, тяжёлое'
+
+
+class WarPick(MilitaryHandToHandWeapon):
+    name = 'Боевая кирка'
+    damage = '1к8'
+    price = '5 зм.'
+    damage_type = 'колющий'
+    weight = '2 фнт.'
+
+
+class WarHammer(MilitaryHandToHandWeapon):
+    name = 'Боевой молот'
+    damage = '1к8'
+    price = '15 зм.'
+    damage_type = 'дробящий'
+    weight = '2 фнт.'
+    properties = 'Универсальное (1к10)'
+    damage_universal = '1к10'
+
+
+class BattleAx(MilitaryHandToHandWeapon):
+    name = 'Боевой топор'
+    damage = '1к8'
+    price = '10 зм.'
+    damage_type = 'рубящий'
+    weight = '4 фнт.'
+    properties = 'Универсальное (1к10)'
+    damage_universal = '1к10'
+
+
+class Glyph(MilitaryHandToHandWeapon):
+    name = 'Глефа'
+    damage = '1к10'
+    price = '10 зм.'
+    damage_type = 'рубящий'
+    weight = '6 фнт.'
+    properties = 'Двуручное, досягаемость, тяжёлое'
+
+
+class TwoHandedSword(MilitaryHandToHandWeapon):
+    name = 'Двуручный меч'
+    damage = '2к6'
+    price = '50 зм.'
+    damage_type = 'рубящий'
+    weight = '6 фнт.'
+    properties = 'Двуручное, тяжёлое'
+
+
+class LongSpear(MilitaryHandToHandWeapon):
+    name = 'Длинное копье'
+    damage = '1к12'
+    price = '10 зм.'
+    damage_type = 'колющий'
+    weight = '6 фнт.'
+    properties = 'Досягаемость, особое'
+
+
+class LongSword(MilitaryHandToHandWeapon):
+    name = 'Длинное копье'
+    damage = '1к8'
+    price = '15 зм.'
+    damage_type = 'рубящий'
+    weight = '3 фнт.'
+    properties = 'Универсальное (1к10)'
+    damage_universal = '1к10'
+
+
+class Whip(MilitaryHandToHandWeapon):
+    name = 'Кнут'
+    damage = '1к4'
+    price = '2 зм.'
+    damage_type = 'рубящий'
+    weight = '3 фнт.'
+    properties = 'Досягаемость, фехтовальное'
+
+
+class ShortSword(MilitaryHandToHandWeapon):
+    name = 'Короткий меч'
+    damage = '1к6'
+    price = '10 зм.'
+    damage_type = 'колющий'
+    weight = '2 фнт.'
+    properties = 'Лёгкое, фехтовальное'
+
+
+class Hammer(MilitaryHandToHandWeapon):
+    name = 'Молот'
+    damage = '2к6'
+    price = '10 зм.'
+    damage_type = 'дробящий'
+    weight = '10 фнт.'
+    properties = 'Двуручное, тяжёлое'
+
+
+class Morgenstern(MilitaryHandToHandWeapon):
+    name = 'Моргенштерн'
+    damage = '1к8'
+    price = '15 зм.'
+    damage_type = 'колющий'
+    weight = '4 фнт.'
+
+
+class Pika(MilitaryHandToHandWeapon):
+    name = 'Пика'
+    damage = '1к10'
+    price = '5 зм.'
+    damage_type = 'колющий'
+    weight = '18 фнт.'
+    properties = 'Двуручное, досягаемость, тяжёлое'
+
+
+class Rapier(MilitaryHandToHandWeapon):
+    name = 'Пика'
+    damage = '1к8'
+    price = '25 зм.'
+    damage_type = 'колющий'
+    weight = '2 фнт.'
+    properties = 'Фехтовальное'
+
+
+class Axe(MilitaryHandToHandWeapon):
+    name = 'Пика'
+    damage = '1к12'
+    price = '30 зм.'
+    damage_type = 'рубящий'
+    weight = '7 фнт.'
+    properties = 'Двуручное, тяжёлое'
+
+
+class Scimitar(MilitaryHandToHandWeapon):
+    name = 'Скимитар'
+    damage = '1к6'
+    price = '25 зм.'
+    damage_type = 'рубящий'
+    weight = '3 фнт.'
+    properties = 'Лёгкое, фехтовальное'
+
+
+class Trident(MilitaryHandToHandWeapon):
+    name = 'Трезубец'
+    damage = '1к6'
+    price = '5 зм.'
+    damage_type = 'колющий'
+    weight = '4 фнт.'
+    properties = 'Метательное (дис. 20/60), Универсальное (1к8)'
+    damage_universal = '1к8'
+
+
+class Cep(MilitaryHandToHandWeapon):
+    name = 'Цеп'
+    damage = '1к8'
+    price = '10 зм.'
+    damage_type = 'дробящий'
+    weight = '2 фнт.'
+
+
+class CrossbowManual(MilitaryRangedWeapons):
+    name = 'Арбалет, ручной'
+    damage = '1к6'
+    price = '75 зм.'
+    damage_type = 'колющий'
+    weight = '3 фнт.'
+    properties = 'Боеприпас (дис. 30/120), легкое, перезарядка'
+
+
+class CrossbowHeavy(MilitaryRangedWeapons):
+    name = 'Арбалет, тяжелый'
+    damage = '1к10'
+    price = '50 зм.'
+    damage_type = 'колющий'
+    weight = '18 фнт.'
+    properties = 'Боеприпас (дис. 100/400), двуручное, перезарядка, тяжёлое'
+
+
+class LongBow(MilitaryRangedWeapons):
+    name = 'Длинный лук'
+    damage = '1к8'
+    price = '50 зм.'
+    damage_type = 'колющий'
+    weight = '2 фнт.'
+    properties = 'Боеприпас (дис. 150/600), двуручное, тяжёлое'
+
+
+class BlowPipe(MilitaryRangedWeapons):
+    name = 'Духовая трубка'
+    damage = '1к8'
+    price = '10 зм.'
+    damage_type = 'колющий'
+    weight = '1 фнт.'
+    properties = 'Боеприпас (дис. 25/100), перезарядка'
+
+
+class Net(MilitaryRangedWeapons):
+    name = 'Сеть'
+    price = '1 зм.'
+    weight = '3 фнт.'
+    properties = 'Метательное (дис. 5/15), особое'
+
+
+weapons = [BattleStaff, Mace, LightCrossbow, ShortBow]
