@@ -253,3 +253,11 @@ class Character(models.Model):
 
 
 
+class It(models.Model):
+    name = models.CharField(max_length=100)
+
+class Chr(models.Model):
+    name = models.CharField(max_length=100)
+
+class Heal(models.Model):
+    name = models.CharField(max_length=100)

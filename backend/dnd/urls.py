@@ -16,5 +16,5 @@ urlpatterns = [
     path('racelist/', RaceViewSet.as_view(), name='race-list'),
     path('prehistory/', PreHistoryView.as_view(), name='pre-history-list'),
     path('looklist/', WorldOutlookView.as_view(), name='world-outlook-list'),
-    path('tasklist/',ItemAPIView.as_view())
+    path('item/',ItemAPIView.as_view())
 ]

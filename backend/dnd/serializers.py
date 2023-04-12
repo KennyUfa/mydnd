@@ -69,8 +69,18 @@ class ChampionSpellSerializer(serializers.ModelSerializer):
     class Meta:
         model = DndSpell
         fields = '__all__'
+class WeaponTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WeaponType
+        fields = ['description']
 
+class PropertiesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Properties
+        fields = ['name','description']
 class WeaponSerializer(serializers.ModelSerializer):
+    type = WeaponTypeSerializer()
+    properties = PropertiesSerializer(many=True)
     class Meta:
         model = Weapon
         fields = '__all__'

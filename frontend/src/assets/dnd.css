@@ -29,6 +29,7 @@ html {
 
 .player-info{
   border: solid 1px black;
+  text-align: center;
 }
 
 .player-name{

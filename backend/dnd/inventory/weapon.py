@@ -362,6 +362,3 @@ class Net(MilitaryRangedWeapons):
     price = '1 зм.'
     weight = '3 фнт.'
     properties = 'Метательное (дис. 5/15), особое'
-
-
-weapons = [BattleStaff, Mace, LightCrossbow, ShortBow]

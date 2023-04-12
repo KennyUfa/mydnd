@@ -34,7 +34,7 @@
           <speed-view></speed-view>
         </div>
         <div class="col player-info">
-        <hit-vue></hit-vue>
+          <hit-vue></hit-vue>
         </div>
         <div class="row dx-1">
           <div class="col">
@@ -48,13 +48,9 @@
         <div class="card">
           <div class="card-header">АТАКИ</div>
           <div class="card-body">
-            <h5 class="card-title">СНАРЯЖЕНИЕ</h5>
-            <button class="button button1">мм</button>
-            <button class="button button1">см</button>
-            <button class="button button1">зм</button>
-            <button class="button button1">эм</button>
-            <button class="button button1">пм</button>
+            оружие
           </div>
+          <inventory-view></inventory-view>
         </div>
       </div>
       <div class="col player-info">
@@ -94,10 +90,12 @@ import SpellView from "./HeroListView/SpellView.vue";
 import HitVue from "./HeroListView/HitVue.vue";
 import ProficiencieAndLanguages
   from "./HeroListView/ProficiencieAndLanguages.vue";
+import InventoryView from "./HeroListView/InventoryView.vue";
 
 
 export default {
   components: {
+    InventoryView,
     ProficiencieAndLanguages,
     HitVue,
     InitiativeView,

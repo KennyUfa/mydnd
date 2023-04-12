@@ -1,15 +1,13 @@
 <template>
-  <div class="row">
+  <div class="row align-items-center">
     <div class="player-name col-md-3" v-if="!show">
       <button
-
           class="btn btn-success" v-on:click="show = !show">
         <i
             class="bi bi-vector-pen">
         </i>
       </button>
       <p class="info">Имя персонажа</p>
-
       <p class="info" v-if="!show">
         {{ $store.state.champion.listInfo.name_champion }}
       </p>
@@ -24,21 +22,19 @@
       <p class="info">Имя персонажа</p>
       <input v-model="name">
     </div>
-
-
     <div class="col-md-9">
       <div class="row">
-        <div class="div col player-info p-1">
+        <div class="div col player-info">
           <p>Класс - {{ $store.state.champion.listInfo.champion_class }}</p>
         </div>
 
-        <div class="div col player-info p-1" v-if="!show">
+        <div class="div col player-info" v-if="!show">
           <p>
             предистория - {{ $store.state.champion.listInfo.pre_history }}
           </p>
         </div>
 
-        <div class="div col player-info p-1" v-else>
+        <div class="div col player-info" v-else>
           <p>
             предистория - {{ $store.state.champion.listInfo.pre_history }}
           </p>
@@ -62,22 +58,22 @@
         </div>
 
 
-        <div class="div col player-info p-1">
+        <div class="div col player-info">
           <p>Имя игрока - {{ $store.state.auth.user.name }}</p>
         </div>
       </div>
       <div class="row">
-        <div class="col player-info p-1">
+        <div class="col player-info">
           <p>Расса - {{ $store.state.champion.listInfo.race }}</p>
         </div>
 
-        <div class="col player-info p-1" v-if="!show">
+        <div class="col player-info" v-if="!show">
           <p>
             Мировозрение - {{ $store.state.champion.listInfo.world_outlook }}
           </p>
         </div>
 
-        <div class="div col player-info p-1" v-else>
+        <div class="div col player-info" v-else>
           <p>
             Мировозрение - {{ $store.state.champion.listInfo.world_outlook }}
           </p>
@@ -100,10 +96,10 @@
           </ul>
         </div>
 
-        <div class="col player-info p-1">
+        <div class="col player-info">
           <p>Опыт - {{ $store.state.champion.listInfo.experience }}</p>
         </div>
-        <div class="col player-info p-1">
+        <div class="col player-info">
           <div id="row counter">
             <div id="buttonCountNumber" class="col">
               уровень - {{ $store.state.champion.listInfo.lvl }}
