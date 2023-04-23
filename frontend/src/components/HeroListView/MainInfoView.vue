@@ -1,11 +1,8 @@
 <template>
   <div class="row align-items-center">
     <div class="player-name col-md-3" v-if="!show">
-      <button
-          class="btn btn-success" v-on:click="show = !show">
-        <i
-            class="bi bi-vector-pen">
-        </i>
+      <button class="btn btn-success" v-on:click="show = !show">
+        <i class="bi bi-vector-pen"> </i>
       </button>
       <p class="info">Имя персонажа</p>
       <p class="info" v-if="!show">
@@ -13,14 +10,11 @@
       </p>
     </div>
     <div class="player-name col-md-3" v-else>
-      <button
-          class="btn btn-danger" v-on:click="patchMainInfo">
-        <i
-            class="bi bi-vector-pen">
-        </i>
+      <button class="btn btn-danger" v-on:click="patchMainInfo">
+        <i class="bi bi-vector-pen"> </i>
       </button>
       <p class="info">Имя персонажа</p>
-      <input v-model="name">
+      <input v-model="name" />
     </div>
     <div class="col-md-9">
       <div class="row">
@@ -29,35 +23,40 @@
         </div>
 
         <div class="div col player-info" v-if="!show">
-          <p>
-            предистория - {{ $store.state.champion.listInfo.pre_history }}
-          </p>
+          <p>предистория - {{ $store.state.champion.listInfo.pre_history }}</p>
         </div>
 
         <div class="div col player-info" v-else>
-          <p>
-            предистория - {{ $store.state.champion.listInfo.pre_history }}
-          </p>
-          <button type="button" @click="loadPreHistory"
-                  class="btn btn-danger dropdown-toggle dropdown-toggle-split"
-                  data-bs-toggle="dropdown" aria-expanded="false">
-          </button>
+          <p>предистория - {{ $store.state.champion.listInfo.pre_history }}</p>
+          <button
+            type="button"
+            @click="loadPreHistory"
+            class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          ></button>
           <ul class="dropdown-menu">
-            <a v-if="!this.$store.state.champion.prehistorylist"
-               class="dropdown-item"
-               href="#">
-              Загрузка</a>
-            <div v-else
-                 v-for="prehistory in this.$store.state.champion.prehistorylist">
-              <a class="dropdown-item" href="#"
-                 @click="changePreHistory(prehistory.pre_history_choices)">{{
-                  prehistory.pre_history_choices
-                }}</a>
+            <a
+              v-if="!this.$store.state.champion.prehistorylist"
+              class="dropdown-item"
+              href="#"
+            >
+              Загрузка</a
+            >
+            <div
+              v-else
+              v-for="prehistory in this.$store.state.champion.prehistorylist"
+              :key="prehistory"
+            >
+              <a
+                class="dropdown-item"
+                href="#"
+                @click="changePreHistory(prehistory.pre_history_choices)"
+                >{{ prehistory.pre_history_choices }}</a
+              >
             </div>
           </ul>
         </div>
-
-
         <div class="div col player-info">
           <p>Имя игрока - {{ $store.state.auth.user.name }}</p>
         </div>
@@ -77,21 +76,32 @@
           <p>
             Мировозрение - {{ $store.state.champion.listInfo.world_outlook }}
           </p>
-          <button type="button" @click="loadWorldOutlook"
-                  class="btn btn-danger dropdown-toggle dropdown-toggle-split"
-                  data-bs-toggle="dropdown" aria-expanded="false">
-          </button>
+          <button
+            type="button"
+            @click="loadWorldOutlook"
+            class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          ></button>
           <ul class="dropdown-menu">
-            <a v-if="!this.$store.state.champion.worldoutlooklist"
-               class="dropdown-item"
-               href="#">
-              Загрузка</a>
-            <div v-else
-                 v-for="wlook in this.$store.state.champion.worldoutlooklist">
-              <a class="dropdown-item" href="#"
-                 @click="changeWorldOutlook(wlook.world_outlook)">{{
-                  wlook.world_outlook
-                }}</a>
+            <a
+              v-if="!this.$store.state.champion.worldoutlooklist"
+              class="dropdown-item"
+              href="#"
+            >
+              Загрузка</a
+            >
+            <div
+              v-else
+              v-for="wlook in this.$store.state.champion.worldoutlooklist"
+              :key="wlook"
+            >
+              <a
+                class="dropdown-item"
+                href="#"
+                @click="changeWorldOutlook(wlook.world_outlook)"
+                >{{ wlook.world_outlook }}</a
+              >
             </div>
           </ul>
         </div>
@@ -106,16 +116,16 @@
             </div>
             <div v-if="show">
               <button
-                  class="col"
-                  @click="$store.state.champion.listInfo.lvl++"
-                  :disabled="$store.state.champion.listInfo.lvl > 19"
+                class="col"
+                @click="$store.state.champion.listInfo.lvl++"
+                :disabled="$store.state.champion.listInfo.lvl > 19"
               >
                 +
               </button>
               <button
-                  class="col"
-                  @click="$store.state.champion.listInfo.lvl--"
-                  :disabled="$store.state.champion.listInfo.lvl < 2"
+                class="col"
+                @click="$store.state.champion.listInfo.lvl--"
+                :disabled="$store.state.champion.listInfo.lvl < 2"
               >
                 -
               </button>
@@ -133,7 +143,7 @@ export default {
   data() {
     return {
       show: false,
-    }
+    };
   },
   methods: {
     patchMainInfo() {
@@ -156,18 +166,13 @@ export default {
   computed: {
     name: {
       get() {
-        return this.$store.state.champion.listInfo.name_champion
+        return this.$store.state.champion.listInfo.name_champion;
       },
       set(value) {
-        console.log(value)
-        this.$store.commit('champion/updateName', value)
-      }
-    }
-  }
-
-}
+        console.log(value);
+        this.$store.commit("champion/updateName", value);
+      },
+    },
+  },
+};
 </script>
-
-<style scoped>
-
-</style>
