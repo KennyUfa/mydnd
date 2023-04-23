@@ -1,13 +1,13 @@
 html {
-  display: block;
   background-color: lightcyan;
 }
 
-.navbar{
+.navbar {
   background-color: rgb(15, 227, 227);
 }
-.head_content{
-  display:flex ;
+
+.head_content {
+  display: flex;
   justify-content: space-between;
 }
 
@@ -27,14 +27,14 @@ html {
   padding: 10px;
 }
 
-.player-info{
+.player-info {
   border: solid 1px black;
   text-align: center;
 }
 
-.player-name{
-  border: solid 1px black;
-  border-radius: 3px;
+.player-name {
+  border: solid 5px black;
+  border-radius: 6px;
   text-align: center;
 }
 
@@ -42,6 +42,6 @@ html {
   border: solid 1px black;
 }
 
-.info{
+.info {
   text-align: center;
 }

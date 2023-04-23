@@ -8,10 +8,8 @@
 <script>
 import NavbarView from "./components/NavbarView.vue";
 
-
 export default {
-  components: { NavbarView,},
+  components: { NavbarView },
   name: "App",
 };
 </script>
-ç

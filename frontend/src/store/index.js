@@ -9,7 +9,7 @@ const store = createStore({
     auth,
     champion,
     spellbook,
-    item
+    item,
   },
 });
 

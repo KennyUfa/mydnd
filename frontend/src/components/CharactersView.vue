@@ -14,8 +14,7 @@ export default {
     ListChampions,
     FormAddchampion,
   },
-}
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

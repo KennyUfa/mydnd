@@ -1,19 +1,20 @@
 <template>
   <div class="card stat">
-    <h5 class="card-title">Вдохновение
-      {{ $store.state.champion.listInfo.inspiration }}</h5>
+    <h5 class="card-title">
+      Вдохновение {{ $store.state.champion.listInfo.inspiration }}
+    </h5>
   </div>
   <button
-      class="col"
-      @click="$store.state.champion.listInfo.inspiration++,patch()"
-      :disabled="$store.state.champion.listInfo.inspiration > 10"
+    class="col"
+    @click="$store.state.champion.listInfo.inspiration++, patch()"
+    :disabled="$store.state.champion.listInfo.inspiration > 10"
   >
     +
   </button>
   <button
-      class="col"
-      @click="$store.state.champion.listInfo.inspiration--,patch()"
-      :disabled="$store.state.champion.listInfo.inspiration < 1"
+    class="col"
+    @click="$store.state.champion.listInfo.inspiration--, patch()"
+    :disabled="$store.state.champion.listInfo.inspiration < 1"
   >
     -
   </button>
@@ -26,8 +27,8 @@ export default {
     return {
       count: 1,
       timer: 0,
-      polling: null
-    }
+      polling: null,
+    };
   },
   methods: {
     patch() {
@@ -38,19 +39,18 @@ export default {
     pollData() {
       this.polling = setTimeout(() => {
         this.$store.dispatch("champion/patchInspirationFrame");
-      }, 2000)
+      }, 2000);
     },
     destroyInterval() {
       if (this.polling) {
-        clearInterval(this.polling)
+        clearInterval(this.polling);
       }
     },
     createTimer() {
-      this.pollData()
+      this.pollData();
     },
   },
-}
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -5,33 +5,31 @@
     <p v-if="!show">
       {{ backgroundValue }}
     </p>
-    <textarea v-else v-model="backgroundValue"></textarea>
+    <textarea v-else :backgroundValue="backgroundValue"></textarea>
   </div>
 </template>
 
 <script>
 export default {
   name: "BackgroundInfo",
-  props: ['backgroundName', 'backgroundValue', 'show'],
+  props: ["backgroundName", "backgroundValue", "show"],
   watch: {
     backgroundValue() {
-      this.onUserChange()
-    }
+      this.onUserChange();
+    },
   },
-  data(){
-    return{
-      saveBackground:true,
-    }
+  data() {
+    return {
+      saveBackground: true,
+    };
   },
   methods: {
     onUserChange: function () {
-      this.$emit('update:backgroundValue', this.backgroundValue);
-      this.saveBackground=false;
-    }
-  }
-}
+      this.$emit("update:backgroundValue", this.backgroundValue);
+      this.saveBackground = false;
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,73 +1,95 @@
 <template>
   <form @submit.prevent>
     <input
-        type="text"
-        v-model="this.$store.state.champion.create_champion.name_champion"
-        placeholder="Имя персонажа"
+      type="text"
+      v-model="this.$store.state.champion.create_champion.name_champion"
+      placeholder="Имя персонажа"
     />
 
     <div class="btn-group">
-      <button type="button"
-              class="btn btn-danger">
+      <button type="button" class="btn btn-danger">
         {{ this.$store.state.champion.create_champion.champion_class }}
       </button>
-      <button type="button" @click="loadClassList"
-              class="btn btn-danger dropdown-toggle dropdown-toggle-split"
-              data-bs-toggle="dropdown" aria-expanded="false">
-      </button>
+      <button
+        type="button"
+        @click="loadClassList"
+        class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      ></button>
       <ul class="dropdown-menu">
-        <a v-if="!this.$store.state.champion.classlist" class="dropdown-item"
-           href="#">
-          Загрузка</a>
-        <div v-else v-for="classHero in this.$store.state.champion.classlist">
-          <a class="dropdown-item" href="#"
-             @click="changeClass(classHero.champion_class)">{{
-              classHero.champion_class
-            }}</a>
+        <a
+          v-if="!this.$store.state.champion.classlist"
+          class="dropdown-item"
+          href="#"
+        >
+          Загрузка</a
+        >
+        <div
+          v-else
+          v-for="classHero in this.$store.state.champion.classlist"
+          :key="classHero"
+        >
+          <a
+            class="dropdown-item"
+            href="#"
+            @click="changeClass(classHero.champion_class)"
+            >{{ classHero.champion_class }}</a
+          >
         </div>
       </ul>
     </div>
 
-
     <div class="btn-group">
-      <button type="button"
-              class="btn btn-danger">
+      <button type="button" class="btn btn-danger">
         {{ this.$store.state.champion.create_champion.race }}
       </button>
-      <button type="button" @click="loadRaceList"
-              class="btn btn-danger dropdown-toggle dropdown-toggle-split"
-              data-bs-toggle="dropdown" aria-expanded="false">
-      </button>
+      <button
+        type="button"
+        @click="loadRaceList"
+        class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      ></button>
       <ul class="dropdown-menu">
-        <a v-if="!this.$store.state.champion.racelist" class="dropdown-item"
-           href="#">
-          Загрузка</a>
-        <div v-else v-for="classHero in this.$store.state.champion.racelist">
-          <a class="dropdown-item" href="#"
-             @click="changeRace(classHero.race)">{{
-              classHero.race
-            }}</a>
+        <a
+          v-if="!this.$store.state.champion.racelist"
+          class="dropdown-item"
+          href="#"
+        >
+          Загрузка</a
+        >
+        <div
+          v-else
+          v-for="classHero in this.$store.state.champion.racelist"
+          :key="classHero"
+        >
+          <a
+            class="dropdown-item"
+            href="#"
+            @click="changeRace(classHero.race)"
+            >{{ classHero.race }}</a
+          >
         </div>
       </ul>
     </div>
 
     <div class="btn-group">
-      <button type="button"
-              class="btn btn-danger">
+      <button type="button" class="btn btn-danger">
         {{ this.$store.state.champion.create_champion.lvl }}
       </button>
-      <button type="button"
-              class="btn btn-danger dropdown-toggle dropdown-toggle-split"
-              data-bs-toggle="dropdown" aria-expanded="false">
-      </button>
+      <button
+        type="button"
+        class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      ></button>
       <ul class="dropdown-menu">
         <div v-for="n in 20" :key="n">
-          <a class="dropdown-item" @click="changeLvl(n)"
-             href="#">{{ n }}</a>
+          <a class="dropdown-item" @click="changeLvl(n)" href="#">{{ n }}</a>
         </div>
       </ul>
     </div>
-
   </form>
   <button class="btn btn-primary" @click="createChampion">
     создать нового чемпиона
@@ -100,5 +122,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

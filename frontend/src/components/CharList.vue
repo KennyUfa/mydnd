@@ -47,9 +47,7 @@
         <spell-view></spell-view>
         <div class="card">
           <div class="card-header">АТАКИ</div>
-          <div class="card-body">
-            оружие
-          </div>
+          <div class="card-body">оружие</div>
           <inventory-view></inventory-view>
         </div>
       </div>
@@ -58,10 +56,10 @@
         <div class="card-body stat">
           <h5 class="card-title">УМЕНИЯ И СПОСОБНОСТИ</h5>
           <p class="card-text">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Dolorem est iusto laboriosam nulla quidem. Alias corporis cum
-            quo tempore? Adipisci enim laboriosam nihil nobis omnis?
-            Deleniti earum numquam quae repellat.
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem
+            est iusto laboriosam nulla quidem. Alias corporis cum quo tempore?
+            Adipisci enim laboriosam nihil nobis omnis? Deleniti earum numquam
+            quae repellat.
           </p>
         </div>
 
@@ -88,10 +86,8 @@ import InitiativeView from "./HeroListView/InitiativeView.vue";
 import SpeedView from "./HeroListView/SpeedView.vue";
 import SpellView from "./HeroListView/SpellView.vue";
 import HitVue from "./HeroListView/HitVue.vue";
-import ProficiencieAndLanguages
-  from "./HeroListView/ProficiencieAndLanguages.vue";
+import ProficiencieAndLanguages from "./HeroListView/ProficiencieAndLanguages.vue";
 import InventoryView from "./HeroListView/InventoryView.vue";
-
 
 export default {
   components: {
@@ -115,5 +111,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
