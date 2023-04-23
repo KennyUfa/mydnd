@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, Group
-from .models import *
 from rest_framework import serializers
+
+from .models import *
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -69,25 +70,87 @@ class ChampionSpellSerializer(serializers.ModelSerializer):
     class Meta:
         model = DndSpell
         fields = '__all__'
-class WeaponTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WeaponType
-        fields = ['description']
+
 
 class PropertiesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Properties
-        fields = ['name','description']
+        fields = '__all__'
+
+
+class TypeItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TypeItem
+        fields = '__all__'
+
+
+class RaritySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rarity
+        fields = '__all__'
+
+
+class WeaponTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubType
+        fields = '__all__'
+
+
+class ItemSerializer:
+    class Meta:
+        model = Item
+        fields = '__all__'
+
+
 class WeaponSerializer(serializers.ModelSerializer):
-    type = WeaponTypeSerializer()
-    properties = PropertiesSerializer(many=True)
+    item = ItemSerializer()
+
     class Meta:
         model = Weapon
         fields = '__all__'
-class ShieldSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        data = super(WeaponSerializer, self).to_representation(instance)
+        copy_data = data.copy()
+        for i in data:
+            if not data[i]:
+                copy_data.pop(i)
+        return copy_data
+
+
+class ArmorSerializer(serializers.ModelSerializer):
+    item = ItemSerializer()
+
     class Meta:
-        model = Shield
+        model = Armor
         fields = '__all__'
+
+    def to_representation(self, instance):
+        data = super(ArmorSerializer, self).to_representation(instance)
+        copy_data = data.copy()
+        for i in data:
+            if not data[i]:
+                copy_data.pop(i)
+        return copy_data
+
+
+class SuperItemSerializer(serializers.ModelSerializer):
+    rarity = RaritySerializer()
+    weapon = WeaponSerializer(allow_null=True)
+    armor = ArmorSerializer(allow_null=True)
+    type = TypeItemSerializer()
+
+    class Meta:
+        model = Item
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        data = super(SuperItemSerializer, self).to_representation(instance)
+        if not data['armor']:
+            del data['armor']
+        if not data['weapon']:
+            del data['weapon']
+        return data
 
 
 class DndSpellBookSerializer(serializers.ModelSerializer):
@@ -100,8 +163,9 @@ class CharlistSerializer(serializers.ModelSerializer):
     champion_class = serializers.SlugRelatedField(slug_field='champion_class',
                                                   queryset=BaseClassCh.objects.all(),
                                                   required=False)
-    race = serializers.SlugRelatedField(slug_field='race', queryset=
-    Race.objects.all(), required=False)
+    race = serializers.SlugRelatedField(slug_field='race',
+                                        queryset=Race.objects.all(),
+                                        required=False)
     account = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     pre_history = serializers.SlugRelatedField(slug_field='pre_history_choices',
@@ -111,7 +175,6 @@ class CharlistSerializer(serializers.ModelSerializer):
     world_outlook = serializers.SlugRelatedField(
         slug_field='world_outlook',
         queryset=WorldOutlook.objects.all(), required=False)
-    weapon = WeaponSerializer(required=False,many=True, read_only=True,)
     background = BackgroundSerializer(required=False)
     protect_char_state = ProtectStateSerializer(required=False)
     skill_char_state = SkillStateSerializer(required=False)

@@ -34,23 +34,7 @@ def combine_names(apps, schema_editor):
                     #     name=wep.info()[7]).id,
                     description=wep.info()[8],
                 )
-                x.save()
-                temp = ''
-                if wep.info()[7] == '':
-                    pass
-                else:
-                    for i in wep.info()[7].split(','):
-                        if not db_weapon_properties.objects.filter(
-                                name=i.strip()):
-                            with transaction.atomic():
-                                temp = db_weapon_properties(name=i.strip())
-                                temp.save()
-                                x.properties.add(temp)
-                        else:
-                            with transaction.atomic():
-                                temp = db_weapon_properties.objects.filter(
-                                    name=i.strip())[0]
-                                x.properties.add(temp)
+
 
 
 class Migration(migrations.Migration):

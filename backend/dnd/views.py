@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from drf_multiple_model.views import ObjectMultipleModelAPIView
+
 
 from .serializers import *
 from dnd.models import *
@@ -60,9 +60,6 @@ class SpellView(viewsets.ReadOnlyModelViewSet):
     filterset_fields = ('lvl', 'name')
     search_fields = ['^name', 'class_actor']
 
-    # def list(self, request):
-    #     serializer = DndSpellBookSerializer(self.queryset, many=True)
-    #     return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         spell = get_object_or_404(self.queryset, pk=pk)
@@ -106,15 +103,7 @@ class WorldOutlookView(generics.ListAPIView):
     def get_queryset(self):
         time.sleep(1)
         return WorldOutlook.objects.all()
-class ItemAPIView(ObjectMultipleModelAPIView):
+class ItemAPIView(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
-    querylist = [
-        {
-            'queryset': Weapon.objects.all(),
-            'serializer_class': WeaponSerializer,
-        },
-        {
-            'queryset': Shield.objects.all(),
-            'serializer_class': ShieldSerializer,
-        },
-    ]
+    queryset = Item.objects.all()
+    serializer_class = SuperItemSerializer

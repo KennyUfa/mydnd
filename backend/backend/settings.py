@@ -38,11 +38,11 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'django_filters',
-    'drf_multiple_model',
+    # 'drf_multiple_model',
     'rest_framework_simplejwt',
     "corsheaders",
-    'dnd',
     'authapp',
+    'dnd',
 ]
 
 MIDDLEWARE = [
