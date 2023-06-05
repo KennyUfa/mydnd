@@ -1,12 +1,10 @@
 <template>
+  <MainInfoView></MainInfoView>
+  <skills-view></skills-view>
   <div class="container">
-    <MainInfoView></MainInfoView>
     <div class="row">
-      <div class="col-4 player-info">
+      <div class="col-4">
         <div class="row">
-          <div class="col player-info">
-            <skills-view></skills-view>
-          </div>
           <div class="col player-info">
             <div class="row">
               <inspiration-frame></inspiration-frame>
@@ -27,7 +25,7 @@
           </div>
         </div>
       </div>
-      <div class="col player-info">
+      <div class="col-4">
         <div class="row gx-1">
           <protection-class-view></protection-class-view>
           <initiative-view></initiative-view>
@@ -51,7 +49,7 @@
           <inventory-view></inventory-view>
         </div>
       </div>
-      <div class="col player-info">
+      <div class="col-4">
         <background-view></background-view>
         <div class="card-body stat">
           <h5 class="card-title">УМЕНИЯ И СПОСОБНОСТИ</h5>

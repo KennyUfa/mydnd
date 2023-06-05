@@ -1,22 +1,24 @@
 <template>
-  <div class="card stat">
-    <h5 class="card-title">
-      Бонус Владения {{ $store.state.champion.listInfo.possession_bonus }}
-    </h5>
-    <button
-      class="col"
-      @click="$store.state.champion.listInfo.possession_bonus++, patchP()"
-      :disabled="$store.state.champion.listInfo.possession_bonus > 10"
-    >
-      +
-    </button>
-    <button
-      class="col"
-      @click="$store.state.champion.listInfo.possession_bonus--, patchP()"
-      :disabled="$store.state.champion.listInfo.possession_bonus < 2"
-    >
-      -
-    </button>
+  <div class="container">
+    <div class="card stat">
+      <h5 class="card-title">
+        Бонус Владения {{ $store.state.champion.listInfo.possession_bonus }}
+      </h5>
+      <button
+        class="col"
+        @click="$store.state.champion.listInfo.possession_bonus++, patchP()"
+        :disabled="$store.state.champion.listInfo.possession_bonus > 10"
+      >
+        +
+      </button>
+      <button
+        class="col"
+        @click="$store.state.champion.listInfo.possession_bonus--, patchP()"
+        :disabled="$store.state.champion.listInfo.possession_bonus < 2"
+      >
+        -
+      </button>
+    </div>
   </div>
 </template>
 <script>
