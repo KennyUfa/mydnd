@@ -1,6 +1,5 @@
 <template>
-  <div class="container">
-    <div class="card stat">
+    <div class="col card stat">
       <h5 class="card-title">
         Бонус Владения {{ $store.state.champion.listInfo.possession_bonus }}
       </h5>
@@ -19,7 +18,6 @@
         -
       </button>
     </div>
-  </div>
 </template>
 <script>
 export default {
