@@ -32,7 +32,7 @@ html {
 
 .skill {
   border: solid black;
-  padding: 0 ;
+  padding: 0;
 }
 
 .name-skill {
@@ -45,5 +45,11 @@ html {
 
 .cd {
   text-align: center;
-  padding: 0 ;
+  padding: 0;
+}
+
+.saving-card {
+  padding: 5px;
+  border: solid black;
+  text-align: left;
 }

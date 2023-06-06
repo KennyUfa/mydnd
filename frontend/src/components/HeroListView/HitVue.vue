@@ -47,6 +47,12 @@
           -
         </button>
       </h5>
+      <div class="col">
+        <div class="p-1 border bg-light">Кость Хитов</div>
+      </div>
+      <div class="col">
+        <div class="p-1 border bg-light">Спасброски от смерти</div>
+      </div>
     </div>
   </div>
 </template>

@@ -9,7 +9,7 @@
         >
           {{ champion.listInfo.protect_char_state[skillValue] }}
         </button>
-        бонус {{ Math.floor((champion.listInfo[stat] - 10) / 2) }}
+        {{ Math.floor((champion.listInfo[stat] - 10) / 2) }}
         {{ skillName }}
       </div>
 
@@ -21,7 +21,6 @@
         >
           {{ champion.listInfo.protect_char_state[skillValue] }}
         </button>
-        бонус
         {{
           Math.floor((champion.listInfo[stat] - 10) / 2) +
           champion.listInfo.possession_bonus

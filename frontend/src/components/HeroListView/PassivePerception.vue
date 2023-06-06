@@ -1,11 +1,11 @@
 <template>
   <div class="col-2">
     <div class="card stat">
-    <p>
-      пассивная мудрость
-      {{ 10 + Math.floor(($store.state.champion.listInfo.wisdom - 10) / 2) }}
-    </p>
-  </div>
+      <p>
+        пассивная мудрость
+        {{ 10 + Math.floor(($store.state.champion.listInfo.wisdom - 10) / 2) }}
+      </p>
+    </div>
   </div>
 </template>
 

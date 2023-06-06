@@ -1,9 +1,9 @@
 <template>
-  <div class="col">
-    <button v-if="!show" v-on:click="show = !show">
-      {{ this.show }} не видно
-    </button>
-    <button v-else v-on:click="postBackground">{{ this.show }}видно</button>
+  <button v-if="!show" v-on:click="show = !show">
+    {{ this.show }} не видно
+  </button>
+  <button v-else v-on:click="postBackground">{{ this.show }}видно</button>
+  <div class="row">
     <background-info
       background-name="ЧЕРТЫ ХАРАКТЕРА"
       v-model:background-value="

@@ -3,7 +3,7 @@
     <h6 class="card-header name-skill">{{ skillName }} - {{ value }}</h6>
     <div class="card-body cd">
       <button class="btn btn-outline-success" v-if="!show">
-        + {{ Math.floor((value - 10) / 2) }}
+        {{ Math.floor((value - 10) / 2) }}
       </button>
       <div id="row" v-if="show">
         <button

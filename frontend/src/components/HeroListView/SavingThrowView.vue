@@ -1,10 +1,6 @@
 <template>
-  <button v-if="!show" v-on:click="show = !show">
-    {{ this.show }} не видно
-  </button>
-  <button v-if="show" v-on:click="patchProtectSkills">
-    {{ this.show }} видно
-  </button>
+  <button v-if="!show" v-on:click="show = !show">изменить</button>
+  <button v-if="show" v-on:click="patchProtectSkills">применить</button>
 
   <protect-state
     skillName="Сила"

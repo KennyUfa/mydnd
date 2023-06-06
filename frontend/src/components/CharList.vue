@@ -6,60 +6,96 @@
       <passive-perception></passive-perception>
       <inspiration-frame></inspiration-frame>
       <possession-bonus></possession-bonus>
+      <protection-class-view></protection-class-view>
+      <initiative-view></initiative-view>
+      <speed-view></speed-view>
     </div>
   </div>
   <div class="container">
     <div class="row">
-      <div class="col-4">
-        <div class="row">
-          <div class="col player-info">
-            <div class="row card stat">
-              <saving-throw-view></saving-throw-view>
-            </div>
-            <div class="row card stat">
-              <ability-view></ability-view>
-            </div>
+      <div class="col-3">
+        <div class="col player-info">
+          <div class="card saving-card">
+            <saving-throw-view></saving-throw-view>
           </div>
-
-          <div class="card">
+          <div class="card saving-card">
+            <ability-view></ability-view>
+          </div>
+        </div>
+      </div>
+      <div class="col-9">
+        <hit-vue></hit-vue>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link active"
+              data-bs-toggle="tab"
+              href="#weapons"
+              role="tab"
+              aria-selected="true"
+              >Оружие и инвентарь</a
+            >
+          </li>
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link"
+              data-bs-toggle="tab"
+              href="#spells"
+              role="tab"
+              aria-selected="false"
+              >Заклинания</a
+            >
+          </li>
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link"
+              data-bs-toggle="tab"
+              href="#prehistory"
+              role="tab"
+              aria-selected="false"
+              >Предыстория</a
+            >
+          </li>
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link"
+              data-bs-toggle="tab"
+              href="#skills-and-abilites"
+              role="tab"
+              aria-selected="false"
+              >Умения и способнисти</a
+            >
+          </li>
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link"
+              data-bs-toggle="tab"
+              href="#outher"
+              role="tab"
+              aria-selected="false"
+              >ПРОЧИЕ ВЛАДЕНИЯ И ЯЗЫКИ</a
+            >
+          </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="weapons" role="tabpanel">
+            <h3>weapons</h3>
+            <inventory-view></inventory-view>
+          </div>
+          <div class="tab-pane fade" id="spells" role="tabpanel">
+            <spell-view></spell-view>
+          </div>
+          <div class="tab-pane fade" id="prehistory" role="tabpanel">
+            <background-view></background-view>
+          </div>
+          <div class="tab-pane fade" id="skills-and-abilites" role="tabpanel">
+            УМЕНИЯ И СПОСОБНОСТИ
+          </div>
+          <div class="tab-pane fade" id="outher" role="tabpanel">
             <proficiencie-and-languages></proficiencie-and-languages>
           </div>
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="row gx-1">
-          <protection-class-view></protection-class-view>
-          <initiative-view></initiative-view>
-          <speed-view></speed-view>
-        </div>
-        <div class="col player-info">
-          <hit-vue></hit-vue>
-        </div>
-        <div class="row dx-1">
-          <div class="col">
-            <div class="p-1 border bg-light">Кость Хитов</div>
-          </div>
-          <div class="col">
-            <div class="p-1 border bg-light">Спасброски от смерти</div>
-          </div>
-        </div>
-        <spell-view></spell-view>
-        <div class="card">
-          <div class="card-header">АТАКИ</div>
-          <div class="card-body">оружие</div>
-          <inventory-view></inventory-view>
-        </div>
-      </div>
-      <div class="col-4">
-        <background-view></background-view>
-        <div class="card-body stat">
-          <h5 class="card-title">УМЕНИЯ И СПОСОБНОСТИ</h5>
-          <p class="card-text">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem
-            est iusto laboriosam nulla quidem. Alias corporis cum quo tempore?
-            Adipisci enim laboriosam nihil nobis omnis? Deleniti earum numquam
-            quae repellat.
-          </p>
         </div>
       </div>
     </div>

@@ -1,26 +1,25 @@
 <template>
-  <div class='col-3'>
+  <div class="col-3">
     <div class="card stat p-4">
       <h5 class="card-title">
         Вдохновение {{ $store.state.champion.listInfo.inspiration }}
       </h5>
       <div class="row">
-              <button
+        <button
           class="col"
           @click="$store.state.champion.listInfo.inspiration++, patch()"
           :disabled="$store.state.champion.listInfo.inspiration > 10"
-      >
-        +
-      </button>
-      <button
+        >
+          +
+        </button>
+        <button
           class="col"
           @click="$store.state.champion.listInfo.inspiration--, patch()"
           :disabled="$store.state.champion.listInfo.inspiration < 1"
-      >
-        -
-      </button>
+        >
+          -
+        </button>
       </div>
-
     </div>
   </div>
 </template>

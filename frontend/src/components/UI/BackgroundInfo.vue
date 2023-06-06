@@ -1,5 +1,5 @@
 <template>
-  <div class="card-text stat">
+  <div class="card-text stat col-6">
     <h4>{{ backgroundName }}</h4>
     <strong>Описание</strong>:
     <p v-if="!show">
