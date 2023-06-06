@@ -4,9 +4,8 @@
       {{ this.show }} не видно
     </button>
     <button v-else v-on:click="postBackground">{{ this.show }}видно</button>
-
     <background-info
-      background-name="черты характера"
+      background-name="ЧЕРТЫ ХАРАКТЕРА"
       v-model:background-value="
         $store.state.champion.listInfo.background.personality_traits
       "
@@ -54,5 +53,4 @@ export default {
   },
 };
 </script>
-
 <style scoped></style>

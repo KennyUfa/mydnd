@@ -5,7 +5,7 @@
     <p v-if="!show">
       {{ backgroundValue }}
     </p>
-    <textarea v-else :backgroundValue="backgroundValue"></textarea>
+    <textarea v-else :value="backgroundValue" @input="onUserChange"></textarea>
   </div>
 </template>
 
@@ -13,20 +13,9 @@
 export default {
   name: "BackgroundInfo",
   props: ["backgroundName", "backgroundValue", "show"],
-  watch: {
-    backgroundValue() {
-      this.onUserChange();
-    },
-  },
-  data() {
-    return {
-      saveBackground: true,
-    };
-  },
   methods: {
-    onUserChange: function () {
-      this.$emit("update:backgroundValue", this.backgroundValue);
-      this.saveBackground = false;
+    onUserChange(event) {
+      this.$emit("update:backgroundValue", event.target.value);
     },
   },
 };
