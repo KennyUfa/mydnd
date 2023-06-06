@@ -3,13 +3,16 @@
   <skills-view></skills-view>
   <div class="container">
     <div class="row">
+      <passive-perception></passive-perception>
+      <inspiration-frame></inspiration-frame>
+      <possession-bonus></possession-bonus>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
       <div class="col-4">
         <div class="row">
           <div class="col player-info">
-            <div class="row">
-              <inspiration-frame></inspiration-frame>
-              <possession-bonus></possession-bonus>
-            </div>
             <div class="row card stat">
               <saving-throw-view></saving-throw-view>
             </div>
@@ -17,9 +20,7 @@
               <ability-view></ability-view>
             </div>
           </div>
-          <div class="card">
-            <passive-perception></passive-perception>
-          </div>
+
           <div class="card">
             <proficiencie-and-languages></proficiencie-and-languages>
           </div>
@@ -60,11 +61,6 @@
             quae repellat.
           </p>
         </div>
-
-        <div class="col"></div>
-        <div class="col"></div>
-        <div class="col"></div>
-        <div class="col"></div>
       </div>
     </div>
   </div>

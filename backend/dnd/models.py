@@ -259,14 +259,6 @@ class BackgroundModel(models.Model):
         return created.pk
 
 
-class Inv(models.Model):
-    name = models.CharField(max_length=1500)
-    colvo = models.PositiveSmallIntegerField()
-class Stat(models.Model):
-    name = models.CharField(max_length=1500)
-    item = models.ManyToOneRel(Inv)
-
-
 class Character(models.Model):
     account = models.ForeignKey('auth.User', related_name='account',
                                 on_delete=models.CASCADE,
