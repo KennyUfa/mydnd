@@ -1,12 +1,12 @@
 <template>
   <div class="card">
-    <div class="card-header">снаряжение
+    <div class="card-header">
+      снаряжение
       <router-link to="/database" class="btn btn-primary">
         База вещей
       </router-link>
     </div>
-    <router-link to="/inventary"
-                 class="btn btn-primary">
+    <router-link to="/inventary" class="btn btn-primary">
       Инвентарь
     </router-link>
   </div>
@@ -22,8 +22,7 @@
 
 <script>
 export default {
-  name: "InventoryView"
-}
+  name: "InventoryView",
+};
 </script>
-<style scoped>
-</style>
+<style scoped></style>

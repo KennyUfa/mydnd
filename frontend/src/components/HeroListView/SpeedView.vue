@@ -1,24 +1,24 @@
 <template>
   <div class="col">
-    <div class="p-1 border bg-light">Скорость
+    <div class="p-1 border bg-light">
+      Скорость
       {{ $store.state.champion.listInfo.speed }}
       <button
-          class="col"
-          @click="$store.state.champion.listInfo.speed+=5,patch()"
-          :disabled="$store.state.champion.listInfo.speed > 60"
+        class="col"
+        @click="($store.state.champion.listInfo.speed += 5), patch()"
+        :disabled="$store.state.champion.listInfo.speed > 60"
       >
         +
       </button>
       <button
-          class="col"
-          @click="$store.state.champion.listInfo.speed-=5,patch()"
-          :disabled="$store.state.champion.listInfo.speed < 1"
+        class="col"
+        @click="($store.state.champion.listInfo.speed -= 5), patch()"
+        :disabled="$store.state.champion.listInfo.speed < 1"
       >
         -
       </button>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -28,8 +28,8 @@ export default {
     return {
       count: 1,
       timer: 0,
-      polling: null
-    }
+      polling: null,
+    };
   },
   methods: {
     patch() {
@@ -40,20 +40,18 @@ export default {
     pollData() {
       this.polling = setTimeout(() => {
         this.$store.dispatch("champion/patchSpeed");
-      }, 2000)
+      }, 2000);
     },
     destroyInterval() {
       if (this.polling) {
-        clearInterval(this.polling)
+        clearInterval(this.polling);
       }
     },
     createTimer() {
-      this.pollData()
+      this.pollData();
     },
   },
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

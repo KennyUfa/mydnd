@@ -1,18 +1,19 @@
 <template>
   <div class="col">
-    <div class="p-1 border bg-light">КЗ
+    <div class="p-1 border bg-light">
+      КЗ
       {{ $store.state.champion.listInfo.protection_class }}
       <button
-          class="col"
-          @click="$store.state.champion.listInfo.protection_class++,patchP()"
-          :disabled="$store.state.champion.listInfo.protection_class > 100"
+        class="col"
+        @click="$store.state.champion.listInfo.protection_class++, patchP()"
+        :disabled="$store.state.champion.listInfo.protection_class > 100"
       >
         +
       </button>
       <button
-          class="col"
-          @click="$store.state.champion.listInfo.protection_class--,patchP()"
-          :disabled="$store.state.champion.listInfo.protection_class < 2"
+        class="col"
+        @click="$store.state.champion.listInfo.protection_class--, patchP()"
+        :disabled="$store.state.champion.listInfo.protection_class < 2"
       >
         -
       </button>
@@ -27,8 +28,8 @@ export default {
     return {
       count: 1,
       timer: 0,
-      polling: null
-    }
+      polling: null,
+    };
   },
   methods: {
     patchP() {
@@ -39,20 +40,18 @@ export default {
     pollData() {
       this.polling = setTimeout(() => {
         this.$store.dispatch("champion/patchProtectionClass");
-      }, 2000)
+      }, 2000);
     },
     destroyInterval() {
       if (this.polling) {
-        clearInterval(this.polling)
+        clearInterval(this.polling);
       }
     },
     createTimer() {
-      this.pollData()
+      this.pollData();
     },
   },
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

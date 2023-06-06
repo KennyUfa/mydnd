@@ -1,31 +1,33 @@
 <template>
-  <div class="card stat">
-    <h5 class="card-title">Бонус Владения
-      {{ $store.state.champion.listInfo.possession_bonus }}</h5>
-    <button
+  <div class="container">
+    <div class="card stat">
+      <h5 class="card-title">
+        Бонус Владения {{ $store.state.champion.listInfo.possession_bonus }}
+      </h5>
+      <button
         class="col"
-        @click="$store.state.champion.listInfo.possession_bonus++,patchP()"
+        @click="$store.state.champion.listInfo.possession_bonus++, patchP()"
         :disabled="$store.state.champion.listInfo.possession_bonus > 10"
-    >
-      +
-    </button>
-    <button
+      >
+        +
+      </button>
+      <button
         class="col"
-        @click="$store.state.champion.listInfo.possession_bonus--,patchP()"
+        @click="$store.state.champion.listInfo.possession_bonus--, patchP()"
         :disabled="$store.state.champion.listInfo.possession_bonus < 2"
-    >
-      -
-    </button>
+      >
+        -
+      </button>
+    </div>
   </div>
 </template>
 <script>
-
 export default {
   name: "PossessionBonus",
   data() {
     return {
-      polling: null
-    }
+      polling: null,
+    };
   },
   methods: {
     patchP() {
@@ -35,20 +37,18 @@ export default {
     pollData() {
       this.polling = setTimeout(() => {
         this.$store.dispatch("champion/patchPossessionBonus");
-      }, 2000)
+      }, 2000);
     },
     destroyInterval() {
       if (this.polling) {
-        clearInterval(this.polling)
+        clearInterval(this.polling);
       }
     },
     createTimer() {
-      this.pollData()
+      this.pollData();
     },
   },
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

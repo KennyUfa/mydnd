@@ -1,17 +1,13 @@
 <template>
-  <div class="container-fluid">
-    <navbar-view></navbar-view>
-    <router-view></router-view>
-  </div>
+  <navbar-view></navbar-view>
+  <router-view></router-view>
 </template>
 
 <script>
 import NavbarView from "./components/NavbarView.vue";
 
-
 export default {
-  components: { NavbarView,},
+  components: { NavbarView },
   name: "App",
 };
 </script>
-ç

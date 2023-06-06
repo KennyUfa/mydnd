@@ -1,124 +1,139 @@
 <template>
-  <div class="row align-items-center">
-    <div class="player-name col-md-3" v-if="!show">
-      <button
-          class="btn btn-success" v-on:click="show = !show">
-        <i
-            class="bi bi-vector-pen">
-        </i>
-      </button>
-      <p class="info">Имя персонажа</p>
-      <p class="info" v-if="!show">
-        {{ $store.state.champion.listInfo.name_champion }}
-      </p>
-    </div>
-    <div class="player-name col-md-3" v-else>
-      <button
-          class="btn btn-danger" v-on:click="patchMainInfo">
-        <i
-            class="bi bi-vector-pen">
-        </i>
-      </button>
-      <p class="info">Имя персонажа</p>
-      <input v-model="name">
-    </div>
-    <div class="col-md-9">
-      <div class="row">
-        <div class="div col player-info">
-          <p>Класс - {{ $store.state.champion.listInfo.champion_class }}</p>
-        </div>
-
-        <div class="div col player-info" v-if="!show">
-          <p>
-            предистория - {{ $store.state.champion.listInfo.pre_history }}
-          </p>
-        </div>
-
-        <div class="div col player-info" v-else>
-          <p>
-            предистория - {{ $store.state.champion.listInfo.pre_history }}
-          </p>
-          <button type="button" @click="loadPreHistory"
-                  class="btn btn-danger dropdown-toggle dropdown-toggle-split"
-                  data-bs-toggle="dropdown" aria-expanded="false">
-          </button>
-          <ul class="dropdown-menu">
-            <a v-if="!this.$store.state.champion.prehistorylist"
-               class="dropdown-item"
-               href="#">
-              Загрузка</a>
-            <div v-else
-                 v-for="prehistory in this.$store.state.champion.prehistorylist">
-              <a class="dropdown-item" href="#"
-                 @click="changePreHistory(prehistory.pre_history_choices)">{{
-                  prehistory.pre_history_choices
-                }}</a>
-            </div>
-          </ul>
-        </div>
-
-
-        <div class="div col player-info">
-          <p>Имя игрока - {{ $store.state.auth.user.name }}</p>
+  <div class="container">
+    <div class="row main-info">
+      <div class="col-2 stat" v-if="!show">
+        <button class="btn btn-success" v-on:click="show = !show">
+          <i class="bi bi-vector-pen"></i>
+        </button>
+        <div class="info">Имя персонажа</div>
+        <div class="info" v-if="!show">
+          {{ $store.state.champion.listInfo.name_champion }}
         </div>
       </div>
-      <div class="row">
-        <div class="col player-info">
-          <p>Расса - {{ $store.state.champion.listInfo.race }}</p>
-        </div>
-
-        <div class="col player-info" v-if="!show">
-          <p>
-            Мировозрение - {{ $store.state.champion.listInfo.world_outlook }}
-          </p>
-        </div>
-
-        <div class="div col player-info" v-else>
-          <p>
-            Мировозрение - {{ $store.state.champion.listInfo.world_outlook }}
-          </p>
-          <button type="button" @click="loadWorldOutlook"
-                  class="btn btn-danger dropdown-toggle dropdown-toggle-split"
-                  data-bs-toggle="dropdown" aria-expanded="false">
-          </button>
-          <ul class="dropdown-menu">
-            <a v-if="!this.$store.state.champion.worldoutlooklist"
-               class="dropdown-item"
-               href="#">
-              Загрузка</a>
-            <div v-else
-                 v-for="wlook in this.$store.state.champion.worldoutlooklist">
-              <a class="dropdown-item" href="#"
-                 @click="changeWorldOutlook(wlook.world_outlook)">{{
-                  wlook.world_outlook
-                }}</a>
+      <div class="col-2 pb-4 stat" v-else>
+        <button class="btn btn-danger" v-on:click="patchMainInfo">
+          <i class="bi bi-vector-pen"></i>
+        </button>
+        <div class="info">Имя персонажа</div>
+        <input
+          type="name"
+          class="form-control"
+          aria-describedby="InputName"
+          v-model="name"
+        />
+      </div>
+      <div class="col">
+        <div class="row h-50">
+          <div class="col stat">
+            Класс - {{ $store.state.champion.listInfo.champion_class }}
+          </div>
+          <div class="col stat" v-if="!show">
+            <div>
+              Предистория - {{ $store.state.champion.listInfo.pre_history }}
             </div>
-          </ul>
-        </div>
-
-        <div class="col player-info">
-          <p>Опыт - {{ $store.state.champion.listInfo.experience }}</p>
-        </div>
-        <div class="col player-info">
-          <div id="row counter">
-            <div id="buttonCountNumber" class="col">
-              уровень - {{ $store.state.champion.listInfo.lvl }}
+          </div>
+          <div class="col stat" v-else>
+            <div>
+              Предистория - {{ $store.state.champion.listInfo.pre_history }}
+              <button
+                type="button"
+                @click="loadPreHistory"
+                class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              ></button>
+              <ul class="dropdown-menu">
+                <a
+                  v-if="!this.$store.state.champion.prehistorylist"
+                  class="dropdown-item"
+                  href="#"
+                  >Загрузка</a
+                >
+                <div
+                  v-else
+                  v-for="prehistory in this.$store.state.champion
+                    .prehistorylist"
+                  :key="prehistory"
+                >
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    @click="changePreHistory(prehistory.pre_history_choices)"
+                    >{{ prehistory.pre_history_choices }}</a
+                  >
+                </div>
+              </ul>
             </div>
-            <div v-if="show">
+          </div>
+          <div class="col stat">
+            <div>Имя игрока - {{ $store.state.auth.user.name }}</div>
+          </div>
+        </div>
+        <div class="row h-50">
+          <div class="col-2 stat">
+            <div>Расса - {{ $store.state.champion.listInfo.race }}</div>
+          </div>
+          <div class="col stat" v-if="!show">
+            <div>
+              Мировозрение - {{ $store.state.champion.listInfo.world_outlook }}
+            </div>
+          </div>
+          <div class="col stat" v-else>
+            <div>
+              Мировозрение - {{ $store.state.champion.listInfo.world_outlook }}
               <button
-                  class="col"
-                  @click="$store.state.champion.listInfo.lvl++"
-                  :disabled="$store.state.champion.listInfo.lvl > 19"
-              >
-                +
-              </button>
-              <button
-                  class="col"
-                  @click="$store.state.champion.listInfo.lvl--"
-                  :disabled="$store.state.champion.listInfo.lvl < 2"
-              >
-                -
-              </button>
+                type="button"
+                @click="loadWorldOutlook"
+                class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              ></button>
+              <ul class="dropdown-menu">
+                <a
+                  v-if="!this.$store.state.champion.worldoutlooklist"
+                  class="dropdown-item"
+                  href="#"
+                  >Загрузка</a
+                >
+                <div
+                  v-else
+                  v-for="wlook in this.$store.state.champion.worldoutlooklist"
+                  :key="wlook"
+                >
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    @click="changeWorldOutlook(wlook.world_outlook)"
+                    >{{ wlook.world_outlook }}</a
+                  >
+                </div>
+              </ul>
+            </div>
+          </div>
+          <div class="col-2 stat">
+            <div>Опыт - {{ $store.state.champion.listInfo.experience }}</div>
+          </div>
+          <div class="col stat">
+            <div>
+              <div id="buttonCountNumber">
+                Уровень - {{ $store.state.champion.listInfo.lvl }}
+                <div v-if="show" class="lvl_up">
+                  <button
+                    class="col"
+                    @click="$store.state.champion.listInfo.lvl++"
+                    :disabled="$store.state.champion.listInfo.lvl > 19"
+                  >
+                    +
+                  </button>
+                  <button
+                    class="col"
+                    @click="$store.state.champion.listInfo.lvl--"
+                    :disabled="$store.state.champion.listInfo.lvl < 2"
+                  >
+                    -
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -129,11 +144,11 @@
 
 <script>
 export default {
-  name: "MainInfoView",
+  name: "MainInfostat",
   data() {
     return {
       show: false,
-    }
+    };
   },
   methods: {
     patchMainInfo() {
@@ -156,18 +171,15 @@ export default {
   computed: {
     name: {
       get() {
-        return this.$store.state.champion.listInfo.name_champion
+        return this.$store.state.champion.listInfo.name_champion;
       },
       set(value) {
-        console.log(value)
-        this.$store.commit('champion/updateName', value)
-      }
-    }
-  }
-
-}
+        console.log(value);
+        this.$store.commit("champion/updateName", value);
+      },
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

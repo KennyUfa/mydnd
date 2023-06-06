@@ -1,12 +1,10 @@
 <template>
+  <MainInfoView></MainInfoView>
+  <skills-view></skills-view>
   <div class="container">
-    <MainInfoView></MainInfoView>
     <div class="row">
-      <div class="col-4 player-info">
+      <div class="col-4">
         <div class="row">
-          <div class="col player-info">
-            <skills-view></skills-view>
-          </div>
           <div class="col player-info">
             <div class="row">
               <inspiration-frame></inspiration-frame>
@@ -27,7 +25,7 @@
           </div>
         </div>
       </div>
-      <div class="col player-info">
+      <div class="col-4">
         <div class="row gx-1">
           <protection-class-view></protection-class-view>
           <initiative-view></initiative-view>
@@ -47,21 +45,19 @@
         <spell-view></spell-view>
         <div class="card">
           <div class="card-header">АТАКИ</div>
-          <div class="card-body">
-            оружие
-          </div>
+          <div class="card-body">оружие</div>
           <inventory-view></inventory-view>
         </div>
       </div>
-      <div class="col player-info">
+      <div class="col-4">
         <background-view></background-view>
         <div class="card-body stat">
           <h5 class="card-title">УМЕНИЯ И СПОСОБНОСТИ</h5>
           <p class="card-text">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Dolorem est iusto laboriosam nulla quidem. Alias corporis cum
-            quo tempore? Adipisci enim laboriosam nihil nobis omnis?
-            Deleniti earum numquam quae repellat.
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem
+            est iusto laboriosam nulla quidem. Alias corporis cum quo tempore?
+            Adipisci enim laboriosam nihil nobis omnis? Deleniti earum numquam
+            quae repellat.
           </p>
         </div>
 
@@ -88,10 +84,8 @@ import InitiativeView from "./HeroListView/InitiativeView.vue";
 import SpeedView from "./HeroListView/SpeedView.vue";
 import SpellView from "./HeroListView/SpellView.vue";
 import HitVue from "./HeroListView/HitVue.vue";
-import ProficiencieAndLanguages
-  from "./HeroListView/ProficiencieAndLanguages.vue";
+import ProficiencieAndLanguages from "./HeroListView/ProficiencieAndLanguages.vue";
 import InventoryView from "./HeroListView/InventoryView.vue";
-
 
 export default {
   components: {
@@ -115,5 +109,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

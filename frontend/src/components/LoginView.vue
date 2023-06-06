@@ -1,9 +1,11 @@
 <template>
   <div>
     <div class="user_login">
-      <input v-model="log" type="text" placeholder="Логин"/>
-      <input v-model="password" type="password" placeholder="Пароль"/>
-      <button type="button" class="btn btn-primary" @click="login">Войти</button>
+      <input v-model="log" type="text" placeholder="Логин" />
+      <input v-model="password" type="password" placeholder="Пароль" />
+      <button type="button" class="btn btn-primary" @click="login">
+        Войти
+      </button>
     </div>
   </div>
 </template>
@@ -21,17 +23,17 @@ export default {
     logged() {
       return this.$store.state.auth.user;
     },
-    login() {
-      return this.$store
-          .dispatch("auth/login", {username: this.log, password: this.password})
-          .then(() => {
-            if (this.logged) {
-              this.$router.push({path: "/characters"});
-            }
-          });
+
+    async login() {
+      await this.$store.dispatch("auth/login", {
+        username: this.log,
+        password: this.password,
+      });
+      if (this.logged) {
+        this.$router.push({ path: "/characters" });
+      }
     },
   },
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

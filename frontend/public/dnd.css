@@ -1,0 +1,47 @@
+html {
+  background-color: rgb(23, 81, 81);
+}
+
+.header-main {
+  margin-bottom: 10px;
+}
+
+
+.login {
+  display: flex;
+  border: solid bisque;
+  padding: 10px;
+}
+
+.main-info {
+  margin: 5px 0;
+}
+
+.lvl_up {
+  display: contents;
+}
+
+.name_input {
+  padding-bottom: 20px;
+}
+
+.stat {
+  border: solid black;
+  text-align: center;
+}
+
+.skill {
+  border: solid black;
+}
+
+.name-skill {
+  text-align: center;
+}
+
+.name-skill.card-title {
+  text-align: center;
+}
+
+.cd {
+  text-align: center;
+}

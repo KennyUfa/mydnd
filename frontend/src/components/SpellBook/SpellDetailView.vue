@@ -16,10 +16,8 @@
 
 <script>
 export default {
-  name: "SpellDetailView"
-}
+  name: "SpellDetailView",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

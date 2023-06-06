@@ -2,22 +2,22 @@
   <div>
     <h2>SpellBook</h2>
     <router-link to="/charlist">Лист персонажа</router-link>
-    <form id="search">
-      Search <input name="query" v-model="search">
-    </form>
+    <form id="search">Search <input name="query" v-model="search" /></form>
     <div
-        class="spellbook border border-primary"
-        v-for="items in this.$store.state.item.itemList"
-        v-bind:key="items"
+      class="spellbook border border-primary"
+      v-for="items in this.$store.state.item.itemList"
+      v-bind:key="items"
     >
-      <div class="spellbook border border-primary"
-           v-for="item in items"
-           v-bind:key="item">
+      <div
+        class="spellbook border border-primary"
+        v-for="item in items"
+        v-bind:key="item"
+      >
         {{ item.name }}
         {{ item.damage }}
         ( {{ item.damage_universal }} )
         <ul id="v-for-object" class="demo">
-          <li v-for="value in item.properties">
+          <li v-for="value in item.properties" :key="value">
             {{ value.name }}
           </li>
         </ul>
@@ -29,12 +29,12 @@
 
 <script>
 export default {
-  name: "Inventory",
+  name: "InventoryView",
   data() {
     return {
-      search: '',
-      polling: null
-    }
+      search: "",
+      polling: null,
+    };
   },
   props: {
     id: {
@@ -44,8 +44,8 @@ export default {
   },
   watch: {
     search() {
-      this.patchSearch()
-    }
+      this.patchSearch();
+    },
   },
   methods: {
     patchSearch() {
@@ -55,26 +55,24 @@ export default {
     pollData() {
       this.polling = setTimeout(() => {
         this.$store.dispatch("spellbook/getData", this.search);
-      }, 2000)
+      }, 2000);
     },
     destroyInterval() {
       if (this.polling) {
-        clearInterval(this.polling)
+        clearInterval(this.polling);
       }
     },
     createTimer() {
-      this.pollData()
+      this.pollData();
     },
     addSpell(id) {
       this.$store.dispatch("champion/addSpell", id);
     },
     deleteSpell(id) {
       this.$store.dispatch("champion/deleteSpell", id);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
