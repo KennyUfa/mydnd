@@ -1,7 +1,9 @@
 <template>
   <button v-if="!show" v-on:click="show = !show">изменить</button>
   <button v-if="show" v-on:click="patchProtectSkills">применить</button>
-
+  <div class="">
+    <h6 class="card-title" style="text-align: center">Навыки</h6>
+  </div>
   <ability-frame
     skillName="Атлетика"
     stat="strength"
@@ -110,9 +112,6 @@
     skillValue="persuasion"
     v-bind:show="show"
   ></ability-frame>
-  <div class="">
-    <h6 class="card-title" style="text-align: center">Навыки</h6>
-  </div>
 </template>
 
 <script>

@@ -1,22 +1,26 @@
 <template>
-  <div class="col">
+  <div class="col card stat">
     <div class="p-1 border bg-light">
       Скорость
       {{ $store.state.champion.listInfo.speed }}
-      <button
-        class="col"
-        @click="($store.state.champion.listInfo.speed += 5), patch()"
-        :disabled="$store.state.champion.listInfo.speed > 60"
-      >
-        +
-      </button>
-      <button
-        class="col"
-        @click="($store.state.champion.listInfo.speed -= 5), patch()"
-        :disabled="$store.state.champion.listInfo.speed < 1"
-      >
-        -
-      </button>
+    </div>
+    <div class="container">
+      <div class="row justify-content-center align-items-center g-2">
+        <button
+          class="col"
+          @click="($store.state.champion.listInfo.speed += 5), patch()"
+          :disabled="$store.state.champion.listInfo.speed > 60"
+        >
+          +
+        </button>
+        <button
+          class="col"
+          @click="($store.state.champion.listInfo.speed -= 5), patch()"
+          :disabled="$store.state.champion.listInfo.speed < 1"
+        >
+          -
+        </button>
+      </div>
     </div>
   </div>
 </template>

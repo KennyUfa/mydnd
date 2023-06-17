@@ -127,7 +127,7 @@ class MagicItems(models.Model):
         return self.item.name
 
 
-class DndSpell(models.Model):
+class Spell(models.Model):
     link = models.CharField(max_length=100, verbose_name='ссылка')
     name = models.CharField(max_length=100, verbose_name='название')
     lvl = models.CharField(max_length=15, verbose_name='уровень')
@@ -263,14 +263,20 @@ class Character(models.Model):
     account = models.ForeignKey('auth.User', related_name='account',
                                 on_delete=models.CASCADE,
                                 default='settings.AUTH_USER_MODEL')
+    inventory = models.ManyToManyField(Item, through='InventoryItem')
     name_champion = models.CharField(max_length=100, blank=True,
                                      default='Безымянный герой')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     is_active = models.BooleanField(default=True)
     lvl = models.IntegerField(blank=True, default=1)
-    spells = models.ManyToManyField(DndSpell,
+
+    spells = models.ManyToManyField(Spell,
                                     blank=True, related_name='my_spells')
+    #
+    # items = models.ManyToManyField(Item,
+    #                                blank=True, related_name='my_items')
+
     champion_class = models.ForeignKey(BaseClassCh,
                                        on_delete=models.PROTECT,
                                        blank=True, null=True)
@@ -330,8 +336,7 @@ class Character(models.Model):
         verbose_name = 'пресонаж'
 
 
-class Inventory(models.Model):
-    character = models.ForeignKey(Character, on_delete=models.CASCADE,
-                                  related_name='inventory')
-    item = models.ForeignKey(Item, on_delete=models.CASCADE,related_name='inventory')
-    quantity = models.IntegerField(default=1)
+class InventoryItem(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    character = models.ForeignKey(Character, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)

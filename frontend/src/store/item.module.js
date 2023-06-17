@@ -5,6 +5,7 @@ export const item = {
 
   state: {
     itemList: NaN,
+    item_detail: NaN,
   },
   actions: {
     getData({ commit }, search) {
@@ -19,8 +20,8 @@ export const item = {
         }
       );
     },
-    getDetailSpell({ commit }, id) {
-      return InventoryApi.getSpellDetail(id).then(
+    getDetailItem({ commit }, id) {
+      return InventoryApi.getInventoryDetail(id).then(
         (data) => {
           commit("dataDetailSuccess", data);
           return Promise.resolve(data);
@@ -37,10 +38,10 @@ export const item = {
       state.itemList = data;
     },
     dataDetailSuccess(state, data) {
-      state.spell_detail = data;
+      state.item_detail = data;
     },
     dataFailure(state) {
-      state.spellList = [];
+      state.itemList = [];
       console.log("dataFailure");
     },
   },

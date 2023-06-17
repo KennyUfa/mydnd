@@ -1,7 +1,9 @@
 <template>
   <button v-if="!show" v-on:click="show = !show">изменить</button>
   <button v-if="show" v-on:click="patchProtectSkills">применить</button>
-
+  <div class="">
+    <h6 class="card-title" style="text-align: center">Спасброски</h6>
+  </div>
   <protect-state
     skillName="Сила"
     stat="strength"
@@ -38,9 +40,6 @@
     skillValue="protect_state_charisma"
     v-bind:show="show"
   ></protect-state>
-  <div class="">
-    <h6 class="card-title" style="text-align: center">Спасброски</h6>
-  </div>
 </template>
 
 <script>

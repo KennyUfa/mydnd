@@ -1,10 +1,10 @@
 <template>
-  <div class="col-3">
-    <div class="card stat p-4">
-      <h5 class="card-title">
-        Вдохновение {{ $store.state.champion.listInfo.inspiration }}
-      </h5>
-      <div class="row">
+  <div class="col card stat">
+    <h5 class="card-title">
+      Вдохновение {{ $store.state.champion.listInfo.inspiration }}
+    </h5>
+    <div class="container">
+      <div class="row justify-content-center align-items-center g-2">
         <button
           class="col"
           @click="$store.state.champion.listInfo.inspiration++, patch()"

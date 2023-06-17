@@ -68,7 +68,7 @@ class SkillStateSerializer(serializers.ModelSerializer):
 
 class ChampionSpellSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DndSpell
+        model = Spell
         fields = '__all__'
 
 
@@ -96,7 +96,7 @@ class WeaponTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ItemSerializer:
+class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = '__all__'
@@ -134,7 +134,7 @@ class ArmorSerializer(serializers.ModelSerializer):
         return copy_data
 
 
-class SuperItemSerializer(serializers.ModelSerializer):
+class ItemsSerializer(serializers.ModelSerializer):
     rarity = RaritySerializer()
     weapon = WeaponSerializer(allow_null=True)
     armor = ArmorSerializer(allow_null=True)
@@ -145,7 +145,7 @@ class SuperItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        data = super(SuperItemSerializer, self).to_representation(instance)
+        data = super(ItemsSerializer, self).to_representation(instance)
         if not data['armor']:
             del data['armor']
         if not data['weapon']:
@@ -153,13 +153,22 @@ class SuperItemSerializer(serializers.ModelSerializer):
         return data
 
 
-class DndSpellBookSerializer(serializers.ModelSerializer):
+class SpellBookSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DndSpell
+        model = Spell
         fields = ['id', 'name', 'lvl', 'class_actor']
 
 
-class CharlistSerializer(serializers.ModelSerializer):
+class InventoryItemSerializer(serializers.ModelSerializer):
+    item = ItemSerializer()
+    quantity = serializers.IntegerField()
+
+    class Meta:
+        model = InventoryItem
+        fields = ['item', 'quantity']
+
+
+class CharacterSerializer(serializers.ModelSerializer):
     champion_class = serializers.SlugRelatedField(slug_field='champion_class',
                                                   queryset=BaseClassCh.objects.all(),
                                                   required=False)
@@ -180,9 +189,10 @@ class CharlistSerializer(serializers.ModelSerializer):
     skill_char_state = SkillStateSerializer(required=False)
     spells = ChampionSpellSerializer(many=True, read_only=True, required=False)
     spells_id = serializers.PrimaryKeyRelatedField(many=True,
-                                                   queryset=DndSpell.objects.all(),
+                                                   queryset=Spell.objects.all(),
                                                    source='spells',
                                                    required=False)
+    inventory = InventoryItemSerializer(source='*')
 
     class Meta:
         model = Character

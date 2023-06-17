@@ -1,15 +1,12 @@
 import time
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
-from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework import filters, viewsets ,permissions ,status ,generics
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-
+from rest_framework.views import APIView
 
 from .serializers import *
 from dnd.models import *
-from rest_framework import generics
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -44,7 +41,7 @@ class RaceViewSet(generics.ListAPIView):
 
 class CharacterView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = CharlistSerializer
+    serializer_class = CharacterSerializer
     queryset = Character.objects.all()
 
     def get_queryset(self):
@@ -52,19 +49,23 @@ class CharacterView(viewsets.ModelViewSet):
 
 
 class SpellView(viewsets.ReadOnlyModelViewSet):
-    queryset = DndSpell.objects.all()
+    queryset = Spell.objects.all()
     permission_classes = [permissions.AllowAny]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter,
                        DjangoFilterBackend]
-    serializer_class = DndSpellBookSerializer
+    serializer_class = SpellBookSerializer
     filterset_fields = ('lvl', 'name')
     search_fields = ['^name', 'class_actor']
 
-
     def retrieve(self, request, pk=None):
+        time.sleep(1)
         spell = get_object_or_404(self.queryset, pk=pk)
         serializer = ChampionSpellSerializer(spell)
         return Response(serializer.data)
+
+    def get_queryset(self):
+        time.sleep(1)
+        return Spell.objects.all()
 
 
 class BackgroundView(viewsets.ModelViewSet):
@@ -103,7 +104,64 @@ class WorldOutlookView(generics.ListAPIView):
     def get_queryset(self):
         time.sleep(1)
         return WorldOutlook.objects.all()
-class ItemAPIView(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+
+
+class ItemView(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [permissions.AllowAny]
     queryset = Item.objects.all()
-    serializer_class = SuperItemSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    serializer_class = ItemsSerializer
+
+    def retrieve(self, request, pk=None):
+        time.sleep(1)
+        item = get_object_or_404(self.queryset, pk=pk)
+        serializer = ItemsSerializer(item)
+        return Response(serializer.data)
+
+    def get_queryset(self):
+        search_query = self.request.query_params.get('search', '')
+        queryset = Item.objects.order_by('name')
+        if search_query:
+            queryset = queryset.filter(name__icontains=search_query)
+        return queryset
+
+class InventoryItemView(APIView):
+    def get(self, request, character_id):
+        character = get_object_or_404(Character.objects.all(), id=character_id)
+        inventory = character.inventory.all()
+        serializer = InventoryItemSerializer(inventory, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, character_id):
+        character = get_object_or_404(Character.objects.all(), id=character_id)
+        item_id = request.data.get('item_id')
+        quantity = request.data.get('quantity', 1)
+        item = get_object_or_404(Item.objects.all(), id=item_id)
+        inventory_item, created = InventoryItem.objects.get_or_create(character=character, item=item)
+        if not created:
+            inventory_item.quantity = int(quantity)
+        else:
+            inventory_item.quantity = int(quantity)
+        inventory_item.save()
+        serializer = InventoryItemSerializer(inventory_item)
+        return Response(serializer.data)
+
+    def delete(self, request, character_id):
+        character = get_object_or_404(Character.objects.all(), id=character_id)
+        item_id = request.data.get('item_id')
+        item = get_object_or_404(Item.objects.all(), id=item_id)
+        inventory_item = get_object_or_404(InventoryItem.objects.all(), character=character, item=item)
+        inventory_item.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def patch(self, request, character_id):
+        character = get_object_or_404(Character.objects.all(), id=character_id)
+        for item in request.data:
+            item_id = item.get('item_id')
+            quantity = item.get('quantity')
+            inventory_item = get_object_or_404(InventoryItem.objects.all(), character=character, item__id=item_id)
+            inventory_item.quantity = quantity
+            inventory_item.save()
+        inventory = character.inventory.all()
+        serializer = InventoryItemSerializer(inventory, many=True)
+        return Response(serializer.data)

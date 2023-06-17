@@ -8,8 +8,7 @@ router.register('character', CharacterView)
 router.register('prots', ProtectStateView)
 router.register('skillstate', SkillStateView)
 router.register('spell', SpellView, basename='spell')
-router.register('items', ItemAPIView, basename='item')
-
+router.register('items', ItemView, basename='item')
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -17,5 +16,5 @@ urlpatterns = [
     path('racelist/', RaceViewSet.as_view(), name='race-list'),
     path('prehistory/', PreHistoryView.as_view(), name='pre-history-list'),
     path('looklist/', WorldOutlookView.as_view(), name='world-outlook-list'),
-    # path('items/', ItemAPIView.as_view(), name='item-list'),
+    path('characters/<int:character_id>/inventory/', InventoryItemView.as_view()),
 ]

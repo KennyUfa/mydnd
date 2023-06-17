@@ -335,6 +335,38 @@ export const champion = {
         }
       );
     },
+    addItem({ commit, state }, id) {
+      state.listInfo.items_id.push(id);
+      const data = {
+        items_id: state.listInfo.items_id,
+      };
+      return DndListService.itemPatch(data, state.champion_id).then(
+        (data) => {
+          commit("dataSuccess", data);
+          return Promise.resolve(data);
+        },
+        (error) => {
+          commit("dataFailure");
+          return Promise.reject(error);
+        }
+      );
+    },
+    deleteItem({ commit, state }, id) {
+      let res = state.listInfo.items_id.filter((value) => id !== value);
+      const data = {
+        items_id: res,
+      };
+      return DndListService.itemPatch(data, state.champion_id).then(
+        (data) => {
+          commit("dataSuccess", data);
+          return Promise.resolve(data);
+        },
+        (error) => {
+          commit("dataFailure");
+          return Promise.reject(error);
+        }
+      );
+    },
     heal({ commit, state }, hit) {
       commit("mutHealHit", hit);
       const data = {

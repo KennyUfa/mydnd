@@ -13,6 +13,7 @@
             height="30"
             alt="MDB Logo"
             loading="lazy"
+            style="margin-top: -1px"
           />
         </a>
         <ul

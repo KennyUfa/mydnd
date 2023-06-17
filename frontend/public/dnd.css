@@ -28,6 +28,7 @@ html {
 .stat {
   border: solid black;
   text-align: center;
+  align-items: center;
 }
 
 .skill {

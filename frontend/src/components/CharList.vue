@@ -2,7 +2,7 @@
   <MainInfoView></MainInfoView>
   <skills-view></skills-view>
   <div class="container">
-    <div class="row">
+    <div class="row justify-content-center m-0">
       <passive-perception></passive-perception>
       <inspiration-frame></inspiration-frame>
       <possession-bonus></possession-bonus>
@@ -31,10 +31,10 @@
             <a
               class="nav-link active"
               data-bs-toggle="tab"
-              href="#weapons"
+              href="#inventory"
               role="tab"
               aria-selected="true"
-              >Оружие и инвентарь</a
+              >Инвентарь</a
             >
           </li>
           <li class="nav-item" role="presentation">
@@ -80,8 +80,7 @@
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
-          <div class="tab-pane fade show active" id="weapons" role="tabpanel">
-            <h3>weapons</h3>
+          <div class="tab-pane fade show active" id="inventory" role="tabpanel">
             <inventory-view></inventory-view>
           </div>
           <div class="tab-pane fade" id="spells" role="tabpanel">

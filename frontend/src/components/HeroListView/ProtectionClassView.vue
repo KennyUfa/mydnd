@@ -1,22 +1,26 @@
 <template>
-  <div class="col">
+  <div class="col card stat">
     <div class="p-1 border bg-light">
       КЗ
       {{ $store.state.champion.listInfo.protection_class }}
-      <button
-        class="col"
-        @click="$store.state.champion.listInfo.protection_class++, patchP()"
-        :disabled="$store.state.champion.listInfo.protection_class > 100"
-      >
-        +
-      </button>
-      <button
-        class="col"
-        @click="$store.state.champion.listInfo.protection_class--, patchP()"
-        :disabled="$store.state.champion.listInfo.protection_class < 2"
-      >
-        -
-      </button>
+    </div>
+    <div class="container">
+      <div class="row justify-content-center align-items-center g-2">
+        <button
+          class="col"
+          @click="$store.state.champion.listInfo.protection_class++, patchP()"
+          :disabled="$store.state.champion.listInfo.protection_class > 100"
+        >
+          +
+        </button>
+        <button
+          class="col"
+          @click="$store.state.champion.listInfo.protection_class--, patchP()"
+          :disabled="$store.state.champion.listInfo.protection_class < 2"
+        >
+          -
+        </button>
+      </div>
     </div>
   </div>
 </template>
