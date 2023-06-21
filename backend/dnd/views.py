@@ -1,6 +1,6 @@
 import time
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, viewsets ,permissions ,status ,generics
+from rest_framework import filters, viewsets, permissions, status, generics
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
@@ -124,6 +124,7 @@ class ItemView(viewsets.ReadOnlyModelViewSet):
         if search_query:
             queryset = queryset.filter(name__icontains=search_query)
         return queryset
+
 
 class InventoryItemView(APIView):
     def get(self, request, character_id):

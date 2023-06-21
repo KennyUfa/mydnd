@@ -263,7 +263,7 @@ class Character(models.Model):
     account = models.ForeignKey('auth.User', related_name='account',
                                 on_delete=models.CASCADE,
                                 default='settings.AUTH_USER_MODEL')
-    inventory = models.ManyToManyField(Item, through='InventoryItem')
+    # inventory = models.ManyToManyField(Item, through='InventoryItem')
     name_champion = models.CharField(max_length=100, blank=True,
                                      default='Безымянный герой')
     created = models.DateTimeField(auto_now_add=True)
@@ -273,10 +273,6 @@ class Character(models.Model):
 
     spells = models.ManyToManyField(Spell,
                                     blank=True, related_name='my_spells')
-    #
-    # items = models.ManyToManyField(Item,
-    #                                blank=True, related_name='my_items')
-
     champion_class = models.ForeignKey(BaseClassCh,
                                        on_delete=models.PROTECT,
                                        blank=True, null=True)
@@ -338,5 +334,5 @@ class Character(models.Model):
 
 class InventoryItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    character = models.ForeignKey(Character, on_delete=models.CASCADE)
+    character = models.ForeignKey(Character, on_delete=models.CASCADE,related_name='my_items')
     quantity = models.PositiveIntegerField(default=1)

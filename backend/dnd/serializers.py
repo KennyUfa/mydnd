@@ -118,6 +118,22 @@ class WeaponSerializer(serializers.ModelSerializer):
         return copy_data
 
 
+class EquipmentSerializer(serializers.ModelSerializer):
+    item = ItemSerializer()
+
+    class Meta:
+        model = Equipment
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        data = super(EquipmentSerializer, self).to_representation(instance)
+        copy_data = data.copy()
+        for i in data:
+            if not data[i]:
+                copy_data.pop(i)
+        return copy_data
+
+
 class ArmorSerializer(serializers.ModelSerializer):
     item = ItemSerializer()
 
@@ -134,10 +150,28 @@ class ArmorSerializer(serializers.ModelSerializer):
         return copy_data
 
 
+class MagicItemsSerializer(serializers.ModelSerializer):
+    item = ItemSerializer()
+
+    class Meta:
+        model = MagicItems
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        data = super(MagicItemsSerializer, self).to_representation(instance)
+        copy_data = data.copy()
+        for i in data:
+            if not data[i]:
+                copy_data.pop(i)
+        return copy_data
+
+
 class ItemsSerializer(serializers.ModelSerializer):
     rarity = RaritySerializer()
     weapon = WeaponSerializer(allow_null=True)
     armor = ArmorSerializer(allow_null=True)
+    equipment = EquipmentSerializer(allow_null=True)
+    magic_item = MagicItemsSerializer(allow_null=True)
     type = TypeItemSerializer()
 
     class Meta:
@@ -150,6 +184,10 @@ class ItemsSerializer(serializers.ModelSerializer):
             del data['armor']
         if not data['weapon']:
             del data['weapon']
+        if not data['equipment']:
+            del data['equipment']
+        if not data['magic_item']:
+            del data['magic_item']
         return data
 
 
@@ -159,13 +197,13 @@ class SpellBookSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'lvl', 'class_actor']
 
 
-class InventoryItemSerializer(serializers.ModelSerializer):
-    item = ItemSerializer()
+class InventorySerializer(serializers.ModelSerializer):
+    item = ItemsSerializer()
     quantity = serializers.IntegerField()
 
     class Meta:
         model = InventoryItem
-        fields = ['item', 'quantity']
+        fields = "__all__"
 
 
 class CharacterSerializer(serializers.ModelSerializer):
@@ -192,7 +230,7 @@ class CharacterSerializer(serializers.ModelSerializer):
                                                    queryset=Spell.objects.all(),
                                                    source='spells',
                                                    required=False)
-    inventory = InventoryItemSerializer(source='*')
+    my_items = InventorySerializer(many=True, read_only=True)
 
     class Meta:
         model = Character
@@ -222,5 +260,5 @@ class CharacterSerializer(serializers.ModelSerializer):
             nested_data = validated_data.pop('skill_char_state')
             nested_serializer.update(nested_instance, nested_data)
 
-        return super(CharlistSerializer, self).update(instance,
-                                                      validated_data)
+        return super(CharacterSerializer, self).update(instance,
+                                                       validated_data)
