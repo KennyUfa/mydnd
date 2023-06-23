@@ -109,8 +109,23 @@ class ChampionApi {
     }
   }
 
+  async itemPost(data, id) {
+    const response = await api.post(
+      "/dnd/characters/" + id + "/inventory/",
+      data
+    );
+    if (response.data) {
+      return response.data;
+    } else {
+      console.log(response);
+    }
+  }
+
   async itemPatch(data, id) {
-    const response = await api.patch("dnd/character/" + id + "/", data);
+    const response = await api.patch(
+      "/dnd/characters/" + id + "/inventory/",
+      data
+    );
     if (response.data) {
       return response.data;
     } else {

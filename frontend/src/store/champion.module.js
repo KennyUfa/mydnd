@@ -335,14 +335,29 @@ export const champion = {
         }
       );
     },
-    addItem({ commit, state }, id) {
-      state.listInfo.items_id.push(id);
+    addItem({ commit, state }, id_item) {
+      console.log(id_item);
       const data = {
-        items_id: state.listInfo.items_id,
+        item_id: id_item,
+      };
+      return DndListService.itemPost(data, state.champion_id).then(
+        (data) => {
+          commit("itemSuccess", data);
+          return Promise.resolve(data);
+        },
+        (error) => {
+          commit("dataFailure");
+          return Promise.reject(error);
+        }
+      );
+    },
+    patchItem({ commit, state }) {
+      const data = {
+        my_items: state.listInfo.my_items,
       };
       return DndListService.itemPatch(data, state.champion_id).then(
         (data) => {
-          commit("dataSuccess", data);
+          commit("itemsSuccess", data);
           return Promise.resolve(data);
         },
         (error) => {
@@ -419,6 +434,12 @@ export const champion = {
   mutations: {
     dataSuccess(state, data) {
       state.listInfo = data;
+    },
+    itemSuccess(state, data) {
+      state.listInfo.my_items.push(data);
+    },
+    itemsSuccess(state, data) {
+      state.listInfo.my_items = data;
     },
     dataFailure(state) {
       state.listInfo = null;

@@ -18,7 +18,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 class BaseClassChSerializer(serializers.ModelSerializer):
     class Meta:
-        model = BaseClassCh
+        model = СharacterСlass
         fields = ['champion_class']
 
 
@@ -38,7 +38,7 @@ class PreHistorySerializer(serializers.ModelSerializer):
 
 class ChampionClassSerializer(serializers.ModelSerializer):
     class Meta:
-        model = BaseClassCh
+        model = СharacterСlass
         fields = '__all__'
 
 

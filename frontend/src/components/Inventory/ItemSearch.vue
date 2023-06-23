@@ -11,13 +11,13 @@
       data-bs-target="#ModalItemSearch"
       @click="loadItemInfo(item.id)"
     >
-      {{ item }}</a
+      {{ item.name }}</a
     >
     <button type="button" class="btn btn-success" @click="addItem(item.id)">
       +
     </button>
     <button
-      v-if="this.$store.state.champion.listInfo.items_id.includes(item.id)"
+      v-if="this.$store.state.champion.listInfo.my_items.includes(item.id)"
       type="button"
       class="btn btn-danger"
       @click="deleteItem(item.id)"
@@ -45,7 +45,12 @@
             </h5>
           </div>
           <div class="modal-body">
-            <div>InFOOOOOOOO</div>
+            <div
+              v-for="info in this.$store.state.item.item_detail"
+              v-bind:key="info"
+            >
+              {{ info }}
+            </div>
           </div>
         </div>
         <div class="modal-content" v-else>

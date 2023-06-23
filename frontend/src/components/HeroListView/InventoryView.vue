@@ -42,16 +42,16 @@
     <div class="card-body">
       <div
         class="spellbook border border-primary"
-        v-for="item in this.$store.state.champion.listInfo.items"
+        v-for="item in my_items"
         v-bind:key="item"
       >
         <a
           href=""
           data-bs-toggle="modal"
           data-bs-target="#ModalItemView"
-          @click="loadItemInfo(item.id)"
+          @click="loadItemInfo(item.item.id)"
         >
-          {{ item.name }}
+          {{ item.item.name }}
         </a>
         <div
           class="modal fade"
@@ -61,29 +61,35 @@
           aria-hidden="true"
         >
           <div class="modal-dialog">
-            <div class="modal-content">
+            <div
+              class="modal-content"
+              v-if="item_detail && item_detail.id === this.id"
+            >
               <div class="modal-header">
                 <h5 class="modal-title" id="ModalLabelItemView">
-                  {{ item.name }}
+                  {{ item_detail.name }}
                 </h5>
               </div>
-              <div
-                class="modal-body"
-                v-if="
-                  this.$store.state.item.item_detail &&
-                  this.$store.state.item.item_detail.id === this.id
-                "
-              >
-                <div>{{ $store.state.item.item_detail }}</div>
+              <div class="modal-body">
+                <div>{{ item_detail }}</div>
               </div>
-              <div class="modal-content" v-else>load</div>
             </div>
+            <div class="modal-content" v-else>load</div>
           </div>
         </div>
         <button
           type="button"
           class="btn btn-danger"
-          @click="deleteItem(item.id)"
+          @click="item.quantity++, patch()"
+        >
+          +
+        </button>
+        {{ item.quantity }}
+        <button
+          type="button"
+          class="btn btn-danger"
+          @click="item.quantity--, patch()"
+          :disabled="item.quantity < 1"
         >
           -
         </button>
@@ -94,6 +100,7 @@
 
 <script>
 import ItemSearch from "../Inventory/ItemSearch.vue";
+import { mapState } from "vuex";
 export default {
   name: "InventoryView",
   components: {
@@ -102,18 +109,42 @@ export default {
   data() {
     return {
       id: "",
+      polling: null,
     };
   },
+  computed: {
+    ...mapState({
+      my_items: (state) => state.champion.listInfo.my_items,
+      item_detail: (state) => state.item.item_detail,
+    }),
+  },
   methods: {
-    deleteItem(id) {
-      this.$store.dispatch("champion/deleteItem", id);
-    },
     loadInventory() {
       this.$store.dispatch("item/getData");
     },
+
     loadItemInfo(id) {
+      console.log(id);
       this.$store.dispatch("item/getDetailItem", id);
       this.id = id;
+    },
+
+    patch() {
+      this.destroyInterval();
+      this.createTimer();
+    },
+    pollData() {
+      this.polling = setTimeout(() => {
+        this.$store.dispatch("champion/patchItem");
+      }, 2000);
+    },
+    destroyInterval() {
+      if (this.polling) {
+        clearInterval(this.polling);
+      }
+    },
+    createTimer() {
+      this.pollData();
     },
   },
 };

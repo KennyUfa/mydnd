@@ -150,7 +150,7 @@ class Spell(models.Model):
         verbose_name = 'Заклинание'
 
 
-class BaseClassCh(models.Model):
+class СharacterСlass(models.Model):
     champion_class = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
@@ -273,7 +273,7 @@ class Character(models.Model):
 
     spells = models.ManyToManyField(Spell,
                                     blank=True, related_name='my_spells')
-    champion_class = models.ForeignKey(BaseClassCh,
+    champion_class = models.ForeignKey(СharacterСlass,
                                        on_delete=models.PROTECT,
                                        blank=True, null=True)
     race = models.ForeignKey(Race, on_delete=models.PROTECT, blank=True,

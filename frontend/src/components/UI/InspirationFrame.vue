@@ -29,15 +29,12 @@ export default {
   name: "InspirationFrame",
   data() {
     return {
-      count: 1,
-      timer: 0,
       polling: null,
     };
   },
   methods: {
     patch() {
       this.destroyInterval();
-      this.count += 1;
       this.createTimer();
     },
     pollData() {

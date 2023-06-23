@@ -7,7 +7,7 @@
         </button>
         <div class="info">Имя персонажа</div>
         <div class="info" v-if="!show">
-          {{ $store.state.champion.listInfo.name_champion }}
+          {{ listInfo.name_champion }}
         </div>
       </div>
       <div class="col-2 pb-4 stat" v-else>
@@ -24,17 +24,13 @@
       </div>
       <div class="col">
         <div class="row h-50">
-          <div class="col stat">
-            Класс - {{ $store.state.champion.listInfo.champion_class }}
-          </div>
+          <div class="col stat">Класс - {{ listInfo.champion_class }}</div>
           <div class="col stat" v-if="!show">
-            <div>
-              Предистория - {{ $store.state.champion.listInfo.pre_history }}
-            </div>
+            <div>Предистория - {{ listInfo.pre_history }}</div>
           </div>
           <div class="col stat" v-else>
             <div>
-              Предистория - {{ $store.state.champion.listInfo.pre_history }}
+              Предистория - {{ listInfo.pre_history }}
               <button
                 type="button"
                 @click="loadPreHistory"
@@ -71,16 +67,14 @@
         </div>
         <div class="row h-50">
           <div class="col-2 stat">
-            <div>Расса - {{ $store.state.champion.listInfo.race }}</div>
+            <div>Расса - {{ listInfo.race }}</div>
           </div>
           <div class="col stat" v-if="!show">
-            <div>
-              Мировозрение - {{ $store.state.champion.listInfo.world_outlook }}
-            </div>
+            <div>Мировозрение - {{ listInfo.world_outlook }}</div>
           </div>
           <div class="col stat" v-else>
             <div>
-              Мировозрение - {{ $store.state.champion.listInfo.world_outlook }}
+              Мировозрение - {{ listInfo.world_outlook }}
               <button
                 type="button"
                 @click="loadWorldOutlook"
@@ -111,24 +105,24 @@
             </div>
           </div>
           <div class="col-2 stat">
-            <div>Опыт - {{ $store.state.champion.listInfo.experience }}</div>
+            <div>Опыт - {{ listInfo.experience }}</div>
           </div>
           <div class="col stat">
             <div>
               <div id="buttonCountNumber">
-                Уровень - {{ $store.state.champion.listInfo.lvl }}
+                Уровень - {{ listInfo.lvl }}
                 <div v-if="show" class="lvl_up">
                   <button
                     class="col"
-                    @click="$store.state.champion.listInfo.lvl++"
-                    :disabled="$store.state.champion.listInfo.lvl > 19"
+                    @click="listInfo.lvl++"
+                    :disabled="listInfo.lvl > 19"
                   >
                     +
                   </button>
                   <button
                     class="col"
-                    @click="$store.state.champion.listInfo.lvl--"
-                    :disabled="$store.state.champion.listInfo.lvl < 2"
+                    @click="listInfo.lvl--"
+                    :disabled="listInfo.lvl < 2"
                   >
                     -
                   </button>
@@ -143,6 +137,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "MainInfostat",
   data() {
@@ -178,6 +173,9 @@ export default {
         this.$store.commit("champion/updateName", value);
       },
     },
+    ...mapState({
+      listInfo: (state) => state.champion.listInfo,
+    }),
   },
 };
 </script>

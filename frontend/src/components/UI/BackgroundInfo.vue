@@ -2,10 +2,17 @@
   <div class="card-text stat col-6">
     <h4>{{ backgroundName }}</h4>
     <strong>Описание</strong>:
-    <p v-if="!show">
+    <div v-if="!show">
       {{ backgroundValue }}
-    </p>
-    <textarea v-else :value="backgroundValue" @input="onUserChange"></textarea>
+    </div>
+    <textarea
+      class="form-control autosize-textarea"
+      id="exampleFormControlTextarea1"
+      rows="3"
+      v-else
+      :value="backgroundValue"
+      @input="onUserChange"
+    ></textarea>
   </div>
 </template>
 
