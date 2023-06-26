@@ -7,7 +7,9 @@
     >
       <button @click="championLink(mychampion.id)">
         <div class="champ">name -{{ mychampion.name_champion }}</div>
-        <div class="champ">class - {{ mychampion.champion_class }}</div>
+        <div class="champ">
+          class - {{ mychampion.champion_class.champion_class }}
+        </div>
         <div class="champ">lvl - {{ mychampion.lvl }}</div>
       </button>
       <button class="btn btn-primary" @click="deleteChampion(mychampion.id)">

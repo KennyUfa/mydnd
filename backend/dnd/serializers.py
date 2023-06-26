@@ -18,8 +18,8 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
 class BaseClassChSerializer(serializers.ModelSerializer):
     class Meta:
-        model = СharacterСlass
-        fields = ['champion_class']
+        model = ClassChampion
+        fields = "__all__"
 
 
 class RaceSerializer(serializers.ModelSerializer):
@@ -38,8 +38,8 @@ class PreHistorySerializer(serializers.ModelSerializer):
 
 class ChampionClassSerializer(serializers.ModelSerializer):
     class Meta:
-        model = СharacterСlass
-        fields = '__all__'
+        model = ClassChampion
+        fields = "__all__"
 
 
 class WorldOutlookSerializer(serializers.ModelSerializer):
@@ -206,10 +206,14 @@ class InventorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class SkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skill
+        fields = ['name', 'level', 'description']
+
+
 class CharacterSerializer(serializers.ModelSerializer):
-    champion_class = serializers.SlugRelatedField(slug_field='champion_class',
-                                                  queryset=BaseClassCh.objects.all(),
-                                                  required=False)
+    champion_class = ChampionClassSerializer()
     race = serializers.SlugRelatedField(slug_field='race',
                                         queryset=Race.objects.all(),
                                         required=False)
@@ -231,10 +235,20 @@ class CharacterSerializer(serializers.ModelSerializer):
                                                    source='spells',
                                                    required=False)
     my_items = InventorySerializer(many=True, read_only=True)
+    available_skills = serializers.SerializerMethodField()
+
+    def get_available_skills(self, obj):
+        return SkillSerializer(obj.champion_class.get_available_skills(obj.lvl), many=True).data
 
     class Meta:
         model = Character
         fields = '__all__'
+
+    def create(self, validated_data):
+        champion_class_data = validated_data.pop('champion_class')
+        champion_class = ClassChampion.objects.get(champion_class=champion_class_data['champion_class'])
+        character = Character.objects.create(champion_class=champion_class, **validated_data)
+        return character
 
     # https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
     def update(self, instance, validated_data):

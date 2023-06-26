@@ -41,6 +41,7 @@ class ChampionApi {
   async getClassList() {
     const response = await api.get("dnd/classlist/");
     if (response.data) {
+      console.log(response);
       return response.data;
     } else {
       console.log(response);

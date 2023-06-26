@@ -24,12 +24,12 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class BaseClassChViewSet(generics.ListAPIView):
-    queryset = BaseClassCh.objects.all()
+    queryset = ClassChampion.objects.all()
     serializer_class = BaseClassChSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return BaseClassCh.objects.all()
+        return ClassChampion.objects.all()
 
 
 class RaceViewSet(generics.ListAPIView):

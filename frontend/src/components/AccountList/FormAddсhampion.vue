@@ -8,7 +8,10 @@
 
     <div class="btn-group">
       <button type="button" class="btn btn-danger">
-        {{ this.$store.state.champion.create_champion.champion_class }}
+        {{
+          this.$store.state.champion.create_champion.champion_class
+            .champion_class
+        }}
       </button>
       <button
         type="button"
@@ -30,12 +33,9 @@
           v-for="classHero in this.$store.state.champion.classlist"
           :key="classHero"
         >
-          <a
-            class="dropdown-item"
-            href="#"
-            @click="changeClass(classHero.champion_class)"
-            >{{ classHero.champion_class }}</a
-          >
+          <a class="dropdown-item" href="#" @click="changeClass(classHero)">{{
+            classHero.champion_class
+          }}</a>
         </div>
       </ul>
     </div>

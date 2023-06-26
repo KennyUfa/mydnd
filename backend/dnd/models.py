@@ -150,11 +150,25 @@ class Spell(models.Model):
         verbose_name = 'Заклинание'
 
 
-class СharacterСlass(models.Model):
+class Skill(models.Model):
+    name = models.CharField(max_length=100, blank=True)
+    level = models.PositiveSmallIntegerField()
+    description = models.TextField(blank=True)
+
+
+
+class ClassChampion(models.Model):
     champion_class = models.CharField(max_length=100, blank=True)
+    table = models.JSONField(blank=True, null=True)
+    skills = models.ManyToManyField(Skill, verbose_name="Умения",blank=True)
+    additional_spells = models.ManyToManyField(Spell, verbose_name="Дополнительные заклинания",blank=True)
 
     def __str__(self):
         return self.champion_class
+
+    def get_available_skills(self, character_level):
+        return self.skills.filter(level__lte=character_level)
+
 
 
 class Race(models.Model):
@@ -260,10 +274,12 @@ class BackgroundModel(models.Model):
 
 
 class Character(models.Model):
+    champion_class = models.ForeignKey(ClassChampion,
+                                       on_delete=models.PROTECT,
+                                       blank=True, null=True)
     account = models.ForeignKey('auth.User', related_name='account',
                                 on_delete=models.CASCADE,
                                 default='settings.AUTH_USER_MODEL')
-    # inventory = models.ManyToManyField(Item, through='InventoryItem')
     name_champion = models.CharField(max_length=100, blank=True,
                                      default='Безымянный герой')
     created = models.DateTimeField(auto_now_add=True)
@@ -273,9 +289,7 @@ class Character(models.Model):
 
     spells = models.ManyToManyField(Spell,
                                     blank=True, related_name='my_spells')
-    champion_class = models.ForeignKey(СharacterСlass,
-                                       on_delete=models.PROTECT,
-                                       blank=True, null=True)
+
     race = models.ForeignKey(Race, on_delete=models.PROTECT, blank=True,
                              null=True)
     world_outlook = models.ForeignKey(WorldOutlook,
@@ -334,5 +348,5 @@ class Character(models.Model):
 
 class InventoryItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    character = models.ForeignKey(Character, on_delete=models.CASCADE,related_name='my_items')
+    character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name='my_items')
     quantity = models.PositiveIntegerField(default=1)

@@ -65,6 +65,7 @@ export const champion = {
       return DndListService.createPostChampion(state.create_champion).then(
         (data) => {
           commit("CreateMychampions", data);
+          console.log(data);
           return Promise.resolve(data);
         },
         (error) => {

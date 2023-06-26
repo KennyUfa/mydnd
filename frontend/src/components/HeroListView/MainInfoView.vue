@@ -24,7 +24,9 @@
       </div>
       <div class="col">
         <div class="row h-50">
-          <div class="col stat">Класс - {{ listInfo.champion_class }}</div>
+          <div class="col stat">
+            Класс - {{ listInfo.champion_class.champion_class }}
+          </div>
           <div class="col stat" v-if="!show">
             <div>Предистория - {{ listInfo.pre_history }}</div>
           </div>
