@@ -212,6 +212,18 @@ class SkillSerializer(serializers.ModelSerializer):
         fields = ['name', 'level', 'description']
 
 
+class CharacterSerializerList:
+    class Meta:
+        model = Character
+        fields = ["name_champion", "champion_class", "lvl"]
+
+
+class SpellLevelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SpellLevel
+        fields = ['level', 'spell_slots', 'known_conspiracies', 'known_spell']
+
+
 class CharacterSerializer(serializers.ModelSerializer):
     champion_class = ChampionClassSerializer()
     race = serializers.SlugRelatedField(slug_field='race',
@@ -236,9 +248,13 @@ class CharacterSerializer(serializers.ModelSerializer):
                                                    required=False)
     my_items = InventorySerializer(many=True, read_only=True)
     available_skills = serializers.SerializerMethodField()
+    spell_slots = serializers.SerializerMethodField()
 
     def get_available_skills(self, obj):
         return SkillSerializer(obj.champion_class.get_available_skills(obj.lvl), many=True).data
+
+    def get_spell_slots(self, obj):
+        return SpellLevelSerializer(obj.champion_class.get_spell_slots(obj.lvl)).data
 
     class Meta:
         model = Character

@@ -156,19 +156,36 @@ class Skill(models.Model):
     description = models.TextField(blank=True)
 
 
+class SpellLevel(models.Model):
+    level = models.PositiveSmallIntegerField(blank=True,null=True)
+    spell_slots = models.JSONField(blank=True,null=True)
+    known_conspiracies = models.PositiveSmallIntegerField(blank=True,null=True)
+    known_spell = models.PositiveSmallIntegerField(blank=True,null=True)
+
 
 class ClassChampion(models.Model):
     champion_class = models.CharField(max_length=100, blank=True)
     table = models.JSONField(blank=True, null=True)
-    skills = models.ManyToManyField(Skill, verbose_name="Умения",blank=True)
-    additional_spells = models.ManyToManyField(Spell, verbose_name="Дополнительные заклинания",blank=True)
+    skill = models.ManyToManyField(Skill, verbose_name="Умения", blank=True)
+    additional_spell = models.ManyToManyField(Spell, verbose_name="Дополнительные заклинания", blank=True)
+    spell_slots = models.ManyToManyField(SpellLevel, verbose_name="Доступные ячейки", blank=True)
+    possession_bonus = models.JSONField(blank=True, null=True)
+    dice_hit = models.CharField(max_length=100, blank=True)
+    hit_first_level = models.CharField(max_length=100, blank=True)
+    hit_next_level = models.CharField(max_length=100, blank=True)
+    protect_dice = models.CharField(max_length=100, blank=True)
+    skill_check = models.CharField(max_length=150, blank=True)
+    available_gear = models.CharField(max_length=150, blank=True)
+
 
     def __str__(self):
         return self.champion_class
 
     def get_available_skills(self, character_level):
-        return self.skills.filter(level__lte=character_level)
+        return self.skill.filter(level__lte=character_level)
 
+    def get_spell_slots(self, character_level):
+        return self.spell_slots.get(level=character_level)
 
 
 class Race(models.Model):
