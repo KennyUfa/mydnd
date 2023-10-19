@@ -1,15 +1,13 @@
 <template>
   <MainInfoView></MainInfoView>
   <skills-view></skills-view>
-  <div class="container">
-    <div class="row justify-content-center m-0">
-      <passive-perception></passive-perception>
-      <inspiration-frame></inspiration-frame>
-      <possession-bonus></possession-bonus>
-      <protection-class-view></protection-class-view>
-      <initiative-view></initiative-view>
-      <speed-view></speed-view>
-    </div>
+  <div class="row justify-content-center m-0">
+    <passive-perception></passive-perception>
+    <inspiration-frame></inspiration-frame>
+    <possession-bonus></possession-bonus>
+    <protection-class-view></protection-class-view>
+    <initiative-view></initiative-view>
+    <speed-view></speed-view>
   </div>
   <div class="container">
     <div class="row">

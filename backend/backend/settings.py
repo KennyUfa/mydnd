@@ -93,12 +93,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # vue ip
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
+    "http://localhost:8001",
     "http://localhost:8080",
     "http://127.0.0.1:9000",
     "http://localhost:5173",
-    'http://127.0.0.1:5173',
-    "http://192.168.0.11:5173"
+    "http://192.168.0.10:8080"
 ]
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

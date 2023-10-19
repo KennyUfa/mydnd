@@ -1,56 +1,19 @@
-html {
-  background-color: rgb(23, 81, 81);
-}
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap');
 
-.header-main {
-  margin-bottom: 10px;
-}
-
-
-.login {
-  display: flex;
-  border: solid bisque;
-  padding: 10px;
-}
-
-.main-info {
-  margin: 5px 0;
-}
-
-.lvl_up {
-  display: contents;
-}
-
-.name_input {
-  padding-bottom: 20px;
-}
-
-.stat {
-  border: solid black;
-  text-align: center;
-  align-items: center;
-}
-
-.skill {
-  border: solid black;
+* {
+  margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  list-style: none;
+  text-transform: capitalize;
 }
 
-.name-skill {
-  text-align: center;
-}
-
-.name-skill.card-title {
-  text-align: center;
-}
-
-.cd {
-  text-align: center;
-  padding: 0;
-}
-
-.saving-card {
-  padding: 5px;
-  border: solid black;
-  text-align: left;
-}
+/* #B9FAD8 зелен*/
+/* #BDB6FA фиолет*/
+/* #FABDB6 розоватый*/
+/* #FAF0B6  желтоватый*/
+/* #AE554B какацвет */

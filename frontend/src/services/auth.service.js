@@ -7,6 +7,7 @@ class AuthService {
       username,
       password,
     });
+    console.log("1");
     if (response.data.access) {
       TokenService.setUser(response.data);
     }

@@ -1,137 +1,122 @@
 <template>
-  <div class="container">
-    <div class="row main-info">
-      <div class="col-2 stat" v-if="!show">
-        <button class="btn btn-success" v-on:click="show = !show">
-          <i class="bi bi-vector-pen"></i>
-        </button>
-        <div class="info">Имя персонажа</div>
-        <div class="info" v-if="!show">
-          {{ listInfo.name_champion }}
+  <div class="wrapper">
+    <div class="center name-champion" v-if="!show">
+      <button class="btn btn-success" v-on:click="show = !show">
+        <i class="bi bi-vector-pen"></i>
+      </button>
+      <div class="">Имя персонажа</div>
+      <div class="info" v-if="!show">
+        {{ listInfo.name_champion }}
+      </div>
+    </div>
+    <div class="center name-champion" v-else>
+      <button class="btn btn-danger" v-on:click="patchMainInfo">
+        <i class="bi bi-vector-pen"></i>
+      </button>
+      <div class="">Имя персонажа</div>
+      <input
+        type="name"
+        class="form-control"
+        aria-describedby="InputName"
+        v-model="name"
+      />
+    </div>
+    <div class="center">
+      Класс - {{ listInfo.champion_class.champion_class }}
+    </div>
+    <div class="center" v-if="!show">
+      Предистория - {{ listInfo.pre_history }}
+    </div>
+
+    <div class="center" v-else>
+      <div>
+        Предистория - {{ listInfo.pre_history }}
+        <button
+          type="button"
+          @click="loadPreHistory"
+          class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        ></button>
+        <ul class="dropdown-menu">
+          <a
+            v-if="!this.$store.state.champion.prehistorylist"
+            class="dropdown-item"
+            href="#"
+            >Загрузка</a
+          >
+          <div
+            v-else
+            v-for="prehistory in this.$store.state.champion.prehistorylist"
+            :key="prehistory"
+          >
+            <a
+              class="dropdown-item"
+              href="#"
+              @click="changePreHistory(prehistory.pre_history_choices)"
+              >{{ prehistory.pre_history_choices }}</a
+            >
+          </div>
+        </ul>
+      </div>
+    </div>
+    <div class="center">Расса - {{ listInfo.race }}</div>
+    <div class="center">
+      <div class="" v-if="!show">
+        <div>Мировозрение - {{ listInfo.world_outlook }}</div>
+      </div>
+      <div class="" v-else>
+        <div>
+          Мировозрение - {{ listInfo.world_outlook }}
+          <button
+            type="button"
+            @click="loadWorldOutlook"
+            class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          ></button>
+          <ul class="dropdown-menu">
+            <a
+              v-if="!this.$store.state.champion.worldoutlooklist"
+              class="dropdown-item"
+              href="#"
+              >Загрузка</a
+            >
+            <div
+              v-else
+              v-for="wlook in this.$store.state.champion.worldoutlooklist"
+              :key="wlook"
+            >
+              <a
+                class="dropdown-item"
+                href="#"
+                @click="changeWorldOutlook(wlook.world_outlook)"
+                >{{ wlook.world_outlook }}</a
+              >
+            </div>
+          </ul>
         </div>
       </div>
-      <div class="col-2 pb-4 stat" v-else>
-        <button class="btn btn-danger" v-on:click="patchMainInfo">
-          <i class="bi bi-vector-pen"></i>
-        </button>
-        <div class="info">Имя персонажа</div>
-        <input
-          type="name"
-          class="form-control"
-          aria-describedby="InputName"
-          v-model="name"
-        />
-      </div>
-      <div class="col">
-        <div class="row h-50">
-          <div class="col stat">
-            Класс - {{ listInfo.champion_class.champion_class }}
-          </div>
-          <div class="col stat" v-if="!show">
-            <div>Предистория - {{ listInfo.pre_history }}</div>
-          </div>
-          <div class="col stat" v-else>
-            <div>
-              Предистория - {{ listInfo.pre_history }}
-              <button
-                type="button"
-                @click="loadPreHistory"
-                class="btn btn-danger dropdown-toggle dropdown-toggle-split"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              ></button>
-              <ul class="dropdown-menu">
-                <a
-                  v-if="!this.$store.state.champion.prehistorylist"
-                  class="dropdown-item"
-                  href="#"
-                  >Загрузка</a
-                >
-                <div
-                  v-else
-                  v-for="prehistory in this.$store.state.champion
-                    .prehistorylist"
-                  :key="prehistory"
-                >
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click="changePreHistory(prehistory.pre_history_choices)"
-                    >{{ prehistory.pre_history_choices }}</a
-                  >
-                </div>
-              </ul>
-            </div>
-          </div>
-          <div class="col stat">
-            <div>Имя игрока - {{ $store.state.auth.user.name }}</div>
-          </div>
-        </div>
-        <div class="row h-50">
-          <div class="col-2 stat">
-            <div>Расса - {{ listInfo.race }}</div>
-          </div>
-          <div class="col stat" v-if="!show">
-            <div>Мировозрение - {{ listInfo.world_outlook }}</div>
-          </div>
-          <div class="col stat" v-else>
-            <div>
-              Мировозрение - {{ listInfo.world_outlook }}
-              <button
-                type="button"
-                @click="loadWorldOutlook"
-                class="btn btn-danger dropdown-toggle dropdown-toggle-split"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              ></button>
-              <ul class="dropdown-menu">
-                <a
-                  v-if="!this.$store.state.champion.worldoutlooklist"
-                  class="dropdown-item"
-                  href="#"
-                  >Загрузка</a
-                >
-                <div
-                  v-else
-                  v-for="wlook in this.$store.state.champion.worldoutlooklist"
-                  :key="wlook"
-                >
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click="changeWorldOutlook(wlook.world_outlook)"
-                    >{{ wlook.world_outlook }}</a
-                  >
-                </div>
-              </ul>
-            </div>
-          </div>
-          <div class="col-2 stat">
-            <div>Опыт - {{ listInfo.experience }}</div>
-          </div>
-          <div class="col stat">
-            <div>
-              <div id="buttonCountNumber">
-                Уровень - {{ listInfo.lvl }}
-                <div v-if="show" class="lvl_up">
-                  <button
-                    class="col"
-                    @click="listInfo.lvl++"
-                    :disabled="listInfo.lvl > 19"
-                  >
-                    +
-                  </button>
-                  <button
-                    class="col"
-                    @click="listInfo.lvl--"
-                    :disabled="listInfo.lvl < 2"
-                  >
-                    -
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+    </div>
+    <div class="center">Опыт - {{ listInfo.experience }}</div>
+    <div class="center">
+      <div id="buttonCountNumber">
+        Уровень - {{ listInfo.lvl }}
+        <div v-if="show" class="lvl_up">
+          <button
+            class="btn btn-danger"
+            @click="listInfo.lvl++"
+            :disabled="listInfo.lvl > 19"
+          >
+            +
+          </button>
+          <button
+            class="btn btn-danger"
+            @click="listInfo.lvl--"
+            :disabled="listInfo.lvl < 2"
+          >
+            -
+          </button>
         </div>
       </div>
     </div>
@@ -182,4 +167,45 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.center {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px black;
+  border-radius: 10px;
+  background-color: #faf0b6;
+}
+.wrapper {
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(50px, auto);
+}
+
+.name-champion {
+  display: flex;
+  justify-content: space-between; /* Раздвинуть элементы по горизонтали */
+  align-items: center; /* Выравнивание по вертикали */
+}
+
+.center:nth-child(1) {
+  grid-column: 1 / span 3; /* Одно окошко на всю ширину */
+}
+
+.center:nth-child(n + 2) {
+  grid-column: span 1; /* По 3 окошка в ряд на второй и третий ряд */
+}
+.name-champion {
+  display: flex;
+  justify-content: space-around;
+}
+@media (max-width: 1024px) {
+  .center {
+    font-size: 13px;
+  }
+}
+
+/* Медиа-запрос для мобильных устройств с шириной экрана меньше 768px */
+</style>

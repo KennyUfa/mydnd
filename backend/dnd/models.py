@@ -148,6 +148,10 @@ class Spell(models.Model):
     class Meta:
         verbose_name_plural = 'Заклинания'
         verbose_name = 'Заклинание'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
 
 
 class Skill(models.Model):
