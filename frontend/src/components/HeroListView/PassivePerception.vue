@@ -1,7 +1,9 @@
 <template>
-  <div class="col card stat justify-content-center align-items-center">
-    пассивная мудрость
-    {{ 10 + Math.floor(($store.state.champion.listInfo.wisdom - 10) / 2) }}
+  <div class="card-body">
+    <div class="card-header">Пассивная мудрость</div>
+    <div class="card-info">
+      {{ 10 + Math.floor(($store.state.champion.listInfo.wisdom - 10) / 2) }}
+    </div>
   </div>
 </template>
 

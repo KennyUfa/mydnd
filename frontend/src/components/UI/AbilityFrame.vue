@@ -1,6 +1,9 @@
 <template>
-  <div class="">
-    <h5 class="card-title">
+  <div class="card-body">
+    <div class="card-header">
+      {{ skillName }}
+    </div>
+    <div class="card-info">
       <div v-if="champion.listInfo.skill_char_state[skillValue] === 1">
         <button
           v-if="show"
@@ -9,10 +12,8 @@
         >
           {{ champion.listInfo.skill_char_state[skillValue] }}
         </button>
-        бонус {{ Math.floor((champion.listInfo[stat] - 10) / 2) }}
-        {{ skillName }}
+        {{ Math.floor((champion.listInfo[stat] - 10) / 2) }}
       </div>
-
       <div v-else-if="champion.listInfo.skill_char_state[skillValue] === 2">
         <button
           v-if="show"
@@ -21,12 +22,10 @@
         >
           {{ champion.listInfo.skill_char_state[skillValue] }}
         </button>
-        бонус
         {{
           Math.floor((champion.listInfo[stat] - 10) / 2) +
           champion.listInfo.possession_bonus
         }}
-        {{ skillName }}
       </div>
 
       <div v-else>
@@ -37,14 +36,12 @@
         >
           {{ champion.listInfo.skill_char_state[skillValue] }}
         </button>
-        бонус
         {{
           Math.floor((champion.listInfo[stat] - 10) / 2) * 2 +
           champion.listInfo.possession_bonus
         }}
-        {{ skillName }}
       </div>
-    </h5>
+    </div>
   </div>
 </template>
 

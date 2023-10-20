@@ -161,10 +161,10 @@ class Skill(models.Model):
 
 
 class SpellLevel(models.Model):
-    level = models.PositiveSmallIntegerField(blank=True,null=True)
-    spell_slots = models.JSONField(blank=True,null=True)
-    known_conspiracies = models.PositiveSmallIntegerField(blank=True,null=True)
-    known_spell = models.PositiveSmallIntegerField(blank=True,null=True)
+    level = models.PositiveSmallIntegerField(blank=True,null=True,verbose_name='Уровень')
+    spell_slots = models.JSONField(blank=True,null=True,verbose_name='Слоты заклинаний')
+    known_conspiracies = models.PositiveSmallIntegerField(blank=True,null=True,verbose_name='Известные заговоры')
+    known_spell = models.PositiveSmallIntegerField(blank=True,null=True,verbose_name='Известные заклинания')
 
 
 class ClassChampion(models.Model):

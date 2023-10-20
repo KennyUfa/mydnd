@@ -192,6 +192,7 @@ export default {
 
 .center:nth-child(1) {
   grid-column: 1 / span 3; /* Одно окошко на всю ширину */
+  padding: 5px;
 }
 
 .center:nth-child(n + 2) {

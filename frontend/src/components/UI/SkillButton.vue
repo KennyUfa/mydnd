@@ -50,27 +50,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.card-body {
-  border: solid 1px black;
-  border-radius: 10px;
-  background-color: #faf0b6;
-}
-.card-header {
-  text-align: center;
-  padding: 5px;
-}
-.card-info {
-  display: flex;
-  justify-content: center;
-}
-.btn {
-  padding: 2px 10px;
-  margin-bottom: 5px;
-}
-@media (max-width: 720px) {
-  .card-header {
-    font-size: 13px;
-  }
-}
-</style>
+<style scoped></style>

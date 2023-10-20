@@ -1,7 +1,9 @@
 <template>
-  <div class="col card stat justify-content-center align-items-center">
-    Инициатива
-    {{ Math.floor(($store.state.champion.listInfo.dexterity - 10) / 2) }}
+  <div class="card-body">
+    <div class="card-header">Инициатива</div>
+    <div class="card-info">
+      {{ Math.floor(($store.state.champion.listInfo.dexterity - 10) / 2) }}
+    </div>
   </div>
 </template>
 

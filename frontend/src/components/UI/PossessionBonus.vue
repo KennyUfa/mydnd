@@ -1,19 +1,19 @@
 <template>
-  <div class="col card stat">
-    <h5 class="card-title">
+  <div class="card-body">
+    <div class="card-header">
       Бонус Владения {{ $store.state.champion.listInfo.possession_bonus }}
-    </h5>
-    <div class="container">
-      <div class="row justify-content-center align-items-center g-2">
+    </div>
+    <div class="card-info">
+      <div id="skill-info">
         <button
-          class="col"
+          class="btn btn-outline-primary"
           @click="$store.state.champion.listInfo.possession_bonus++, patchP()"
           :disabled="$store.state.champion.listInfo.possession_bonus > 10"
         >
           +
         </button>
         <button
-          class="col"
+          class="btn btn-outline-primary"
           @click="$store.state.champion.listInfo.possession_bonus--, patchP()"
           :disabled="$store.state.champion.listInfo.possession_bonus < 2"
         >

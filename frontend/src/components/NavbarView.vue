@@ -1,6 +1,6 @@
 <template>
   <header>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg">
       <a class="navbar-brand" href="#">Kenny's site</a>
       <a class="btn btn-light name-account" v-if="$store.state.auth.name"
         >Hello {{ $store.state.auth.name }}</a

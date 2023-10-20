@@ -1,20 +1,20 @@
 <template>
-  <div class="col card stat">
-    <div class="p-1 border bg-light">
+  <div class="card-body">
+    <div class="card-header">
       Скорость
       {{ $store.state.champion.listInfo.speed }}
     </div>
-    <div class="container">
-      <div class="row justify-content-center align-items-center g-2">
+    <div class="card-info">
+      <div id="skill-info">
         <button
-          class="col"
+          class="btn btn-outline-primary"
           @click="($store.state.champion.listInfo.speed += 5), patch()"
           :disabled="$store.state.champion.listInfo.speed > 60"
         >
           +
         </button>
         <button
-          class="col"
+          class="btn btn-outline-primary"
           @click="($store.state.champion.listInfo.speed -= 5), patch()"
           :disabled="$store.state.champion.listInfo.speed < 1"
         >
@@ -58,4 +58,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.card-body {
+  border: solid 1px black;
+  border-radius: 10px;
+  background-color: #faf0b6;
+}
+</style>

@@ -1,19 +1,19 @@
 <template>
-  <div class="col card stat">
-    <h5 class="card-title">
+  <div class="card-body">
+    <h5 class="card-header">
       Вдохновение {{ $store.state.champion.listInfo.inspiration }}
     </h5>
-    <div class="container">
-      <div class="row justify-content-center align-items-center g-2">
+    <div class="card-info">
+      <div id="skill-info">
         <button
-          class="col"
+          class="btn btn-outline-primary"
           @click="$store.state.champion.listInfo.inspiration++, patch()"
           :disabled="$store.state.champion.listInfo.inspiration > 10"
         >
           +
         </button>
         <button
-          class="col"
+          class="btn btn-outline-primary"
           @click="$store.state.champion.listInfo.inspiration--, patch()"
           :disabled="$store.state.champion.listInfo.inspiration < 1"
         >

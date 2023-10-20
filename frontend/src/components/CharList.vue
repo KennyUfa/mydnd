@@ -1,7 +1,81 @@
 <template>
   <MainInfoView></MainInfoView>
+  <ability-view></ability-view>
+  <div class="col">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link active"
+          data-bs-toggle="tab"
+          href="#inventory"
+          role="tab"
+          aria-selected="true"
+          >Инвентарь</a
+        >
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          data-bs-toggle="tab"
+          href="#spells"
+          role="tab"
+          aria-selected="false"
+          >Заклинания</a
+        >
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          data-bs-toggle="tab"
+          href="#prehistory"
+          role="tab"
+          aria-selected="false"
+          >Предыстория</a
+        >
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          data-bs-toggle="tab"
+          href="#skills-and-abilites"
+          role="tab"
+          aria-selected="false"
+          >Умения и способнисти</a
+        >
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          data-bs-toggle="tab"
+          href="#outher"
+          role="tab"
+          aria-selected="false"
+          >ПРОЧИЕ ВЛАДЕНИЯ И ЯЗЫКИ</a
+        >
+      </li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="inventory" role="tabpanel">
+        <inventory-view></inventory-view>
+      </div>
+      <div class="tab-pane fade" id="spells" role="tabpanel">
+        <spell-view></spell-view>
+      </div>
+      <div class="tab-pane fade" id="prehistory" role="tabpanel">
+        <background-view></background-view>
+      </div>
+      <div class="tab-pane fade" id="skills-and-abilites" role="tabpanel">
+        УМЕНИЯ И СПОСОБНОСТИ
+      </div>
+      <div class="tab-pane fade" id="outher" role="tabpanel">
+        <proficiencie-and-languages></proficiencie-and-languages>
+      </div>
+    </div>
+  </div>
   <skills-view></skills-view>
-  <div class="row justify-content-center m-0">
+  <div class="wrapper">
     <passive-perception></passive-perception>
     <inspiration-frame></inspiration-frame>
     <possession-bonus></possession-bonus>
@@ -9,94 +83,8 @@
     <initiative-view></initiative-view>
     <speed-view></speed-view>
   </div>
-  <div class="container">
-    <div class="row">
-      <div class="col-3">
-        <div class="col player-info">
-          <div class="card saving-card">
-            <saving-throw-view></saving-throw-view>
-          </div>
-          <div class="card saving-card">
-            <ability-view></ability-view>
-          </div>
-        </div>
-      </div>
-      <div class="col-9">
-        <hit-vue></hit-vue>
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-          <li class="nav-item" role="presentation">
-            <a
-              class="nav-link active"
-              data-bs-toggle="tab"
-              href="#inventory"
-              role="tab"
-              aria-selected="true"
-              >Инвентарь</a
-            >
-          </li>
-          <li class="nav-item" role="presentation">
-            <a
-              class="nav-link"
-              data-bs-toggle="tab"
-              href="#spells"
-              role="tab"
-              aria-selected="false"
-              >Заклинания</a
-            >
-          </li>
-          <li class="nav-item" role="presentation">
-            <a
-              class="nav-link"
-              data-bs-toggle="tab"
-              href="#prehistory"
-              role="tab"
-              aria-selected="false"
-              >Предыстория</a
-            >
-          </li>
-          <li class="nav-item" role="presentation">
-            <a
-              class="nav-link"
-              data-bs-toggle="tab"
-              href="#skills-and-abilites"
-              role="tab"
-              aria-selected="false"
-              >Умения и способнисти</a
-            >
-          </li>
-          <li class="nav-item" role="presentation">
-            <a
-              class="nav-link"
-              data-bs-toggle="tab"
-              href="#outher"
-              role="tab"
-              aria-selected="false"
-              >ПРОЧИЕ ВЛАДЕНИЯ И ЯЗЫКИ</a
-            >
-          </li>
-        </ul>
-        <!-- Tab panes -->
-        <div class="tab-content">
-          <div class="tab-pane fade show active" id="inventory" role="tabpanel">
-            <inventory-view></inventory-view>
-          </div>
-          <div class="tab-pane fade" id="spells" role="tabpanel">
-            <spell-view></spell-view>
-          </div>
-          <div class="tab-pane fade" id="prehistory" role="tabpanel">
-            <background-view></background-view>
-          </div>
-          <div class="tab-pane fade" id="skills-and-abilites" role="tabpanel">
-            УМЕНИЯ И СПОСОБНОСТИ
-          </div>
-          <div class="tab-pane fade" id="outher" role="tabpanel">
-            <proficiencie-and-languages></proficiencie-and-languages>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <hit-vue></hit-vue>
+  <saving-throw-view></saving-throw-view>
 </template>
 
 <script>
@@ -138,4 +126,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  padding-top: 10px;
+}
+</style>
