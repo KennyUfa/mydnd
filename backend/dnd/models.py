@@ -127,6 +127,48 @@ class MagicItems(models.Model):
         return self.item.name
 
 
+class Skill(models.Model):
+    name = models.CharField(max_length=100, blank=True)
+    level = models.PositiveSmallIntegerField()
+    description = models.TextField(blank=True)
+
+
+class SpellLevel(models.Model):
+    level = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Уровень')
+    spell_slots = models.JSONField(blank=True, null=True, verbose_name='Слоты заклинаний')
+    known_conspiracies = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Известные заговоры')
+    known_spell = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Известные заклинания')
+
+
+class ClassChampion(models.Model):
+    champion_class = models.CharField(max_length=100, blank=True)
+    table = models.JSONField(blank=True, null=True)
+    skill = models.ManyToManyField(Skill, verbose_name="Умения", blank=True)
+    spell_slots = models.ManyToManyField(SpellLevel, verbose_name="Доступные ячейки", blank=True)
+    possession_bonus = models.JSONField(blank=True, null=True)
+    dice_hit = models.CharField(max_length=100, blank=True)
+    hit_first_level = models.CharField(max_length=100, blank=True)
+    hit_next_level = models.CharField(max_length=100, blank=True)
+    protect_dice = models.CharField(max_length=100, blank=True)
+    skill_check = models.CharField(max_length=150, blank=True)
+    available_gear = models.CharField(max_length=150, blank=True)
+
+    def __str__(self):
+        return self.champion_class
+
+    def get_available_skills(self, character_level):
+        return self.skill.filter(level__lte=character_level)
+
+    def get_spell_slots(self, character_level):
+        return self.spell_slots.get(level=character_level)
+
+class Archetype(models.Model):
+    name = models.CharField(max_length=100)
+    character_class = models.ForeignKey(ClassChampion, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
 class Spell(models.Model):
     link = models.CharField(max_length=100, verbose_name='ссылка')
     name = models.CharField(max_length=100, verbose_name='название')
@@ -137,10 +179,9 @@ class Spell(models.Model):
     distance = models.CharField(max_length=100, verbose_name='дистанция')
     components = models.CharField(max_length=400, verbose_name='компоненты')
     timing = models.CharField(max_length=100, verbose_name='Длительность')
-    class_actor = models.CharField(max_length=150, verbose_name='Классы',
-                                   blank=True, null=True)
-    architype = models.CharField(max_length=200, verbose_name='Архетипы',
-                                 blank=True, null=True)
+    class_actor = models.ManyToManyField(ClassChampion, related_name="class_spells", blank=True)
+    archetype = models.ManyToManyField(Archetype, related_name='archetype_spells',
+                                       blank=True)
     origin = models.CharField(blank=True, null=True, max_length=100,
                               verbose_name='источник')
     instruction = models.TextField(verbose_name='описание')
@@ -154,42 +195,6 @@ class Spell(models.Model):
         return self.name
 
 
-class Skill(models.Model):
-    name = models.CharField(max_length=100, blank=True)
-    level = models.PositiveSmallIntegerField()
-    description = models.TextField(blank=True)
-
-
-class SpellLevel(models.Model):
-    level = models.PositiveSmallIntegerField(blank=True,null=True,verbose_name='Уровень')
-    spell_slots = models.JSONField(blank=True,null=True,verbose_name='Слоты заклинаний')
-    known_conspiracies = models.PositiveSmallIntegerField(blank=True,null=True,verbose_name='Известные заговоры')
-    known_spell = models.PositiveSmallIntegerField(blank=True,null=True,verbose_name='Известные заклинания')
-
-
-class ClassChampion(models.Model):
-    champion_class = models.CharField(max_length=100, blank=True)
-    table = models.JSONField(blank=True, null=True)
-    skill = models.ManyToManyField(Skill, verbose_name="Умения", blank=True)
-    additional_spell = models.ManyToManyField(Spell, verbose_name="Дополнительные заклинания", blank=True)
-    spell_slots = models.ManyToManyField(SpellLevel, verbose_name="Доступные ячейки", blank=True)
-    possession_bonus = models.JSONField(blank=True, null=True)
-    dice_hit = models.CharField(max_length=100, blank=True)
-    hit_first_level = models.CharField(max_length=100, blank=True)
-    hit_next_level = models.CharField(max_length=100, blank=True)
-    protect_dice = models.CharField(max_length=100, blank=True)
-    skill_check = models.CharField(max_length=150, blank=True)
-    available_gear = models.CharField(max_length=150, blank=True)
-
-
-    def __str__(self):
-        return self.champion_class
-
-    def get_available_skills(self, character_level):
-        return self.skill.filter(level__lte=character_level)
-
-    def get_spell_slots(self, character_level):
-        return self.spell_slots.get(level=character_level)
 
 
 class Race(models.Model):

@@ -16,11 +16,11 @@ def remove_brackets(text):
 def extract_contents(text):
     pattern = r'\(([^()]+)\)'
     matches = re.findall(pattern, text)
+    t = matches[0]
 
     for match in matches:
         text = text.replace(f'({match})', '')
-
-    return text.strip(), matches
+    return text.strip(), t
 
 
 def combine_names():
@@ -32,17 +32,28 @@ def combine_names():
         for row in reader:
             x += 1
             class_ch = row[8].split(',')
-            for i in class_ch:
-                i = remove_brackets(i)
-                # d[i.strip()] += 1
+            # for i in class_ch:
+            #     if i == '':
+            #         print('UGKJHSGJHDG')
+            #         print(row)
+            #         y = row[9].split(',')
+            #         for r in y:
+            #             if r == '':
+            #                 print('!!!!!!!!!!!!!!!!!!')
+            #             print(r)
+            #     i = remove_brackets(i)
+
+            #         d[i.strip()] += 1
             # pprint(sorted(d.items()))
 
             y = row[9].split(',')
-            for i in y:
-                text_before, contents = extract_contents(i.strip())
-                # print(contents)
-                print(f"{text_before} - "+"-".join(contents))
 
+            if y[0] == '':
+                continue
+            else:
+                for i in y:
+                    text_before, contents = extract_contents(i.strip())
+            print(f"{text_before} - {contents}")
 
 
 combine_names()

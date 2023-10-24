@@ -4,15 +4,10 @@ from django.contrib import admin
 from dnd.models import *
 
 
-# class DndAdmin(admin.ModelAdmin):
-#     list_display = ("name", "lvl")
-#     list_display_links = ("name", "lvl")
-#     search_fields = ("name", "lvl")
-#
+
+
 
 models = apps.get_models()
-
-
 
 # class WeaponInline(admin.StackedInline):
 #     model = Weapon
