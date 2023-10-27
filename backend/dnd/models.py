@@ -140,11 +140,12 @@ class SpellLevel(models.Model):
     known_spell = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Известные заклинания')
 
 
+
 class ClassChampion(models.Model):
     champion_class = models.CharField(max_length=100, blank=True)
     table = models.JSONField(blank=True, null=True)
     skill = models.ManyToManyField(Skill, verbose_name="Умения", blank=True)
-    spell_slots = models.ManyToManyField(SpellLevel, verbose_name="Доступные ячейки", blank=True)
+    spell_slots = models.ManyToManyField(SpellLevel, verbose_name="Доступные ячейки", blank=True,null=True)
     possession_bonus = models.JSONField(blank=True, null=True)
     dice_hit = models.CharField(max_length=100, blank=True)
     hit_first_level = models.CharField(max_length=100, blank=True)
@@ -162,12 +163,14 @@ class ClassChampion(models.Model):
     def get_spell_slots(self, character_level):
         return self.spell_slots.get(level=character_level)
 
+
 class Archetype(models.Model):
     name = models.CharField(max_length=100)
     character_class = models.ForeignKey(ClassChampion, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
+
 
 class Spell(models.Model):
     link = models.CharField(max_length=100, verbose_name='ссылка')
@@ -193,8 +196,6 @@ class Spell(models.Model):
 
     def __str__(self):
         return self.name
-
-
 
 
 class Race(models.Model):
