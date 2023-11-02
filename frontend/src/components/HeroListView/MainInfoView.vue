@@ -25,36 +25,35 @@
       Класс - {{ listInfo.champion_class.champion_class }}
     </div>
     <div class="center" v-if="!show">
-      Предистория - {{ listInfo.pre_history }}
+      Предистория - {{ listInfo.my_origin.origin }}
     </div>
-
     <div class="center" v-else>
       <div>
-        Предистория - {{ listInfo.pre_history }}
+        Предистория - {{ listInfo.my_origin.origin }}
         <button
           type="button"
-          @click="loadPreHistory"
+          @click="loadOrigin"
           class="btn btn-danger dropdown-toggle dropdown-toggle-split"
           data-bs-toggle="dropdown"
           aria-expanded="false"
         ></button>
         <ul class="dropdown-menu">
           <a
-            v-if="!this.$store.state.champion.prehistorylist"
+            v-if="!this.$store.state.origin.originlist"
             class="dropdown-item"
             href="#"
             >Загрузка</a
           >
           <div
             v-else
-            v-for="prehistory in this.$store.state.champion.prehistorylist"
-            :key="prehistory"
+            v-for="origin in this.$store.state.origin.originlist"
+            :key="origin"
           >
             <a
               class="dropdown-item"
               href="#"
-              @click="changePreHistory(prehistory.pre_history_choices)"
-              >{{ prehistory.pre_history_choices }}</a
+              @click="changeOrigin(origin.id)"
+              >{{ origin.origin }}</a
             >
           </div>
         </ul>
@@ -63,38 +62,42 @@
     <div class="center">Расса - {{ listInfo.race }}</div>
     <div class="center">
       <div class="" v-if="!show">
-        <div>Мировозрение - {{ listInfo.world_outlook }}</div>
+        <div>Мировозрение</div>
+        <div class="">{{ listInfo.world_outlook }}</div>
       </div>
       <div class="" v-else>
         <div>
-          Мировозрение - {{ listInfo.world_outlook }}
-          <button
-            type="button"
-            @click="loadWorldOutlook"
-            class="btn btn-danger dropdown-toggle dropdown-toggle-split"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          ></button>
-          <ul class="dropdown-menu">
-            <a
-              v-if="!this.$store.state.champion.worldoutlooklist"
-              class="dropdown-item"
-              href="#"
-              >Загрузка</a
-            >
-            <div
-              v-else
-              v-for="wlook in this.$store.state.champion.worldoutlooklist"
-              :key="wlook"
-            >
+          <div>
+            Мировозрение
+            <button
+              type="button"
+              @click="loadWorldOutlook"
+              class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            ></button>
+            <ul class="dropdown-menu">
               <a
+                v-if="!this.$store.state.champion.worldoutlooklist"
                 class="dropdown-item"
                 href="#"
-                @click="changeWorldOutlook(wlook.world_outlook)"
-                >{{ wlook.world_outlook }}</a
+                >Загрузка</a
               >
-            </div>
-          </ul>
+              <div
+                v-else
+                v-for="wlook in this.$store.state.champion.worldoutlooklist"
+                :key="wlook"
+              >
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click="changeWorldOutlook(wlook.name)"
+                  >{{ wlook.name }}</a
+                >
+              </div>
+            </ul>
+          </div>
+          <div class="">{{ listInfo.world_outlook }}</div>
         </div>
       </div>
     </div>
@@ -137,11 +140,11 @@ export default {
       this.$store.dispatch("champion/patchMainInfo");
       this.show = !this.show;
     },
-    loadPreHistory() {
-      this.$store.dispatch("champion/loadPreHistory");
+    loadOrigin() {
+      this.$store.dispatch("origin/loadOrigin");
     },
-    changePreHistory(selected) {
-      this.$store.dispatch("champion/changePreHistory", selected);
+    changeOrigin(selected) {
+      this.$store.dispatch("origin/changeOrigin", selected);
     },
     loadWorldOutlook() {
       this.$store.dispatch("champion/loadWorldOutlook");

@@ -47,8 +47,9 @@ class ChampionApi {
     }
   }
 
-  async getPreHistory() {
-    const response = await api.get("dnd/prehistory/");
+  async getOrigin() {
+    console.log("loadlistorogon");
+    const response = await api.get("dnd/origin/");
     if (response.data) {
       return response.data;
     } else {
@@ -102,6 +103,18 @@ class ChampionApi {
   }
   async spellPatch(data, id) {
     const response = await api.patch("dnd/character/" + id + "/", data);
+    if (response.data) {
+      return response.data;
+    } else {
+      console.log(response);
+    }
+  }
+
+  async originPatch(id_origin, data) {
+    const response = await api.patch(
+      "/dnd/origin/" + id_origin + "/change/",
+      data
+    );
     if (response.data) {
       return response.data;
     } else {

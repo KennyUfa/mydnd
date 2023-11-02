@@ -92,14 +92,14 @@ class SkillStateView(viewsets.ModelViewSet):
     queryset = SkillStateModel.objects.all()
 
 
-class PreHistoryView(generics.ListAPIView):
+class OriginView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = PreHistoryModel.objects.all()
-    serializer_class = PreHistorySerializer
+    queryset = Origin.objects.all()
+    serializer_class = OriginChoiceSerializer
 
     def get_queryset(self):
         # time.sleep(3)
-        return PreHistoryModel.objects.all()
+        return Origin.objects.all()
 
 
 class WorldOutlookView(generics.ListAPIView):
@@ -171,4 +171,17 @@ class InventoryItemView(APIView):
                 inventory_item.save()
         inventory = character.my_items.all()
         serializer = InventorySerializer(inventory, many=True)
+        return Response(serializer.data)
+
+
+class OriginChangeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, origin_id):
+        id = request.data.get('character_id')
+        character =  get_object_or_404(Character.objects.all(), id=id)
+        origin = get_object_or_404(Origin, id=origin_id)
+        character.my_origin = origin
+        character.save()
+        serializer = CharacterSerializer(character)
         return Response(serializer.data)

@@ -134,18 +134,17 @@ class Skill(models.Model):
 
 
 class SpellLevel(models.Model):
+    character_class = models.ForeignKey('ClassChampion', on_delete=models.CASCADE, blank=True, null=True)
     level = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Уровень')
     spell_slots = models.JSONField(blank=True, null=True, verbose_name='Слоты заклинаний')
     known_conspiracies = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Известные заговоры')
     known_spell = models.PositiveSmallIntegerField(blank=True, null=True, verbose_name='Известные заклинания')
 
 
-
 class ClassChampion(models.Model):
     champion_class = models.CharField(max_length=100, blank=True)
     table = models.JSONField(blank=True, null=True)
     skill = models.ManyToManyField(Skill, verbose_name="Умения", blank=True)
-    spell_slots = models.ManyToManyField(SpellLevel, verbose_name="Доступные ячейки", blank=True,null=True)
     possession_bonus = models.JSONField(blank=True, null=True)
     dice_hit = models.CharField(max_length=100, blank=True)
     hit_first_level = models.CharField(max_length=100, blank=True)
@@ -205,19 +204,57 @@ class Race(models.Model):
         return self.race
 
 
+class SecondaryModel1(models.Model):
+    primary_model = models.ForeignKey(Race, on_delete=models.CASCADE)
+    additional_info = models.IntegerField(default=100)
+
+
+class SecondaryModel2(models.Model):
+    primary_model = models.ForeignKey(Race, on_delete=models.CASCADE)
+    additional_info = models.CharField(max_length=100, default='fdfd')
+    info = models.CharField(max_length=100, default='2222')
+
+    def __str__(self):
+        return self.additional_info
+
+
+class SecondaryModel3(models.Model):
+    primary_model = models.ForeignKey(Race, on_delete=models.CASCADE)
+    additional_info = models.CharField(max_length=100, default='33333')
+
+    def __str__(self):
+        return self.additional_info
+
+
 class WorldOutlook(models.Model):
-    world_outlook = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=100, blank=True)
+    description = models.CharField(blank=True, null=True, max_length=4000)
 
     def __str__(self):
-        return self.world_outlook
+        return self.name
 
 
-class PreHistoryModel(models.Model):
-    pre_history_choices = models.CharField(max_length=100, blank=True,
-                                           null=True)
+class Ideal(models.Model):
+    choice = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.pre_history_choices
+        return self.choice
+
+
+class Origin(models.Model):
+    origin = models.CharField(max_length=100)
+    ideals = models.ManyToManyField(Ideal, related_name='origins')
+
+    def __str__(self):
+        return self.origin
+
+
+# class PreHistoryModel(models.Model):
+#     pre_history_choices = models.CharField(max_length=100, blank=True,
+#                                            null=True)
+#
+#     def __str__(self):
+#         return self.pre_history_choices
 
 
 class ProtectStateModel(models.Model):
@@ -332,8 +369,9 @@ class Character(models.Model):
     background = models.ForeignKey(BackgroundModel,
                                    on_delete=models.CASCADE,
                                    default=BackgroundModel.default)
-    pre_history = models.ForeignKey(PreHistoryModel, on_delete=models.PROTECT,
-                                    blank=True, null=True)
+    my_origin = models.ForeignKey(Origin, on_delete=models.PROTECT,
+                                  blank=True, null=True)
+    # ideal_choice = models.ForeignKey(Ideal, on_delete=models.CASCADE, blank=True)
     ProficienciesAndLanguages = models.CharField(max_length=4000,
                                                  default="Список навыков и языков")
 

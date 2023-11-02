@@ -14,7 +14,8 @@ urlpatterns = [
     path('', include(router.urls)),
     path('classlist/', BaseClassChViewSet.as_view(), name='class-list'),
     path('racelist/', RaceViewSet.as_view(), name='race-list'),
-    path('prehistory/', PreHistoryView.as_view(), name='pre-history-list'),
+    path('origin/', OriginView.as_view(), name='origin-list'),
     path('looklist/', WorldOutlookView.as_view(), name='world-outlook-list'),
     path('characters/<int:character_id>/inventory/', InventoryItemView.as_view()),
+    path('origin/<int:origin_id>/change/', OriginChangeView.as_view(), name='origin-change'),
 ]

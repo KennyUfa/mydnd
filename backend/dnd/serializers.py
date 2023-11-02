@@ -4,6 +4,24 @@ from rest_framework import serializers
 from .models import *
 
 
+class SecondaryModel1Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = SecondaryModel1
+        fields = ['additional_info']  # Замените на поля SecondaryModel1
+
+
+class SecondaryModel2Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = SecondaryModel2
+        fields = ['additional_info', 'info']  # Замените на поля SecondaryModel2
+
+
+class SecondaryModel3Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = SecondaryModel3
+        fields = ['additional_info']  # Замените на поля SecondaryModel3
+
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
@@ -22,24 +40,64 @@ class BaseClassChSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+# class RaceSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Race
+#         fields = ['race']
 class RaceSerializer(serializers.ModelSerializer):
+    secondary_model1 = serializers.SerializerMethodField()
+    secondary_model2 = serializers.SerializerMethodField()
+    secondary_model3 = serializers.SerializerMethodField()
+
     class Meta:
         model = Race
-        fields = ['race']
+        fields = ['race', 'secondary_model1', 'secondary_model2', 'secondary_model3']
+
+    def get_secondary_model1(self, obj):
+        if obj.secondarymodel1_set.exists():
+            return SecondaryModel1Serializer(obj.secondarymodel1_set.all(), many=True).data
+        return None
+
+    def get_secondary_model2(self, obj):
+        if obj.secondarymodel2_set.exists():
+            return SecondaryModel2Serializer(obj.secondarymodel2_set.all(), many=True).data
+        return None
+
+    def get_secondary_model3(self, obj):
+        if obj.secondarymodel3_set.exists():
+            return SecondaryModel3Serializer(obj.secondarymodel3_set.all(), many=True).data
+        return None
+
+    def to_representation(self, instance):
+        # Удалить пустые модели из вывода
+        representation = super().to_representation(instance)
+        return {
+            key: value for key, value in representation.items() if value is not None
+        }
 
 
-class PreHistorySerializer(serializers.ModelSerializer):
-    pre_history_choices = serializers.CharField()
-
+class IdealSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PreHistoryModel
+        model = Ideal
         fields = '__all__'
 
 
-class ChampionClassSerializer(serializers.ModelSerializer):
+class OriginChoiceSerializer(serializers.ModelSerializer):
+    origin = serializers.CharField()
+    ideals = IdealSerializer(many=True)
+    # ideal_choice = IdealSerializer()
+
     class Meta:
-        model = ClassChampion
-        fields = "__all__"
+        model = Origin
+        fields = '__all__'
+
+
+class OriginSerializer(serializers.ModelSerializer):
+    origin = serializers.CharField()
+
+    class Meta:
+        model = Origin
+        fields = ['origin']
 
 
 class WorldOutlookSerializer(serializers.ModelSerializer):
@@ -197,6 +255,20 @@ class SpellBookSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'lvl', 'class_actor']
 
 
+class SpellSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Spell
+        fields = "__all__"
+
+
+class ChampionClassSerializer(serializers.ModelSerializer):
+    class_spells = SpellSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = ClassChampion
+        fields = "__all__"
+
+
 class InventorySerializer(serializers.ModelSerializer):
     item = ItemsSerializer()
     quantity = serializers.IntegerField()
@@ -231,12 +303,9 @@ class CharacterSerializer(serializers.ModelSerializer):
                                         required=False)
     account = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
-    pre_history = serializers.SlugRelatedField(slug_field='pre_history_choices',
-                                               queryset=
-                                               PreHistoryModel.objects.all(),
-                                               required=False)
+    my_origin = OriginSerializer()
     world_outlook = serializers.SlugRelatedField(
-        slug_field='world_outlook',
+        slug_field='name',
         queryset=WorldOutlook.objects.all(), required=False)
     background = BackgroundSerializer(required=False)
     protect_char_state = ProtectStateSerializer(required=False)
@@ -248,13 +317,13 @@ class CharacterSerializer(serializers.ModelSerializer):
                                                    required=False)
     my_items = InventorySerializer(many=True, read_only=True)
     available_skills = serializers.SerializerMethodField()
-    spell_slots = serializers.SerializerMethodField()
+    # ideal_choice = IdealSerializer()
 
     def get_available_skills(self, obj):
         return SkillSerializer(obj.champion_class.get_available_skills(obj.lvl), many=True).data
 
-    def get_spell_slots(self, obj):
-        return SpellLevelSerializer(obj.champion_class.get_spell_slots(obj.lvl)).data
+    # def get_spell_slots(self, obj):
+    #     return SpellLevelSerializer(obj.champion_class.get_spell_slots(obj.lvl)).data
 
     class Meta:
         model = Character

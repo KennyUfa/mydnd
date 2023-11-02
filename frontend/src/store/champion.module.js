@@ -7,7 +7,7 @@ export const champion = {
   state: {
     classlist: NaN,
     racelist: NaN,
-    prehistorylist: NaN,
+    // prehistorylist: NaN,
     worldoutlooklist: NaN,
     isLoading: false,
     mychampions: [],
@@ -89,19 +89,19 @@ export const champion = {
         }
       );
     },
-    loadPreHistory({ commit }) {
-      return DndListService.getPreHistory().then(
-        (data) => {
-          commit("preHistoryListEdit", data);
-          return Promise.resolve(data);
-        },
-        (error) => {
-          console.log(error.request.responseText);
-          commit("dataFailure");
-          return Promise.reject(error);
-        }
-      );
-    },
+    // loadOrigin({ commit }) {
+    //   return DndListService.getOrigin().then(
+    //     (data) => {
+    //       commit("OriginListEdit", data);
+    //       return Promise.resolve(data);
+    //     },
+    //     (error) => {
+    //       console.log(error.request.responseText);
+    //       commit("dataFailure");
+    //       return Promise.reject(error);
+    //     }
+    //   );
+    // },
     loadWorldOutlook({ commit }) {
       return DndListService.getWorldOutlook().then(
         (data) => {
@@ -200,7 +200,7 @@ export const champion = {
       const data = {
         name_champion: state.listInfo.name_champion,
         lvl: state.listInfo.lvl,
-        pre_history: state.listInfo.pre_history,
+        // pre_history: state.listInfo.pre_history,
         world_outlook: state.listInfo.world_outlook,
       };
       return DndListService.patchMainInfo(data, state.champion_id).then(
@@ -337,7 +337,6 @@ export const champion = {
       );
     },
     addItem({ commit, state }, id_item) {
-      console.log(id_item);
       const data = {
         item_id: id_item,
       };
@@ -425,9 +424,10 @@ export const champion = {
     changeLvl({ commit }, selected) {
       return commit("mutChangeLvl", selected);
     },
-    changePreHistory({ commit }, selected) {
-      return commit("mutChangePreHistory", selected);
-    },
+    // changeOrigin({ commit }, selected) {
+    //   console.log(selected);
+    //   return commit("mutChangeOrigin", selected);
+    // },
     changeWorldOutlook({ commit }, selected) {
       return commit("mutWorldOutlook", selected);
     },
@@ -464,18 +464,18 @@ export const champion = {
     raceListEdit(state, data) {
       state.racelist = data;
     },
-    preHistoryListEdit(state, data) {
-      state.prehistorylist = data;
-    },
+    // OriginListEdit(state, data) {
+    //   state.prehistorylist = data;
+    // },
     WorldOutlookListEdit(state, data) {
       state.worldoutlooklist = data;
     },
     mutChangeClass(state, data) {
       state.create_champion.champion_class = data;
     },
-    mutChangePreHistory(state, data) {
-      state.listInfo.pre_history = data;
-    },
+    // mutChangeOrigin(state, data) {
+    //   state.listInfo.my_origin = data;
+    // },
     mutWorldOutlook(state, data) {
       state.listInfo.world_outlook = data;
     },
