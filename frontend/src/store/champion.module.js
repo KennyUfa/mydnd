@@ -65,7 +65,6 @@ export const champion = {
       return DndListService.createPostChampion(state.create_champion).then(
         (data) => {
           commit("CreateMychampions", data);
-          console.log(data);
           return Promise.resolve(data);
         },
         (error) => {
@@ -471,11 +470,9 @@ export const champion = {
       state.worldoutlooklist = data;
     },
     mutChangeClass(state, data) {
-      state.create_champion.champion_class = data;
+      console.log(data.champion_class);
+      state.create_champion.champion_class = data.champion_class;
     },
-    // mutChangeOrigin(state, data) {
-    //   state.listInfo.my_origin = data;
-    // },
     mutWorldOutlook(state, data) {
       state.listInfo.world_outlook = data;
     },

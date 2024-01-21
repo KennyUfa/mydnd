@@ -1,14 +1,13 @@
-import time
+import re
 
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets, permissions, status, generics
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 
 from .serializers import *
-from dnd.models import *
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -52,25 +51,25 @@ class CharacterView(viewsets.ModelViewSet):
 
 class SpellView(viewsets.ReadOnlyModelViewSet):
     queryset = Spell.objects.all()
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter,
                        DjangoFilterBackend]
     serializer_class = SpellBookSerializer
-    filterset_fields = ('lvl', 'name')
-    search_fields = ['^name', 'class_actor']
+
 
     def retrieve(self, request, pk=None):
-        spell = get_object_or_404(self.queryset, pk=pk)
+        spell = get_object_or_404(Spell, pk=pk)
         serializer = ChampionSpellSerializer(spell)
         return Response(serializer.data)
 
     def get_queryset(self):
+
         search_query = self.request.query_params.get('search', '')
-        print(search_query)
         queryset = Spell.objects.all()
+
         if search_query:
-            queryset = queryset.filter(
-                Q(name__icontains=search_query) | Q(class_actor__icontains=search_query))
+            print(search_query)
+            queryset = queryset.filter(name__iregex=search_query.strip())
         return queryset
 
 
@@ -98,7 +97,6 @@ class OriginView(generics.ListAPIView):
     serializer_class = OriginChoiceSerializer
 
     def get_queryset(self):
-        # time.sleep(3)
         return Origin.objects.all()
 
 
@@ -108,25 +106,24 @@ class WorldOutlookView(generics.ListAPIView):
     serializer_class = WorldOutlookSerializer
 
     def get_queryset(self):
-        time.sleep(1)
         return WorldOutlook.objects.all()
 
 
 class ItemView(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Item.objects.all()
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter,
+                       DjangoFilterBackend]
     serializer_class = ItemsSerializer
 
     def retrieve(self, request, pk=None):
-        time.sleep(1)
-        item = get_object_or_404(self.queryset, pk=pk)
+        item = get_object_or_404(Item, pk=pk)
         serializer = ItemsSerializer(item)
         return Response(serializer.data)
 
     def get_queryset(self):
         search_query = self.request.query_params.get('search', '')
-        queryset = Item.objects.order_by('name')
+        queryset = Item.objects.all()
         if search_query:
             queryset = queryset.filter(name__icontains=search_query)
         return queryset
@@ -136,34 +133,37 @@ class InventoryItemView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, character_id):
-        character = get_object_or_404(Character.objects.all(), id=character_id)
+        character = get_object_or_404(Character, id=character_id)
         item_id = request.data.get('item_id')
         quantity = request.data.get('quantity', 1)
-        item = get_object_or_404(Item.objects.all(), id=item_id)
-        inventory_item, created = InventoryItem.objects.get_or_create(character=character, item=item)
+        item = get_object_or_404(Item, id=item_id)
+        inventory_item, created = InventoryItem.objects.get_or_create(
+            character=character, item=item)
         if not created:
-            inventory_item.quantity = int(quantity)
+            inventory_item.quantity = quantity
         else:
-            inventory_item.quantity = int(quantity)
+            inventory_item.quantity = quantity
         inventory_item.save()
         serializer = InventorySerializer(inventory_item)
         return Response(serializer.data)
 
     def delete(self, request, character_id):
-        character = get_object_or_404(Character.objects.all(), id=character_id)
+        character = get_object_or_404(Character, id=character_id)
         item_id = request.data.get('item_id')
-        item = get_object_or_404(Item.objects.all(), id=item_id)
-        inventory_item = get_object_or_404(InventoryItem.objects.all(), character=character, item=item)
+        item = get_object_or_404(Item, id=item_id)
+        inventory_item = get_object_or_404(InventoryItem,
+                                           character=character, item=item)
         inventory_item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def patch(self, request, character_id):
-        character = get_object_or_404(Character.objects.all(), id=character_id)
+        character = get_object_or_404(Character, id=character_id)
         for item in request.data.get('my_items'):
-            print(item)
             item_id = int(item.get('item').get("id"))
             quantity = int(item.get('quantity'))
-            inventory_item = get_object_or_404(InventoryItem.objects.all(), character=character, item__id=item_id)
+            inventory_item = get_object_or_404(InventoryItem,
+                                               character=character,
+                                               item__id=item_id)
             inventory_item.quantity = quantity
             if quantity <= 0:
                 inventory_item.delete()
@@ -179,7 +179,7 @@ class OriginChangeView(APIView):
 
     def patch(self, request, origin_id):
         id = request.data.get('character_id')
-        character =  get_object_or_404(Character.objects.all(), id=id)
+        character = get_object_or_404(Character, id=id)
         origin = get_object_or_404(Origin, id=origin_id)
         character.my_origin = origin
         character.save()

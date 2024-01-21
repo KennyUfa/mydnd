@@ -8,7 +8,7 @@
     <a
       href=""
       data-bs-toggle="modal"
-      data-bs-target="#ModalSpellSearch"
+      data-bs-target="#ModalSpellView2"
       @click="loadSpellInfo(spell.id)"
     >
       {{ spell.name }}
@@ -28,9 +28,9 @@
     </button>
     <div
       class="modal fade"
-      id="ModalSpellSearch"
+      id="ModalSpellView2"
       tabindex="-1"
-      aria-labelledby="ModalLabelSpellSearch"
+      aria-labelledby="ModalLabelSpellView"
       aria-hidden="true"
     >
       <div class="modal-dialog">
@@ -42,26 +42,12 @@
           "
         >
           <div class="modal-header">
-            <h5 class="modal-title" id="ModalLabelSpellSearch">
+            <h5 class="modal-title" id="ModalLabelSpellView">
               {{ $store.state.spellbook.spell_detail.name }}
             </h5>
           </div>
-          <div class="modal-body">
-            <div>{{ $store.state.spellbook.spell_detail.lvl }}</div>
-            <div>{{ $store.state.spellbook.spell_detail.class_actor }}</div>
-            <div>{{ $store.state.spellbook.spell_detail.components }}</div>
-            <div>{{ $store.state.spellbook.spell_detail.distance }}</div>
-            <div>{{ $store.state.spellbook.spell_detail.time_cast }}</div>
-            <div>{{ $store.state.spellbook.spell_detail.timing }}</div>
-            <div>{{ $store.state.spellbook.spell_detail.origin }}</div>
-            <div>{{ $store.state.spellbook.spell_detail.instruction }}</div>
-          </div>
         </div>
-        <div class="modal-content" v-else>
-          <div class="modal-header">
-            <h5 class="modal-title" id="ModalLabelSpellSearch">Load</h5>
-          </div>
-        </div>
+        <div class="modal-content" v-else>load</div>
       </div>
     </div>
   </div>

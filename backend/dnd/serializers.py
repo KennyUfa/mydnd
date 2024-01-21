@@ -51,28 +51,33 @@ class RaceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Race
-        fields = ['race', 'secondary_model1', 'secondary_model2', 'secondary_model3']
+        fields = ['race', 'secondary_model1', 'secondary_model2',
+                  'secondary_model3']
 
     def get_secondary_model1(self, obj):
         if obj.secondarymodel1_set.exists():
-            return SecondaryModel1Serializer(obj.secondarymodel1_set.all(), many=True).data
+            return SecondaryModel1Serializer(obj.secondarymodel1_set.all(),
+                                             many=True).data
         return None
 
     def get_secondary_model2(self, obj):
         if obj.secondarymodel2_set.exists():
-            return SecondaryModel2Serializer(obj.secondarymodel2_set.all(), many=True).data
+            return SecondaryModel2Serializer(obj.secondarymodel2_set.all(),
+                                             many=True).data
         return None
 
     def get_secondary_model3(self, obj):
         if obj.secondarymodel3_set.exists():
-            return SecondaryModel3Serializer(obj.secondarymodel3_set.all(), many=True).data
+            return SecondaryModel3Serializer(obj.secondarymodel3_set.all(),
+                                             many=True).data
         return None
 
     def to_representation(self, instance):
         # Удалить пустые модели из вывода
         representation = super().to_representation(instance)
         return {
-            key: value for key, value in representation.items() if value is not None
+            key: value for key, value in representation.items() if
+            value is not None
         }
 
 
@@ -85,6 +90,7 @@ class IdealSerializer(serializers.ModelSerializer):
 class OriginChoiceSerializer(serializers.ModelSerializer):
     origin = serializers.CharField()
     ideals = IdealSerializer(many=True)
+
     # ideal_choice = IdealSerializer()
 
     class Meta:
@@ -264,6 +270,18 @@ class SpellSerializer(serializers.ModelSerializer):
 class ChampionClassSerializer(serializers.ModelSerializer):
     class_spells = SpellSerializer(many=True, read_only=True)
 
+    def to_representation(self, obj):
+        # При сериализации возвращаем нужное представление объекта
+        if isinstance(obj, str):
+            return {"champion_class": obj}
+        return super().to_representation(obj)
+
+    def to_internal_value(self, data):
+        # При десериализации принимаем как строку или словарь
+        if isinstance(data, str):
+            return {"champion_class": data}
+        return super().to_internal_value(data)
+
     class Meta:
         model = ClassChampion
         fields = "__all__"
@@ -303,7 +321,7 @@ class CharacterSerializer(serializers.ModelSerializer):
                                         required=False)
     account = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
-    my_origin = OriginSerializer()
+    my_origin = OriginSerializer(required=False)
     world_outlook = serializers.SlugRelatedField(
         slug_field='name',
         queryset=WorldOutlook.objects.all(), required=False)
@@ -317,10 +335,12 @@ class CharacterSerializer(serializers.ModelSerializer):
                                                    required=False)
     my_items = InventorySerializer(many=True, read_only=True)
     available_skills = serializers.SerializerMethodField()
+
     # ideal_choice = IdealSerializer()
 
     def get_available_skills(self, obj):
-        return SkillSerializer(obj.champion_class.get_available_skills(obj.lvl), many=True).data
+        return SkillSerializer(obj.champion_class.get_available_skills(obj.lvl),
+                               many=True).data
 
     # def get_spell_slots(self, obj):
     #     return SpellLevelSerializer(obj.champion_class.get_spell_slots(obj.lvl)).data
@@ -330,9 +350,13 @@ class CharacterSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
+        print('!!')
         champion_class_data = validated_data.pop('champion_class')
-        champion_class = ClassChampion.objects.get(champion_class=champion_class_data['champion_class'])
-        character = Character.objects.create(champion_class=champion_class, **validated_data)
+        print(champion_class_data)
+        champion_class = ClassChampion.objects.get(
+            champion_class=champion_class_data['champion_class'])
+        character = Character.objects.create(champion_class=champion_class,
+                                             **validated_data)
         return character
 
     # https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers

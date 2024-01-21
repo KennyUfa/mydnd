@@ -25,11 +25,18 @@
       Класс - {{ listInfo.champion_class.champion_class }}
     </div>
     <div class="center" v-if="!show">
-      Предистория - {{ listInfo.my_origin.origin }}
+      <p v-if="listInfo.my_origin">
+        Предистория - {{ listInfo.my_origin.origin }}
+      </p>
+      <p v-else>Предистория - не выбрана</p>
     </div>
     <div class="center" v-else>
       <div>
-        Предистория - {{ listInfo.my_origin.origin }}
+        <p v-if="listInfo.my_origin">
+          Предистория - {{ listInfo.my_origin.origin }}
+        </p>
+        <p v-else>Предистория - не выбрана</p>
+
         <button
           type="button"
           @click="loadOrigin"
@@ -128,6 +135,7 @@
 
 <script>
 import { mapState } from "vuex";
+
 export default {
   name: "MainInfostat",
   data() {
@@ -180,6 +188,7 @@ export default {
   border-radius: 10px;
   background-color: #faf0b6;
 }
+
 .wrapper {
   display: grid;
   grid-gap: 5px;
@@ -201,10 +210,12 @@ export default {
 .center:nth-child(n + 2) {
   grid-column: span 1; /* По 3 окошка в ряд на второй и третий ряд */
 }
+
 .name-champion {
   display: flex;
   justify-content: space-around;
 }
+
 @media (max-width: 1024px) {
   .center {
     font-size: 13px;

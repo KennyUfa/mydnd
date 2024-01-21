@@ -121,7 +121,6 @@
     >
       Поиск по инвентарю
     </button>
-
     <div class="card-body">
       <div
         class="spellbook border border-primary"
@@ -209,7 +208,6 @@ export default {
     },
 
     loadItemInfo(id) {
-      console.log(id);
       this.$store.dispatch("item/getDetailItem", id);
       this.id = id;
     },

@@ -8,10 +8,7 @@
 
     <div class="btn-group">
       <button type="button" class="btn btn-danger">
-        {{
-          this.$store.state.champion.create_champion.champion_class
-            .champion_class
-        }}
+        {{ this.$store.state.champion.create_champion.champion_class }}
       </button>
       <button
         type="button"
