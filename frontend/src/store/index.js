@@ -4,6 +4,7 @@ import { champion } from "./champion.module";
 import { spellbook } from "./spellbook.module";
 import { item } from "./item.module";
 import { origin } from "./origin.module";
+import { getrand } from "./getrand.module";
 
 const store = createStore({
   modules: {
@@ -12,6 +13,7 @@ const store = createStore({
     spellbook,
     item,
     origin,
+    getrand,
   },
 });
 export default store;

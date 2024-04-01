@@ -1,5 +1,16 @@
 <template>
   <MainInfoView></MainInfoView>
+  <saving-throw-view></saving-throw-view>
+  <skills-view></skills-view>
+  <div class="wrapper">
+    <passive-perception></passive-perception>
+    <inspiration-frame></inspiration-frame>
+    <possession-bonus></possession-bonus>
+    <protection-class-view></protection-class-view>
+    <initiative-view></initiative-view>
+    <speed-view></speed-view>
+  </div>
+  <hit-vue></hit-vue>
   <ability-view></ability-view>
   <div class="col">
     <!-- Nav tabs -->
@@ -74,17 +85,6 @@
       </div>
     </div>
   </div>
-  <skills-view></skills-view>
-  <div class="wrapper">
-    <passive-perception></passive-perception>
-    <inspiration-frame></inspiration-frame>
-    <possession-bonus></possession-bonus>
-    <protection-class-view></protection-class-view>
-    <initiative-view></initiative-view>
-    <speed-view></speed-view>
-  </div>
-  <hit-vue></hit-vue>
-  <saving-throw-view></saving-throw-view>
 </template>
 
 <script>

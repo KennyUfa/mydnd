@@ -3,11 +3,9 @@ import DndListService from "../services/charlist.service.js";
 const initialChampion_id = JSON.parse(localStorage.getItem("champion_id"));
 export const champion = {
   namespaced: true,
-
   state: {
     classlist: NaN,
     racelist: NaN,
-    // prehistorylist: NaN,
     worldoutlooklist: NaN,
     isLoading: false,
     mychampions: [],
@@ -88,19 +86,6 @@ export const champion = {
         }
       );
     },
-    // loadOrigin({ commit }) {
-    //   return DndListService.getOrigin().then(
-    //     (data) => {
-    //       commit("OriginListEdit", data);
-    //       return Promise.resolve(data);
-    //     },
-    //     (error) => {
-    //       console.log(error.request.responseText);
-    //       commit("dataFailure");
-    //       return Promise.reject(error);
-    //     }
-    //   );
-    // },
     loadWorldOutlook({ commit }) {
       return DndListService.getWorldOutlook().then(
         (data) => {
@@ -536,8 +521,8 @@ export const champion = {
     },
   },
   getters: {
-    getInspiration(state) {
-      return state.listInfo.inspiration;
+    getChampionId(state) {
+      return state.champion_id;
     },
   },
 };

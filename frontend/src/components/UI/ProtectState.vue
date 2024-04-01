@@ -1,5 +1,6 @@
 <template>
-  <div class="card-body">
+  <random-window ref="RandomWindow"></random-window>
+  <div class="card-body" @click="random_save()">
     <div class="card-header">
       {{ skillName }}
     </div>
@@ -16,7 +17,11 @@
       </button>
       {{ Math.floor((champion.listInfo[stat] - 10) / 2) }}
     </div>
-    <div class="card-info" v-else>
+    <div
+      class="card-info"
+      v-bind:style="{ 'background-color': '#d8c13b' }"
+      v-else
+    >
       <button
         v-if="show"
         class="ui button big toggle"
@@ -35,14 +40,48 @@
 <script>
 import store from "../../store";
 import { mapState } from "vuex";
+import RandomWindow from "@/components/UI/RandomWindow.vue";
 
 export default {
   name: "ProtectState",
+  components: {
+    RandomWindow,
+  },
   props: ["skillName", "skillValue", "stat", "show"],
   computed: mapState(["champion"]),
+  data() {
+    return {
+      showToast: false,
+      result: "",
+    };
+  },
   methods: {
     stateProtect(skill) {
       store.commit("champion/switchProtectState", skill);
+    },
+    random_save() {
+      let params = {
+        skillValue: this.skillValue,
+        stat: this.stat,
+      };
+
+      this.$store
+        .dispatch("getrand/getRandomProtect", params)
+        .then((responseData) => {
+          this.$refs.RandomWindow.openPopup(responseData);
+        })
+        .catch((error) => {
+          // обработка ошибки при запросе
+          console.error("Error fetching data:", error);
+        });
+    },
+    async handleButtonClick() {
+      try {
+        this.result = 10;
+        this.showToast = true;
+      } catch (error) {
+        console.error("Ошибка при выполнении запроса:", error);
+      }
     },
   },
 };
