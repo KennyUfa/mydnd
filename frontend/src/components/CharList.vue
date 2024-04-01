@@ -1,17 +1,21 @@
 <template>
+  <random-window ref="RandomWindow"></random-window>
   <MainInfoView></MainInfoView>
-  <saving-throw-view></saving-throw-view>
+  <ability-view @callRandomWindow="callRandomWindowMethod"></ability-view>
+  <saving-throw-view
+    @callRandomWindow="callRandomWindowMethod"
+  ></saving-throw-view>
   <skills-view></skills-view>
   <div class="wrapper">
+    <possession-bonus></possession-bonus>
     <passive-perception></passive-perception>
     <inspiration-frame></inspiration-frame>
-    <possession-bonus></possession-bonus>
     <protection-class-view></protection-class-view>
     <initiative-view></initiative-view>
     <speed-view></speed-view>
   </div>
   <hit-vue></hit-vue>
-  <ability-view></ability-view>
+
   <div class="col">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
@@ -103,9 +107,11 @@ import SpellView from "./HeroListView/SpellView.vue";
 import HitVue from "./HeroListView/HitVue.vue";
 import ProficiencieAndLanguages from "./HeroListView/ProficiencieAndLanguages.vue";
 import InventoryView from "./HeroListView/InventoryView.vue";
+import RandomWindow from "@/components/UI/RandomWindow.vue";
 
 export default {
   components: {
+    RandomWindow,
     InventoryView,
     ProficiencieAndLanguages,
     HitVue,
@@ -123,6 +129,12 @@ export default {
     SpellView,
   },
   name: "CharList",
+  methods: {
+    callRandomWindowMethod(arg) {
+      console.log(arg);
+      this.$refs.RandomWindow.openPopup(arg);
+    },
+  },
 };
 </script>
 

@@ -188,31 +188,61 @@ class RandomSaveView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        print(request.data)
 
         character = Character.objects.get(id=request.data.get('championId'))
         skillValue = getattr(character, request.data.get('statValue'))
-        protect_char_state = getattr(character.protect_char_state,
-                                     request.data.get('skillValue'))
-        possession_bonus = character.possession_bonus
-        result = math.floor((skillValue - 10) / 2)
-        random_result = random.randint(1, 20)
+        if 'protectValueName' in request.data:
+            protect_char_state = getattr(character.protect_char_state,
+                                         request.data.get('protectValueName'))
+            possession_bonus = character.possession_bonus
+            result = math.floor((skillValue - 10) / 2)
+            random_result = random.randint(1, 20)
 
-        match protect_char_state:
-            case 1:
-                resp = {
-                    'total': random_result + result,
-                    'skillValue': skillValue,
-                    'random_result': random_result,
-                    'possession_bonus': possession_bonus,
-                }
-                return Response(resp)
-            case 2:
-                resp = {
-                    'total': random_result + result + possession_bonus,
-                    'skillValue': skillValue,
-                    'random_result': random_result,
-                    'possession_bonus': possession_bonus,
-                }
-                return Response(resp)
-            case _:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+            match protect_char_state:
+                case 1:
+                    resp = {
+                        'total': random_result + result,
+                        'skillValue': skillValue,
+                        'random_result': random_result,
+                        'possession_bonus': possession_bonus,
+                    }
+                    return Response(resp)
+                case 2:
+                    resp = {
+                        'total': random_result + result + possession_bonus,
+                        'skillValue': skillValue,
+                        'random_result': random_result,
+                        'possession_bonus': possession_bonus,
+                    }
+                    return Response(resp)
+                case _:
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+        elif 'abilityValueName' in request.data:
+            abilityValueName = getattr(character.skill_char_state,
+                                       request.data.get('abilityValueName'))
+            possession_bonus = character.possession_bonus
+            result = math.floor((skillValue - 10) / 2)
+            random_result = random.randint(1, 20)
+
+            match abilityValueName:
+                case 1:
+                    resp = {
+                        'total': random_result + result,
+                        'skillValue': skillValue,
+                        'random_result': random_result,
+                        'possession_bonus': possession_bonus,
+                    }
+                    print('1')
+                    return Response(resp)
+                case 2:
+                    print('2')
+                    resp = {
+                        'total': random_result + result + possession_bonus,
+                        'skillValue': skillValue,
+                        'random_result': random_result,
+                        'possession_bonus': possession_bonus,
+                    }
+                    return Response(resp)
+                case _:
+                    return Response(status=status.HTTP_400_BAD_REQUEST)

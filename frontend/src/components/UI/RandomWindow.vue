@@ -19,12 +19,13 @@ export default {
     };
   },
   methods: {
-    openPopup(responseData) {
-      this.responseData = responseData;
-      this.showPopup = true;
-    },
     closePopup() {
       this.showPopup = false;
+    },
+    openPopup(responseData) {
+      this.closePopup();
+      this.responseData = responseData;
+      this.showPopup = true;
     },
   },
 };

@@ -1,5 +1,4 @@
 <template>
-  <random-window ref="RandomWindow"></random-window>
   <div class="card-body" @click="random_save()">
     <div class="card-header">
       {{ skillName }}
@@ -40,13 +39,9 @@
 <script>
 import store from "../../store";
 import { mapState } from "vuex";
-import RandomWindow from "@/components/UI/RandomWindow.vue";
 
 export default {
   name: "ProtectState",
-  components: {
-    RandomWindow,
-  },
   props: ["skillName", "skillValue", "stat", "show"],
   computed: mapState(["champion"]),
   data() {
@@ -68,7 +63,7 @@ export default {
       this.$store
         .dispatch("getrand/getRandomProtect", params)
         .then((responseData) => {
-          this.$refs.RandomWindow.openPopup(responseData);
+          this.$emit("callRandomWindow", responseData);
         })
         .catch((error) => {
           // обработка ошибки при запросе

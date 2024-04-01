@@ -1,5 +1,5 @@
 <template>
-  <div class="card-body">
+  <div class="card-body" @click="random_save()">
     <div class="card-header">
       {{ skillName }}
     </div>
@@ -56,6 +56,22 @@ export default {
   methods: {
     stateProtect(skill) {
       store.commit("champion/switchAbilityState", skill);
+    },
+    random_save() {
+      let params = {
+        skillValue: this.skillValue,
+        stat: this.stat,
+      };
+
+      this.$store
+        .dispatch("getrand/getRandomAbility", params)
+        .then((responseData) => {
+          this.$emit("callRandomWindow", responseData);
+        })
+        .catch((error) => {
+          // обработка ошибки при запросе
+          console.error("Error fetching data:", error);
+        });
     },
   },
 };
