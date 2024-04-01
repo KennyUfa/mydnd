@@ -1,6 +1,6 @@
-import re
+import math
+import random
 
-from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets, permissions, status, generics
@@ -56,19 +56,16 @@ class SpellView(viewsets.ReadOnlyModelViewSet):
                        DjangoFilterBackend]
     serializer_class = SpellBookSerializer
 
-
     def retrieve(self, request, pk=None):
         spell = get_object_or_404(Spell, pk=pk)
         serializer = ChampionSpellSerializer(spell)
         return Response(serializer.data)
 
     def get_queryset(self):
-
         search_query = self.request.query_params.get('search', '')
         queryset = Spell.objects.all()
 
         if search_query:
-            print(search_query)
             queryset = queryset.filter(name__iregex=search_query.strip())
         return queryset
 
@@ -125,7 +122,7 @@ class ItemView(viewsets.ReadOnlyModelViewSet):
         search_query = self.request.query_params.get('search', '')
         queryset = Item.objects.all()
         if search_query:
-            queryset = queryset.filter(name__icontains=search_query)
+            queryset = queryset.filter(name__iregex=search_query)
         return queryset
 
 
@@ -185,3 +182,37 @@ class OriginChangeView(APIView):
         character.save()
         serializer = CharacterSerializer(character)
         return Response(serializer.data)
+
+
+class RandomSaveView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+
+        character = Character.objects.get(id=request.data.get('championId'))
+        skillValue = getattr(character, request.data.get('statValue'))
+        protect_char_state = getattr(character.protect_char_state,
+                                     request.data.get('skillValue'))
+        possession_bonus = character.possession_bonus
+        result = math.floor((skillValue - 10) / 2)
+        random_result = random.randint(1, 20)
+
+        match protect_char_state:
+            case 1:
+                resp = {
+                    'total': random_result + result,
+                    'skillValue': skillValue,
+                    'random_result': random_result,
+                    'possession_bonus': possession_bonus,
+                }
+                return Response(resp)
+            case 2:
+                resp = {
+                    'total': random_result + result + possession_bonus,
+                    'skillValue': skillValue,
+                    'random_result': random_result,
+                    'possession_bonus': possession_bonus,
+                }
+                return Response(resp)
+            case _:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
