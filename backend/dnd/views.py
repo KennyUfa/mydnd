@@ -23,21 +23,12 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class BaseClassChViewSet(generics.ListAPIView):
-    queryset = ClassChampion.objects.all()
+    queryset = BaseClass.objects.all()
     serializer_class = BaseClassChSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return ClassChampion.objects.all()
-
-
-class RaceViewSet(generics.ListAPIView):
-    queryset = Race.objects.all()
-    serializer_class = RaceSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return Race.objects.all()
+        return BaseClass.objects.all()
 
 
 class CharacterView(viewsets.ModelViewSet):
@@ -48,6 +39,25 @@ class CharacterView(viewsets.ModelViewSet):
     def get_queryset(self):
         return Character.objects.filter(account=self.request.user)
 
+class CharacterListView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CharacterSerializerList
+    queryset = Character.objects.all()
+
+    def get_queryset(self):
+        return Character.objects.filter(account=self.request.user)
+
+    def get(self, request):
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save(account=self.request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SpellView(viewsets.ReadOnlyModelViewSet):
     queryset = Spell.objects.all()
@@ -70,10 +80,10 @@ class SpellView(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 
-class BackgroundView(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = BackgroundSerializer
-    queryset = BackgroundModel.objects.all()
+# class BackgroundView(viewsets.ModelViewSet):
+#     permission_classes = [permissions.IsAuthenticated]
+#     serializer_class = BackgroundSerializer
+#     queryset = BackgroundModel2.objects.all()
 
 
 class ProtectStateView(viewsets.ModelViewSet):
@@ -88,13 +98,13 @@ class SkillStateView(viewsets.ModelViewSet):
     queryset = SkillStateModel.objects.all()
 
 
-class OriginView(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Origin.objects.all()
-    serializer_class = OriginChoiceSerializer
-
-    def get_queryset(self):
-        return Origin.objects.all()
+# class OriginView(generics.ListAPIView):
+#     permission_classes = [permissions.IsAuthenticated]
+#     queryset = Origin.objects.all()
+#     serializer_class = OriginChoiceSerializer
+#
+#     def get_queryset(self):
+#         return Origin.objects.all()
 
 
 class WorldOutlookView(generics.ListAPIView):
@@ -171,17 +181,17 @@ class InventoryItemView(APIView):
         return Response(serializer.data)
 
 
-class OriginChangeView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def patch(self, request, origin_id):
-        id = request.data.get('character_id')
-        character = get_object_or_404(Character, id=id)
-        origin = get_object_or_404(Origin, id=origin_id)
-        character.my_origin = origin
-        character.save()
-        serializer = CharacterSerializer(character)
-        return Response(serializer.data)
+# class OriginChangeView(APIView):
+#     permission_classes = [permissions.IsAuthenticated]
+#
+#     def patch(self, request, origin_id):
+#         id = request.data.get('character_id')
+#         character = get_object_or_404(Character, id=id)
+#         origin = get_object_or_404(Origin, id=origin_id)
+#         character.my_origin = origin
+#         character.save()
+#         serializer = CharacterSerializer(character)
+#         return Response(serializer.data)
 
 
 class RandomSaveView(APIView):
@@ -191,19 +201,19 @@ class RandomSaveView(APIView):
         print(request.data)
 
         character = Character.objects.get(id=request.data.get('championId'))
-        skillValue = getattr(character, request.data.get('statValue'))
+        skillvalue = getattr(character, request.data.get('statValue'))
         if 'protectValueName' in request.data:
             protect_char_state = getattr(character.protect_char_state,
                                          request.data.get('protectValueName'))
             possession_bonus = character.possession_bonus
-            result = math.floor((skillValue - 10) / 2)
+            result = math.floor((skillvalue - 10) / 2)
             random_result = random.randint(1, 20)
 
             match protect_char_state:
                 case 1:
                     resp = {
                         'total': random_result + result,
-                        'skillValue': skillValue,
+                        'skillValue': skillvalue,
                         'random_result': random_result,
                         'possession_bonus': possession_bonus,
                     }
@@ -211,7 +221,7 @@ class RandomSaveView(APIView):
                 case 2:
                     resp = {
                         'total': random_result + result + possession_bonus,
-                        'skillValue': skillValue,
+                        'skillValue': skillvalue,
                         'random_result': random_result,
                         'possession_bonus': possession_bonus,
                     }
@@ -222,14 +232,14 @@ class RandomSaveView(APIView):
             abilityValueName = getattr(character.skill_char_state,
                                        request.data.get('abilityValueName'))
             possession_bonus = character.possession_bonus
-            result = math.floor((skillValue - 10) / 2)
+            result = math.floor((skillvalue - 10) / 2)
             random_result = random.randint(1, 20)
 
             match abilityValueName:
                 case 1:
                     resp = {
                         'total': random_result + result,
-                        'skillValue': skillValue,
+                        'skillValue': skillvalue,
                         'random_result': random_result,
                         'possession_bonus': possession_bonus,
                     }
@@ -239,7 +249,7 @@ class RandomSaveView(APIView):
                     print('2')
                     resp = {
                         'total': random_result + result + possession_bonus,
-                        'skillValue': skillValue,
+                        'skillValue': skillvalue,
                         'random_result': random_result,
                         'possession_bonus': possession_bonus,
                     }

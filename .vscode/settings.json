@@ -1,9 +1,9 @@
 {
-    "CodeGPT.apiKey": "OpenAI",
-    "CodeGPT.query.language": "Russian",
-    "CodeGPT.Autocomplete.enabled": true,
-    "Codegeex.Comment.LanguagePreference": "English",
-    "Codegeex.Explanation.LanguagePreference": "English",
-    "Codegeex.CompletionModel": "CodeGeeX Pro[Beta]",
-    "CodeGPT.Autocomplete.provider": "OpenAI - gpt-3.5-turbo-instruct"
+  "CodeGPT.apiKey": "OpenAI",
+  "CodeGPT.query.language": "Russian",
+  "CodeGPT.Autocomplete.enabled": true,
+  "Codegeex.Comment.LanguagePreference": "English",
+  "Codegeex.Explanation.LanguagePreference": "English",
+  "Codegeex.CompletionModel": "CodeGeeX Pro[Beta]",
+  "CodeGPT.Autocomplete.provider": "OpenAI - gpt-3.5-turbo-instruct"
 }

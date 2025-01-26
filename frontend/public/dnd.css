@@ -42,7 +42,14 @@ body {
     font-size: 13px;
   }
 }
-
+.digital-check{
+    border: 1px solid #606b85;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 46px;
+    padding: 4px 0 3px;
+    transition: background-color .1s
+}
 /* #B9FAD8 зелен*/
 /* #BDB6FA фиолет*/
 /* #FABDB6 розоватый*/

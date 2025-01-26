@@ -1,11 +1,12 @@
-import { createWebHistory, createRouter } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "@/components/LoginView";
-import CharList from "./components/CharList.vue";
-import CharactersView from "./components/CharactersView.vue";
-import store from "./store";
-import SpellBookView from "./components/SpellBook/SpellBookView.vue";
-import SpellDetailView from "./components/SpellBook/SpellDetailView.vue";
-import Inventory from "./components/Inventory/InventoryView.vue";
+import CharList from "@/components/CharList.vue";
+import CharList2 from "@/components/CharList2.vue";
+import CharactersView from "@/components/CharactersView.vue";
+import store from "@/store";
+import SpellBookView from "@/components/SpellBook/SpellBookView.vue";
+import SpellDetailView from "@/components/SpellBook/SpellDetailView.vue";
+import Inventory from "@/components/Inventory/InventoryView.vue";
 
 const routes = [
   {
@@ -47,6 +48,10 @@ const routes = [
         next();
       }
     },
+  },
+  {
+    path: "/charlist2",
+    component: CharList2,
   },
   {
     path: "/database",

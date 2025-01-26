@@ -1,52 +1,37 @@
 <template>
-  <div class="card-body" @click="random_save()">
-    <div class="card-header">
-      {{ skillName }}
-    </div>
-    <div class="card-info">
-      <div v-if="champion.listInfo.skill_char_state[skillValue] === 1">
-        <button
-          v-if="show"
-          class="ui button big toggle"
-          @click="stateProtect(skillValue)"
-        >
-          {{ champion.listInfo.skill_char_state[skillValue] }}
-        </button>
-        {{ Math.floor((champion.listInfo[stat] - 10) / 2) }}
+    <div class="card-body d-flex justify-content-between" @click="random_save()">
+      <button
+        v-if="show"
+        class="ui button big toggle"
+        @click="stateProtect(skillValue)"
+      >
+        {{ champion.listInfo.skill_char_state[skillValue] }}
+      </button>
+      <div class="card-header">
+        {{ skillName }}
       </div>
-      <div v-else-if="champion.listInfo.skill_char_state[skillValue] === 2">
-        <button
-          v-if="show"
-          class="ui button big toggle"
-          @click="stateProtect(skillValue)"
-        >
-          {{ champion.listInfo.skill_char_state[skillValue] }}
-        </button>
-        {{
-          Math.floor((champion.listInfo[stat] - 10) / 2) +
-          champion.listInfo.possession_bonus
-        }}
-      </div>
-
-      <div v-else>
-        <button
-          v-if="show"
-          class="ui button big toggle"
-          @click="stateProtect(skillValue)"
-        >
-          {{ champion.listInfo.skill_char_state[skillValue] }}
-        </button>
-        {{
-          Math.floor((champion.listInfo[stat] - 10) / 2) * 2 +
-          champion.listInfo.possession_bonus
-        }}
+      <div class="digital-check text-wrap text-center">
+        <div v-if="champion.listInfo.skill_char_state[skillValue] === 1">
+          {{ Math.floor((champion.listInfo[stat] - 10) / 2) }}
+        </div>
+        <div v-else-if="champion.listInfo.skill_char_state[skillValue] === 2">
+          {{
+            Math.floor((champion.listInfo[stat] - 10) / 2) +
+            champion.listInfo.possession_bonus
+          }}
+        </div>
+        <div v-else>
+          {{
+            Math.floor((champion.listInfo[stat] - 10) / 2) * 2 +
+            champion.listInfo.possession_bonus
+          }}
+        </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 import store from "../../store";
 
 export default {
@@ -77,4 +62,13 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.digital-check{
+    border: 1px solid #606b85;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 46px;
+    padding: 4px 0 3px;
+    transition: background-color .1s
+}
+</style>

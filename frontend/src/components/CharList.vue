@@ -1,21 +1,5 @@
 <template>
   <random-window ref="RandomWindow"></random-window>
-  <MainInfoView></MainInfoView>
-  <ability-view @callRandomWindow="callRandomWindowMethod"></ability-view>
-  <saving-throw-view
-    @callRandomWindow="callRandomWindowMethod"
-  ></saving-throw-view>
-  <skills-view></skills-view>
-  <div class="wrapper">
-    <possession-bonus></possession-bonus>
-    <passive-perception></passive-perception>
-    <inspiration-frame></inspiration-frame>
-    <protection-class-view></protection-class-view>
-    <initiative-view></initiative-view>
-    <speed-view></speed-view>
-  </div>
-  <hit-vue></hit-vue>
-
   <div class="col">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
@@ -23,10 +7,20 @@
         <a
           class="nav-link active"
           data-bs-toggle="tab"
-          href="#inventory"
+          href="#stats"
           role="tab"
           aria-selected="true"
-          >Инвентарь</a
+        >Характеристики</a
+        >
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          data-bs-toggle="tab"
+          href="#inventory"
+          role="tab"
+          aria-selected="false"
+        >Инвентарь</a
         >
       </li>
       <li class="nav-item" role="presentation">
@@ -36,7 +30,7 @@
           href="#spells"
           role="tab"
           aria-selected="false"
-          >Заклинания</a
+        >Заклинания</a
         >
       </li>
       <li class="nav-item" role="presentation">
@@ -46,7 +40,7 @@
           href="#prehistory"
           role="tab"
           aria-selected="false"
-          >Предыстория</a
+        >Предыстория</a
         >
       </li>
       <li class="nav-item" role="presentation">
@@ -56,7 +50,7 @@
           href="#skills-and-abilites"
           role="tab"
           aria-selected="false"
-          >Умения и способнисти</a
+        >Умения и способнисти</a
         >
       </li>
       <li class="nav-item" role="presentation">
@@ -66,17 +60,36 @@
           href="#outher"
           role="tab"
           aria-selected="false"
-          >ПРОЧИЕ ВЛАДЕНИЯ И ЯЗЫКИ</a
+        >ПРОЧИЕ ВЛАДЕНИЯ И ЯЗЫКИ</a
         >
       </li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
-      <div class="tab-pane fade show active" id="inventory" role="tabpanel">
+      <div class="tab-pane fade" id="inventory" role="tabpanel">
         <inventory-view></inventory-view>
       </div>
       <div class="tab-pane fade" id="spells" role="tabpanel">
         <spell-view></spell-view>
+      </div>
+      <div class="tab-pane fade show active" id="stats" role="tabpanel">
+        <MainInfoView></MainInfoView>
+        <ability-view @callRandomWindow="callRandomWindowMethod"></ability-view>
+        <saving-throw-view
+          @callRandomWindow="callRandomWindowMethod"
+        ></saving-throw-view>
+        <skills-view></skills-view>
+        <div class="wrapper">
+          <div class="container">
+            <possession-bonus></possession-bonus>
+            <passive-perception></passive-perception>
+            <inspiration-frame></inspiration-frame>
+            <protection-class-view></protection-class-view>
+            <initiative-view></initiative-view>
+            <speed-view></speed-view>
+          </div>
+        </div>
+        <hit-vue></hit-vue>
       </div>
       <div class="tab-pane fade" id="prehistory" role="tabpanel">
         <background-view></background-view>
@@ -105,7 +118,8 @@ import InitiativeView from "./HeroListView/InitiativeView.vue";
 import SpeedView from "./HeroListView/SpeedView.vue";
 import SpellView from "./HeroListView/SpellView.vue";
 import HitVue from "./HeroListView/HitVue.vue";
-import ProficiencieAndLanguages from "./HeroListView/ProficiencieAndLanguages.vue";
+import ProficiencieAndLanguages
+  from "./HeroListView/ProficiencieAndLanguages.vue";
 import InventoryView from "./HeroListView/InventoryView.vue";
 import RandomWindow from "@/components/UI/RandomWindow.vue";
 
@@ -137,12 +151,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.wrapper {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 5px;
-  padding-top: 10px;
-}
-</style>

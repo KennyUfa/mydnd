@@ -1,9 +1,9 @@
 <template>
-  <button v-if="!show" v-on:click="show = !show">изменить</button>
+<div class="container">
+    <button v-if="!show" v-on:click="show = !show">изменить</button>
   <button v-if="show" v-on:click="patchProtectSkills">применить</button>
-  <div class="card-body">
     <div class="card-header">Спасброски</div>
-    <div class="wrapper">
+    <div class="row row-cols-3">
       <protect-state
         @callRandomWindow="callRandomWindow"
         skillName="Сила"
@@ -54,7 +54,7 @@
 import ProtectState from "../UI/ProtectState.vue";
 
 export default {
-  components: { ProtectState },
+  components: {ProtectState},
   data() {
     return {
       show: false,

@@ -1,4 +1,5 @@
 <template>
+
   <button v-if="!show" v-on:click="show = !show">
     {{ this.show }} не видно
   </button>

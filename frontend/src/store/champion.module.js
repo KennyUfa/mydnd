@@ -189,6 +189,7 @@ export const champion = {
       };
       return DndListService.patchMainInfo(data, state.champion_id).then(
         (data) => {
+          commit("dataSuccess", data);
           return Promise.resolve(data);
         },
         (error) => {

@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import LoginView from "@/components/LoginView";
 import CharList from "./components/CharList.vue";
+import CharList2 from "@/components/CharList2.vue";
 import CharactersView from "./components/CharactersView.vue";
 import store from "./store";
 import SpellBookView from "./components/SpellBook/SpellBookView.vue";
@@ -75,14 +76,8 @@ const routes = [
     },
   },
   {
-    path: "/charlist",
-    component: CharList,
-    async beforeEnter(to, from, next) {
-      await store.dispatch("champion/getData");
-      if (store.state.champion.listInfo) {
-        next();
-      }
-    },
+    path: "/charlist2",
+    component: CharList2,
   },
   {
     path: "/characters",

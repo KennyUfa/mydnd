@@ -1,44 +1,32 @@
 <template>
-  <div class="card-body" @click="random_save()">
+  <div class="card-body d-flex justify-content-between" @click="random_save()">
+    <button
+      v-if="show"
+      class="ui button big toggle"
+      @click="stateProtect(skillValue)"
+    >
+      {{ champion.listInfo.protect_char_state[skillValue] }}
+    </button>
     <div class="card-header">
       {{ skillName }}
     </div>
-    <div
-      class="card-info"
-      v-if="champion.listInfo.protect_char_state[skillValue] === 1"
-    >
-      <button
-        v-if="show"
-        class="ui button big toggle"
-        @click="stateProtect(skillValue)"
-      >
-        {{ champion.listInfo.protect_char_state[skillValue] }}
-      </button>
-      {{ Math.floor((champion.listInfo[stat] - 10) / 2) }}
-    </div>
-    <div
-      class="card-info"
-      v-bind:style="{ 'background-color': '#d8c13b' }"
-      v-else
-    >
-      <button
-        v-if="show"
-        class="ui button big toggle"
-        @click="stateProtect(skillValue)"
-      >
-        {{ champion.listInfo.protect_char_state[skillValue] }}
-      </button>
-      {{
-        Math.floor((champion.listInfo[stat] - 10) / 2) +
-        champion.listInfo.possession_bonus
-      }}
+    <div class="digital-check text-wrap text-center">
+      <div v-if="champion.listInfo.protect_char_state[skillValue] === 1">
+        {{ Math.floor((champion.listInfo[stat] - 10) / 2) }}
+      </div>
+      <div v-bind:style="{ 'background-color': '#d8c13b' }" v-else>
+        {{
+          Math.floor((champion.listInfo[stat] - 10) / 2) +
+          champion.listInfo.possession_bonus
+        }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import store from "../../store";
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 
 export default {
   name: "ProtectState",

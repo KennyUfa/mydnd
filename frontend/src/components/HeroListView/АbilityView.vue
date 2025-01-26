@@ -1,9 +1,9 @@
 <template>
-  <button v-if="!show" v-on:click="show = !show">изменить</button>
-  <button v-if="show" v-on:click="patchProtectSkills">применить</button>
-  <div class="card-body">
-    <div class="card-header">Навыки</div>
-    <div class="wrapper">
+  <div class="container">
+    <button v-if="!show" v-on:click="show = !show">изменить</button>
+    <button v-if="show" v-on:click="patchProtectSkills">применить</button>
+    <div>Навыки</div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 ">
       <ability-frame
         @callRandomWindow="callRandomWindow"
         skillName="Атлетика"
@@ -157,29 +157,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.card-body {
-  margin-top: 5px;
-}
-
-.wrapper {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 5px;
-}
-
-@media (max-width: 1200px) {
-  .wrapper {
-    grid-template-columns: repeat(3, 1fr);
-    font-size: 15px;
-  }
-}
-
-@media (max-width: 720px) {
-  .wrapper {
-    grid-template-columns: repeat(2, 1fr);
-    font-size: 15px;
-  }
-}
-</style>

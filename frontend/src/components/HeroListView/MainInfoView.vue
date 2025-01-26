@@ -22,7 +22,7 @@
       />
     </div>
     <div class="center">
-      Класс - {{ listInfo.champion_class.champion_class }}
+      Класс - {{ listInfo.champion_class.name }}
     </div>
     <div class="center" v-if="!show">
       <p v-if="listInfo.my_origin">

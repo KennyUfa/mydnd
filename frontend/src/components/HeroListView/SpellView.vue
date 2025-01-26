@@ -23,11 +23,11 @@
           v-if="!this.$store.state.spellbook.spellList"
           class="dropdown-item"
           href="#"
-          >Загрузка</a
+        >Загрузка</a
         >
         <div class="modal-body" v-else>
           <form id="search">
-            Search <input name="query" v-model="search" />
+            Search <input name="query" v-model="search"/>
           </form>
           <div
             class="spellbook border border-primary"
@@ -115,13 +115,14 @@
       <div class="modal-content" v-else>load</div>
     </div>
   </div>
+  <div>{{ this.champion.listInfo.spell_slots }}</div>
   <a
     class="btn btn-primary"
     data-bs-toggle="modal"
     href="#SpellModalToggleOne"
     role="button"
     @click="loadSpells"
-    >Книга заклинаний</a
+  >Книга заклинаний</a
   >
   <div class="card-body">
     <!-- Оставьте эту часть без изменений, она отвечает за отображение заклинаний -->
@@ -152,8 +153,12 @@
 </template>
 
 <script>
+
+import {mapState} from "vuex";
+
 export default {
   name: "SpellView",
+  computed: mapState(["champion"]),
   data() {
     return {
       id: "",
