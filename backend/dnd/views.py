@@ -34,10 +34,15 @@ class BaseClassChViewSet(generics.ListAPIView):
 class CharacterView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CharacterSerializer
-    queryset = Character.objects.all()
+    queryset = Character.objects.select_related("character_class") \
+        .prefetch_related(
+        "character_class__levels__abilities",
+        "custom_abilities"
+    )
 
     def get_queryset(self):
         return Character.objects.filter(account=self.request.user)
+
 
 class CharacterListView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -58,6 +63,7 @@ class CharacterListView(APIView):
             serializer.save(account=self.request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class SpellView(viewsets.ReadOnlyModelViewSet):
     queryset = Spell.objects.all()

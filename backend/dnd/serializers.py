@@ -1,6 +1,10 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
+from .db.inventory import Properties, TypeItem, Rarity, SubType, Weapon, \
+    Equipment, Armor, MagicItems
+from .db.race import RaceBackground, CustomRaceBackground, FeatureRace, \
+    CustomFeatureRace
 from .models import *
 
 
@@ -56,7 +60,7 @@ class FeatureRaceSerializer(serializers.ModelSerializer):
 
 class CustomFeatureSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CustomFeature
+        model = CustomFeatureRace
         fields = ['id', 'custom_description', 'hide_original']
 
 
@@ -314,68 +318,93 @@ class CharacterSerializer(serializers.ModelSerializer):
     #                                                required=False)
     # my_items = InventorySerializer(many=True, read_only=True)
     current_level_data = serializers.SerializerMethodField()
-    race = RaceSerializer()
-    sub_race = SubRaceSerializer(required=False)
-    race_features = serializers.SerializerMethodField()
-    race_backgrounds = serializers.SerializerMethodField()
+    race = serializers.SerializerMethodField()
 
     class Meta:
         model = Character
-        fields = '__all__'
+        fields = "__all__"
 
-    # todo разделить бэйс класс и архетип
-    def get_current_level_data(self, obj):
-        current_level = obj.get_current_level_data()
-        return current_level
+    def get_race(self, obj):
+        if not obj.race:
+            return None
 
-    def get_race_features(self, obj):
-        features = obj.race.features.all()
-        custom_features = CustomFeature.objects.filter(character=obj)
-
-        # Сопоставляем пользовательские данные с особенностями
-        custom_features_map = {
-            custom.feature_id: custom
-            for custom in custom_features
+        race_data = {
+            "id": obj.race.id,
+            "name": obj.race.name,
+            "description": obj.race.description,
+            "features": self.get_features_with_custom(obj,
+                                                      obj.race.features.all()),
+            "backgrounds": self.get_backgrounds_with_custom(obj,
+                                                            obj.race.background.all())
         }
 
-        # Добавляем кастомные данные к каждой особенности
+        if obj.sub_race:
+            race_data["sub_race"] = self.get_sub_race(obj)
+
+        return race_data
+
+    def get_sub_race(self, obj):
+        if not obj.sub_race:
+            return None
+
+        return {
+            "id": obj.sub_race.id,
+            "name": obj.sub_race.name,
+            "description": obj.sub_race.description,
+            "features": self.get_features_with_custom(obj,
+                                                      obj.sub_race.features.all()),
+            "backgrounds": self.get_backgrounds_with_custom(obj,
+                                                            obj.sub_race.background.all()),
+            "race": obj.sub_race.race.id if obj.sub_race.race else None
+        }
+
+    def get_features_with_custom(self, obj, features):
+        """
+        Возвращает список особенностей с учетом пользовательских данных.
+        """
+        custom_features = CustomFeatureRace.objects.filter(character=obj)
+        custom_map = {custom.feature_id: custom for custom in custom_features}
+
         result = []
         for feature in features:
-            custom_data = custom_features_map.get(feature.id)
-            result.append({
+            custom_data = custom_map.get(feature.id)
+            feature_data = {
                 "id": feature.id,
                 "name": feature.name,
                 "description": feature.description,
-                "custom": {
-                    "custom_description": custom_data.custom_description if custom_data else None,
-                    "hide_original": custom_data.hide_original if custom_data else False
+            }
+            if custom_data:
+                feature_data["custom"] = {
+                    "custom_description": custom_data.custom_description,
+                    "hide_original": custom_data.hide_original,
                 }
-            })
+            result.append(feature_data)
+
         return result
 
-    def get_race_backgrounds(self, obj):
-        backgrounds = obj.race.background.all()
+    def get_backgrounds_with_custom(self, obj, backgrounds):
+        """
+        Возвращает список фонов с учетом пользовательских данных.
+        """
         custom_backgrounds = CustomRaceBackground.objects.filter(character=obj)
+        custom_map = {custom.race_background_id: custom for custom in
+                      custom_backgrounds}
 
-        # Сопоставляем пользовательские данные с историческими особенностями
-        custom_backgrounds_map = {
-            custom.race_background_id: custom
-            for custom in custom_backgrounds
-        }
-
-        # Добавляем пользовательские данные к каждой исторической особенности
         result = []
         for background in backgrounds:
-            custom_data = custom_backgrounds_map.get(background.id)
-            result.append({
+            custom_data = custom_map.get(background.id)
+            background_data = {
                 "id": background.id,
                 "name": background.name,
                 "description": background.description,
-                "custom": {
-                    "custom_description": custom_data.custom_description if custom_data else None,
-                    "hide_original": custom_data.hide_original if custom_data else False
+            }
+            if custom_data:
+                background_data["custom"] = {
+                    "custom_description": custom_data.custom_description,
+                    "hide_original": custom_data.hide_original,
                 }
-            })
+            result.append(background_data)
+
         return result
 
     def create(self, validated_data):
@@ -401,3 +430,8 @@ class CharacterSerializer(serializers.ModelSerializer):
 
         return super(CharacterSerializer, self).update(instance,
                                                        validated_data)
+
+    # todo разделить бэйс класс и архетип
+    def get_current_level_data(self, obj):
+        current_level = obj.get_current_level_data()
+        return current_level
