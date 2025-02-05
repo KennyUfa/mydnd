@@ -3,8 +3,10 @@ from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
+from dnd.db.background import BackgroundModel
 from dnd.db.champion_class import Archetype, BaseClass
 from dnd.db.inventory import Item
+from dnd.db.lineament import LineamentModel
 from dnd.db.race import Race, SubRace
 
 
@@ -14,13 +16,6 @@ class WorldOutlook(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Ideal(models.Model):
-    choice = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.choice
 
 
 class ProtectStateModel(models.Model):
@@ -116,17 +111,6 @@ class Spell(models.Model):
         return self.name
 
 
-class BackgroundModel(models.Model):
-    personality_traits = models.CharField(max_length=1500,
-                                          default='черты характера')
-    ideals = models.CharField(max_length=1500,
-                              default="идеалы")
-    bonds = models.CharField(max_length=1500,
-                             default="узы")
-    flaws = models.CharField(max_length=1500,
-                             default="недостатки")
-
-
 class Character(models.Model):
     champion_class = models.ForeignKey(BaseClass,
                                        on_delete=models.PROTECT,
@@ -139,7 +123,8 @@ class Character(models.Model):
                              null=True)
     sub_race = models.ForeignKey(SubRace, on_delete=models.PROTECT, blank=True,
                                  null=True)
-    background = models.ForeignKey(BackgroundModel, on_delete=models.CASCADE, )
+    background = models.ForeignKey(BackgroundModel, on_delete=models.CASCADE,
+                                   blank=True, null=True)
     account = models.ForeignKey('auth.User', related_name='account',
                                 on_delete=models.CASCADE,
                                 default='settings.AUTH_USER_MODEL')
@@ -200,20 +185,10 @@ class Character(models.Model):
                                                         verbose_name="kz")
     speed = models.PositiveSmallIntegerField(default=30,
                                              verbose_name="speed_ch")
+    lineament = models.ManyToManyField(LineamentModel, verbose_name="Черты")
 
     def __str__(self):
         return self.name_champion
-
-    def get_current_level_data(self):
-        current_level = self.lvl
-        base_class_data = self.champion_class.get_current_level_data(
-            current_level,self)
-
-        if self.archetype:
-            archetype_data = self.archetype.get_current_level_data(
-                current_level)
-
-        return base_class_data, archetype_data
 
     def save(self, *args, **kwargs):
         # Если protect_state ещё не задан, создаём запись
@@ -224,6 +199,29 @@ class Character(models.Model):
             self.skill_state = SkillStateModel.objects.create()
         # Сохраняем объект Character
         super().save(*args, **kwargs)
+
+    def get_lineament(self):
+        lineament_list = self.lineament.all()
+        custom_map = {custom.lineament.id: custom for custom in
+                  self.lineament_custom.all()}
+        result = []
+        for lineament in lineament_list:
+            data ={
+                'id': lineament.id,
+                'name': lineament.name,
+                'description': lineament.description,
+            }
+            custom = custom_map.get(lineament.id)
+            if custom:
+                data['custom'] = {
+                    'id': custom.id,
+                    'name': custom.custom_description,
+                    'description': custom.hide_original,
+                }
+            result.append(data)
+        return result
+
+
 
     class Meta:
         verbose_name_plural = 'персонажи'

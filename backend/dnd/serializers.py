@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from .db.inventory import Properties, TypeItem, Rarity, SubType, Weapon, \
     Equipment, Armor, MagicItems
+from .db.lineament import CustomLineament
 from .db.race import RaceBackground, CustomRaceBackground, FeatureRace, \
     CustomFeatureRace
 from .models import *
@@ -34,10 +35,10 @@ class BaseClassChSerializer(serializers.ModelSerializer):
         }
 
 
-class IdealSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ideal
-        fields = '__all__'
+# class IdealSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Ideal
+#         fields = '__all__'
 
 
 class RaceBackgroundSerializer(serializers.ModelSerializer):
@@ -252,6 +253,20 @@ class InventorySerializer(serializers.ModelSerializer):
         model = InventoryItem
         fields = "__all__"
 
+class CustomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomLineament
+        fields = "__all__"
+
+
+class LineamentSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
+    description = serializers.CharField()
+    custom = CustomSerializer(many=True,)
+
+    class Meta:
+        model = LineamentModel
+        fields = "__all__"
 
 class CharacterSerializerList(serializers.ModelSerializer):
     class Meta:
@@ -308,7 +323,7 @@ class CharacterSerializer(serializers.ModelSerializer):
     world_outlook = serializers.SlugRelatedField(
         slug_field='name',
         queryset=WorldOutlook.objects.all(), required=False)
-    # background = BackgroundSerializer()
+    background = serializers.SerializerMethodField()
     protect_char_state = ProtectStateSerializer(required=False)
     skill_char_state = SkillStateSerializer(required=False)
     # spells = ChampionSpellSerializer(many=True, read_only=True, required=False)
@@ -319,93 +334,20 @@ class CharacterSerializer(serializers.ModelSerializer):
     # my_items = InventorySerializer(many=True, read_only=True)
     current_level_data = serializers.SerializerMethodField()
     race = serializers.SerializerMethodField()
+    lineament = serializers.SerializerMethodField()
 
     class Meta:
         model = Character
         fields = "__all__"
 
     def get_race(self, obj):
-        if not obj.race:
-            return None
+        return obj.race.get_race(obj)
 
-        race_data = {
-            "id": obj.race.id,
-            "name": obj.race.name,
-            "description": obj.race.description,
-            "features": self.get_features_with_custom(obj,
-                                                      obj.race.features.all()),
-            "backgrounds": self.get_backgrounds_with_custom(obj,
-                                                            obj.race.background.all())
-        }
+    def get_lineament(self, obj):
+        return obj.get_lineament()
 
-        if obj.sub_race:
-            race_data["sub_race"] = self.get_sub_race(obj)
-
-        return race_data
-
-    def get_sub_race(self, obj):
-        if not obj.sub_race:
-            return None
-
-        return {
-            "id": obj.sub_race.id,
-            "name": obj.sub_race.name,
-            "description": obj.sub_race.description,
-            "features": self.get_features_with_custom(obj,
-                                                      obj.sub_race.features.all()),
-            "backgrounds": self.get_backgrounds_with_custom(obj,
-                                                            obj.sub_race.background.all()),
-            "race": obj.sub_race.race.id if obj.sub_race.race else None
-        }
-
-    def get_features_with_custom(self, obj, features):
-        """
-        Возвращает список особенностей с учетом пользовательских данных.
-        """
-        custom_features = CustomFeatureRace.objects.filter(character=obj)
-        custom_map = {custom.feature_id: custom for custom in custom_features}
-
-        result = []
-        for feature in features:
-            custom_data = custom_map.get(feature.id)
-            feature_data = {
-                "id": feature.id,
-                "name": feature.name,
-                "description": feature.description,
-            }
-            if custom_data:
-                feature_data["custom"] = {
-                    "custom_description": custom_data.custom_description,
-                    "hide_original": custom_data.hide_original,
-                }
-            result.append(feature_data)
-
-        return result
-
-    def get_backgrounds_with_custom(self, obj, backgrounds):
-        """
-        Возвращает список фонов с учетом пользовательских данных.
-        """
-        custom_backgrounds = CustomRaceBackground.objects.filter(character=obj)
-        custom_map = {custom.race_background_id: custom for custom in
-                      custom_backgrounds}
-
-        result = []
-        for background in backgrounds:
-            custom_data = custom_map.get(background.id)
-            background_data = {
-                "id": background.id,
-                "name": background.name,
-                "description": background.description,
-            }
-            if custom_data:
-                background_data["custom"] = {
-                    "custom_description": custom_data.custom_description,
-                    "hide_original": custom_data.hide_original,
-                }
-            result.append(background_data)
-
-        return result
+    def get_background(self, obj):
+        return obj.background.get_background(obj)
 
     def create(self, validated_data):
         champion_class_data = validated_data.pop('champion_class')
@@ -433,5 +375,13 @@ class CharacterSerializer(serializers.ModelSerializer):
 
     # todo разделить бэйс класс и архетип
     def get_current_level_data(self, obj):
-        current_level = obj.get_current_level_data()
-        return current_level
+        current_level = obj.lvl
+        base_class_data = obj.champion_class.get_current_level_data(
+            current_level, obj)
+
+        if obj.archetype:
+            archetype_data = obj.archetype.get_current_level_data(
+                current_level, obj)
+            base_class_data['archetype'] = archetype_data
+
+        return base_class_data

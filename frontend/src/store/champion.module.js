@@ -457,7 +457,7 @@ export const champion = {
     },
     mutChangeClass(state, data) {
       console.log(data.champion_class);
-      state.create_champion.champion_class = data.champion_class;
+      state.create_champion.champion_class = data.name;
     },
     mutWorldOutlook(state, data) {
       state.listInfo.world_outlook = data;

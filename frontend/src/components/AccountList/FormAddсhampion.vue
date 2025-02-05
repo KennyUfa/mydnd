@@ -30,8 +30,9 @@
           v-for="classHero in this.$store.state.champion.classlist"
           :key="classHero"
         >
-          <a class="dropdown-item" href="#" @click="changeClass(classHero)">{{
-            classHero.champion_class
+          <a class="dropdown-item" href="#"
+             @click="changeClass(classHero)">{{
+            classHero.name
           }}</a>
         </div>
       </ul>

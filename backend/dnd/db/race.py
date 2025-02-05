@@ -91,6 +91,89 @@ class Race(models.Model):
     def __str__(self):
         return self.name
 
+    def get_race(self, obj):
+        if not obj.race:
+            return None
+
+        race_data = {
+            "id": obj.race.id,
+            "name": obj.race.name,
+            "description": obj.race.description,
+            "features": self.get_features_with_custom(obj,
+                                                      obj.race.features.all()),
+            "backgrounds": self.get_backgrounds_with_custom(obj,
+                                                            obj.race.background.all())
+        }
+
+        if obj.sub_race:
+            race_data["sub_race"] = self.get_sub_race(obj)
+
+        return race_data
+
+    def get_sub_race(self, obj):
+        if not obj.sub_race:
+            return None
+
+        return {
+            "id": obj.sub_race.id,
+            "name": obj.sub_race.name,
+            "description": obj.sub_race.description,
+            "features": self.get_features_with_custom(obj,
+                                                      obj.sub_race.features.all()),
+            "backgrounds": self.get_backgrounds_with_custom(obj,
+                                                            obj.sub_race.background.all()),
+            "race": obj.sub_race.race.id if obj.sub_race.race else None
+        }
+
+    def get_features_with_custom(self, obj, features):
+        """
+        Возвращает список особенностей с учетом пользовательских данных.
+        """
+        custom_features = CustomFeatureRace.objects.filter(character=obj)
+        custom_map = {custom.feature_id: custom for custom in custom_features}
+
+        result = []
+        for feature in features:
+            custom_data = custom_map.get(feature.id)
+            feature_data = {
+                "id": feature.id,
+                "name": feature.name,
+                "description": feature.description,
+            }
+            if custom_data:
+                feature_data["custom"] = {
+                    "custom_description": custom_data.custom_description,
+                    "hide_original": custom_data.hide_original,
+                }
+            result.append(feature_data)
+
+        return result
+
+    def get_backgrounds_with_custom(self, obj, backgrounds):
+        """
+        Возвращает список фонов с учетом пользовательских данных.
+        """
+        custom_backgrounds = CustomRaceBackground.objects.filter(character=obj)
+        custom_map = {custom.race_background_id: custom for custom in
+                      custom_backgrounds}
+
+        result = []
+        for background in backgrounds:
+            custom_data = custom_map.get(background.id)
+            background_data = {
+                "id": background.id,
+                "name": background.name,
+                "description": background.description,
+            }
+            if custom_data:
+                background_data["custom"] = {
+                    "custom_description": custom_data.custom_description,
+                    "hide_original": custom_data.hide_original,
+                }
+            result.append(background_data)
+
+        return result
+
 
 class SubRace(models.Model):
     race = models.ForeignKey(
