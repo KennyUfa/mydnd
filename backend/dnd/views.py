@@ -31,6 +31,49 @@ class BaseClassChViewSet(generics.ListAPIView):
         return BaseClass.objects.all()
 
 
+class RaceListView(generics.ListAPIView):
+    queryset = Race.objects.all()
+    serializer_class = RaceListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Race.objects.all()
+
+
+class OriginListView(generics.ListAPIView):
+    queryset = OriginModel.objects.all()
+    serializer_class = OriginListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return OriginModel.objects.all()
+
+
+class CharacterOriginView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, character_id):
+        # Получаем персонажа по id
+        character = get_object_or_404(Character, id=character_id)
+
+        # Получаем ID предыстории из данных запроса
+        origin_id = request.data.get('origin_id')
+        if not origin_id:
+            return Response({'error': 'origin_id is required'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Получаем объект предыстории
+        origin = get_object_or_404(OriginModel, id=origin_id)
+
+        # Привязываем предысторию к персонажу
+        character.origin = origin
+        character.save()
+
+        # Возвращаем сериализованные данные персонажа
+        serializer = CharacterSerializer(character)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class CharacterView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CharacterSerializer
@@ -47,21 +90,17 @@ class CharacterView(viewsets.ModelViewSet):
 class CharacterListView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CharacterSerializerList
-    queryset = Character.objects.all()
-
-    def get_queryset(self):
-        return Character.objects.filter(account=self.request.user)
 
     def get(self, request):
-        queryset = self.get_queryset()
+        queryset = Character.objects.filter(account=self.request.user)
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
+        serializer = CreateCharacterSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(account=self.request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            data = serializer.save(account=self.request.user)
+            return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -86,12 +125,6 @@ class SpellView(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 
-# class BackgroundView(viewsets.ModelViewSet):
-#     permission_classes = [permissions.IsAuthenticated]
-#     serializer_class = BackgroundSerializer
-#     queryset = BackgroundModel2.objects.all()
-
-
 class ProtectStateView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = ProtectStateSerializer
@@ -102,15 +135,6 @@ class SkillStateView(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = SkillStateSerializer
     queryset = SkillStateModel.objects.all()
-
-
-# class OriginView(generics.ListAPIView):
-#     permission_classes = [permissions.IsAuthenticated]
-#     queryset = Origin.objects.all()
-#     serializer_class = OriginChoiceSerializer
-#
-#     def get_queryset(self):
-#         return Origin.objects.all()
 
 
 class WorldOutlookView(generics.ListAPIView):
@@ -185,19 +209,6 @@ class InventoryItemView(APIView):
         inventory = character.my_items.all()
         serializer = InventorySerializer(inventory, many=True)
         return Response(serializer.data)
-
-
-# class OriginChangeView(APIView):
-#     permission_classes = [permissions.IsAuthenticated]
-#
-#     def patch(self, request, origin_id):
-#         id = request.data.get('character_id')
-#         character = get_object_or_404(Character, id=id)
-#         origin = get_object_or_404(Origin, id=origin_id)
-#         character.my_origin = origin
-#         character.save()
-#         serializer = CharacterSerializer(character)
-#         return Response(serializer.data)
 
 
 class RandomSaveView(APIView):

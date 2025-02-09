@@ -200,3 +200,6 @@ class ArchetypeCustomAbility(models.Model):
                                 related_name='archetype_custom_versions')
     custom_description = models.TextField(blank=True, null=True)
     hide_original = models.BooleanField(default=False)
+
+
+

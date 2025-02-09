@@ -4,9 +4,10 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
 from dnd.db.background import BackgroundModel
-from dnd.db.champion_class import Archetype, BaseClass
+from dnd.db.champion_class import BaseClass, Archetype
 from dnd.db.inventory import Item
 from dnd.db.lineament import LineamentModel
+from dnd.db.origin import OriginModel
 from dnd.db.race import Race, SubRace
 
 
@@ -92,10 +93,10 @@ class Spell(models.Model):
     distance = models.CharField(max_length=100, verbose_name='дистанция')
     components = models.CharField(max_length=400, verbose_name='компоненты')
     timing = models.CharField(max_length=100, verbose_name='Длительность')
-    class_actor = models.ManyToManyField(BaseClass,
+    class_actor = models.ManyToManyField('BaseClass',
                                          related_name="class_spells",
                                          blank=True)
-    archetype = models.ManyToManyField(Archetype,
+    archetype = models.ManyToManyField('Archetype',
                                        related_name='archetype_spells',
                                        blank=True)
     origin = models.CharField(blank=True, null=True, max_length=100,
@@ -113,10 +114,10 @@ class Spell(models.Model):
 
 class Character(models.Model):
     champion_class = models.ForeignKey(BaseClass,
-                                       on_delete=models.PROTECT,
+                                       on_delete=models.SET_NULL,
                                        blank=True, null=True)
     archetype = models.ForeignKey(
-        Archetype, on_delete=models.PROTECT, blank=True, null=True,
+        Archetype, on_delete=models.SET_NULL, blank=True, null=True,
         verbose_name="Архетип"
     )
     race = models.ForeignKey(Race, on_delete=models.PROTECT, blank=True,
@@ -171,7 +172,7 @@ class Character(models.Model):
         verbose_name="Телосложение",
         blank=True, default=10)
     intelligence = models.PositiveSmallIntegerField(
-        verbose_name="Интиллект",
+        verbose_name="Интеллект",
         blank=True, default=10)
     wisdom = models.PositiveSmallIntegerField(verbose_name="Мудрость",
                                               blank=True, default=10)
@@ -185,8 +186,10 @@ class Character(models.Model):
                                                         verbose_name="kz")
     speed = models.PositiveSmallIntegerField(default=30,
                                              verbose_name="speed_ch")
-    lineament = models.ManyToManyField(LineamentModel, verbose_name="Черты")
-
+    lineament = models.ManyToManyField(LineamentModel, verbose_name="Черты",
+                                       blank=True)
+    origin = models.ForeignKey(OriginModel,blank=True, null=True,
+                               on_delete=models.SET_NULL)
     def __str__(self):
         return self.name_champion
 

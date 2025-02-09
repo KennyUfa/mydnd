@@ -48,8 +48,8 @@ class ChampionApi {
   }
 
   async getOrigin() {
-    console.log("loadlistorogon");
-    const response = await api.get("dnd/origin/");
+    console.log("loadlistorigin");
+    const response = await api.get("dnd/originlist/");
     if (response.data) {
       return response.data;
     } else {
@@ -110,9 +110,10 @@ class ChampionApi {
     }
   }
 
-  async originPatch(id_origin, data) {
+  async originPatch(id_origin, id_character) {
+    const data = { origin_id: id_origin };
     const response = await api.patch(
-      "/dnd/origin/" + id_origin + "/change/",
+      "/dnd/characters/" + id_character.character_id + "/origin/",
       data
     );
     if (response.data) {

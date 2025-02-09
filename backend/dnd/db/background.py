@@ -21,7 +21,7 @@ class BackgroundModel(models.Model):
 
     def get_background(self, obj):
         if not obj.background:
-            return None
+            return {"message": "No background assigned"}
 
         race_data = {
             "id": obj.background.id,

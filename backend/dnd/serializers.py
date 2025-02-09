@@ -35,12 +35,6 @@ class BaseClassChSerializer(serializers.ModelSerializer):
         }
 
 
-# class IdealSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Ideal
-#         fields = '__all__'
-
-
 class RaceBackgroundSerializer(serializers.ModelSerializer):
     class Meta:
         model = RaceBackground
@@ -65,9 +59,24 @@ class CustomFeatureSerializer(serializers.ModelSerializer):
         fields = ['id', 'custom_description', 'hide_original']
 
 
+class RaceListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Race
+        fields = ['id', 'name']
+
+
+class CreateRaceSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
+    class Meta:
+        model = Race
+        fields = ['id', 'name']
+
 class RaceSerializer(serializers.ModelSerializer):
-    features = FeatureRaceSerializer(many=True)
-    backgrounds = RaceBackgroundSerializer(source='background', many=True)
+    name = serializers.CharField()
+    features = FeatureRaceSerializer(many=True,required=False)
+    backgrounds = RaceBackgroundSerializer(source='background', many=True,
+                                           required=False)
 
     class Meta:
         model = Race
@@ -238,6 +247,10 @@ class SpellBookSerializer(serializers.ModelSerializer):
         model = Spell
         fields = ['id', 'name', 'lvl', 'class_actor']
 
+class OriginListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OriginModel
+        fields = ['id', 'name']
 
 class SpellSerializer(serializers.ModelSerializer):
     class Meta:
@@ -253,6 +266,7 @@ class InventorySerializer(serializers.ModelSerializer):
         model = InventoryItem
         fields = "__all__"
 
+
 class CustomSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomLineament
@@ -262,17 +276,16 @@ class CustomSerializer(serializers.ModelSerializer):
 class LineamentSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
     description = serializers.CharField()
-    custom = CustomSerializer(many=True,)
+    custom = CustomSerializer(many=True, )
 
     class Meta:
         model = LineamentModel
         fields = "__all__"
 
-class CharacterSerializerList(serializers.ModelSerializer):
+class CreateBaseClassSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Character
-        fields = ["champion_class", "name_champion", "lvl", "id"]
-
+        model = BaseClass
+        fields = ['name', 'id']
 
 class BaseClassSerializer(serializers.ModelSerializer):
     table = serializers.SerializerMethodField()
@@ -317,12 +330,40 @@ class BaseClassSerializer(serializers.ModelSerializer):
         return table
 
 
+class CharacterSerializerList(serializers.ModelSerializer):
+    champion_class = serializers.StringRelatedField()
+
+    class Meta:
+        model = Character
+        fields = ["champion_class", "name_champion", "lvl", "id"]
+
+class CreateCharacterSerializer(serializers.ModelSerializer):
+    champion_class = CreateBaseClassSerializer()
+    race = CreateRaceSerializer()
+
+    class Meta:
+        model = Character
+        fields = "__all__"
+
+    def create(self, validated_data):
+        race_data = validated_data.pop('race')
+        champion_class_data = validated_data.pop('champion_class')
+        race = Race.objects.get(name__iexact=race_data['name'])
+        champion_class = BaseClass.objects.get(
+            name__iexact=champion_class_data['name'])
+
+        character = Character.objects.create(race=race, champion_class=champion_class,
+                     **validated_data)
+        response_serializer = CharacterSerializerList(character)
+        return response_serializer.data
+
+
 class CharacterSerializer(serializers.ModelSerializer):
     champion_class = BaseClassSerializer()
     account = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    world_outlook = serializers.SlugRelatedField(
-        slug_field='name',
-        queryset=WorldOutlook.objects.all(), required=False)
+    # world_outlook = serializers.SlugRelatedField(
+    #     slug_field='name',
+    #     queryset=WorldOutlook.objects.all(), required=False)
     background = serializers.SerializerMethodField()
     protect_char_state = ProtectStateSerializer(required=False)
     skill_char_state = SkillStateSerializer(required=False)
@@ -335,27 +376,25 @@ class CharacterSerializer(serializers.ModelSerializer):
     current_level_data = serializers.SerializerMethodField()
     race = serializers.SerializerMethodField()
     lineament = serializers.SerializerMethodField()
+    origin = OriginListSerializer()
 
     class Meta:
         model = Character
         fields = "__all__"
 
     def get_race(self, obj):
+        if not obj.race:
+            return None
         return obj.race.get_race(obj)
 
     def get_lineament(self, obj):
         return obj.get_lineament()
 
     def get_background(self, obj):
+        if not obj.background:
+            return None
         return obj.background.get_background(obj)
 
-    def create(self, validated_data):
-        champion_class_data = validated_data.pop('champion_class')
-        champion_class = BaseClass.objects.get(
-            name=champion_class_data['champion_class'])
-        character = Character.objects.create(champion_class=champion_class,
-                                             **validated_data)
-        return character
 
     # https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
     def update(self, instance, validated_data):
@@ -367,8 +406,6 @@ class CharacterSerializer(serializers.ModelSerializer):
                 nested_instance = getattr(instance, field)
                 nested_data = validated_data.pop(field)
                 nested_serializer.update(nested_instance, nested_data)
-                print(nested_instance)
-                print(nested_data)
 
         return super(CharacterSerializer, self).update(instance,
                                                        validated_data)

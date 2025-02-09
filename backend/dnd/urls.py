@@ -16,6 +16,10 @@ router.register('character', CharacterView, basename='character')
 urlpatterns = [
     path('', include(router.urls)),
     path('classlist/', BaseClassChViewSet.as_view(), name='class-list'),
+    path('racelist/', RaceListView.as_view(), name='race-list'),
+    path('originlist/', OriginListView.as_view(), name='origin-list'),
+    path('characters/<int:character_id>/origin/', CharacterOriginView.as_view(),
+         name='character-origin'),
     path('characterlist/', CharacterListView.as_view(), name='character-list'),
     # path('origin/', OriginView.as_view(), name='origin-list'),
     path('random_protect/', RandomSaveView.as_view(), name='random-save'),

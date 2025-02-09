@@ -45,9 +45,6 @@
               >Лист персонажей</a
             >
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/charlist2">Новый лист персонаж</a>
-          </li>
         </ul>
       </div>
     </nav>

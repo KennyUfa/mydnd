@@ -74,14 +74,15 @@ class CustomRaceBackground(models.Model):
 class Race(models.Model):
     name = models.CharField(max_length=50, unique=True,
                             verbose_name="Название расы")
-    description = models.TextField(verbose_name="Описание")
+    description = models.TextField(verbose_name="Описание", blank=True, null=True)
     background = models.ManyToManyField(RaceBackground, verbose_name="История "
                                                                      "рассы",
-                                        related_name='races_backgrounds', )
+                                        related_name='races_backgrounds',
+                                        blank=True)
     features = models.ManyToManyField(
         FeatureRace,
         related_name="races_features",
-        verbose_name="Особенности"
+        verbose_name="Особенности", blank=True
     )
 
     class Meta:

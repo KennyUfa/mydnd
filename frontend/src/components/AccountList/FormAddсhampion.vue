@@ -2,13 +2,16 @@
   <form @submit.prevent>
     <input
       type="text"
-      v-model="this.$store.state.champion.create_champion.name_champion"
+      v-model="this.$store.state.list_characters.name_champion"
       placeholder="Имя персонажа"
     />
 
     <div class="btn-group">
       <button type="button" class="btn btn-danger">
-        {{ this.$store.state.champion.create_champion.champion_class }}
+        {{
+          this.$store.state.list_characters.champion_class.name ||
+          "Выбери класс"
+        }}
       </button>
       <button
         type="button"
@@ -19,7 +22,7 @@
       ></button>
       <ul class="dropdown-menu">
         <a
-          v-if="!this.$store.state.champion.classlist"
+          v-if="!this.$store.state.list_characters.classlist"
           class="dropdown-item"
           href="#"
         >
@@ -27,20 +30,20 @@
         >
         <div
           v-else
-          v-for="classHero in this.$store.state.champion.classlist"
+          v-for="classHero in this.$store.state.list_characters.classlist"
           :key="classHero"
         >
           <a class="dropdown-item" href="#"
              @click="changeClass(classHero)">{{
-            classHero.name
-          }}</a>
+              classHero.name
+            }}</a>
         </div>
       </ul>
     </div>
 
     <div class="btn-group">
       <button type="button" class="btn btn-danger">
-        {{ this.$store.state.champion.create_champion.race }}
+        {{ this.$store.state.list_characters.race.name || 'Выбери расу' }}
       </button>
       <button
         type="button"
@@ -51,7 +54,7 @@
       ></button>
       <ul class="dropdown-menu">
         <a
-          v-if="!this.$store.state.champion.racelist"
+          v-if="!this.$store.state.list_characters.racelist"
           class="dropdown-item"
           href="#"
         >
@@ -59,14 +62,14 @@
         >
         <div
           v-else
-          v-for="classHero in this.$store.state.champion.racelist"
+          v-for="classHero in this.$store.state.list_characters.racelist"
           :key="classHero"
         >
           <a
             class="dropdown-item"
             href="#"
-            @click="changeRace(classHero.race)"
-            >{{ classHero.race }}</a
+            @click="changeRace(classHero)"
+          >{{ classHero.name }}</a
           >
         </div>
       </ul>
@@ -74,7 +77,7 @@
 
     <div class="btn-group">
       <button type="button" class="btn btn-danger">
-        {{ this.$store.state.champion.create_champion.lvl }}
+        {{ this.$store.state.list_characters.lvl }}
       </button>
       <button
         type="button"
@@ -99,22 +102,22 @@ export default {
   name: "FormAddсhampion",
   methods: {
     createChampion() {
-      this.$store.dispatch("champion/createChampion");
+      this.$store.dispatch("list_characters/createChampion");
     },
     loadClassList() {
-      this.$store.dispatch("champion/loadClassList");
+      this.$store.dispatch("list_characters/loadClassList");
     },
     loadRaceList() {
-      this.$store.dispatch("champion/loadRaceList");
+      this.$store.dispatch("list_characters/loadRaceList");
     },
     changeClass(selected) {
-      this.$store.dispatch("champion/changeClass", selected);
+      this.$store.dispatch("list_characters/changeClass", selected);
     },
     changeRace(selected) {
-      this.$store.dispatch("champion/changeRace", selected);
+      this.$store.dispatch("list_characters/changeRace", selected);
     },
     changeLvl(selected) {
-      this.$store.dispatch("champion/changeLvl", selected);
+      this.$store.dispatch("list_characters/changeLvl", selected);
     },
   },
 };

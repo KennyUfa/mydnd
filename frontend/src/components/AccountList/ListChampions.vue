@@ -2,15 +2,15 @@
   <transition-group name="list-champions">
     <div
       class="champion row"
-      v-for="mychampion in this.$store.state.champion.mychampions"
+      v-for="mychampion in this.$store.state.list_characters.my_champions"
       v-bind:key="mychampion"
     >
       <button @click="championLink(mychampion.id)">
-        <div class="champ">name -{{ mychampion.name_champion }}</div>
+        <div class="champ">Имя персонажа - {{ mychampion.name_champion }}</div>
         <div class="champ">
-          class - {{ mychampion.champion_class.champion_class }}
+          Класс - {{ mychampion.champion_class }}
         </div>
-        <div class="champ">lvl - {{ mychampion.lvl }}</div>
+        <div class="champ">Уровень - {{ mychampion.lvl }}</div>
       </button>
       <button class="btn btn-primary" @click="deleteChampion(mychampion.id)">
         Delete
@@ -22,15 +22,15 @@
 export default {
   name: "ListChampions",
   mounted() {
-    this.$store.dispatch("champion/getChampions");
+    this.$store.dispatch("list_characters/getChampions");
   },
   methods: {
     deleteChampion(id) {
-      this.$store.dispatch("champion/deleteChampion", id);
+      this.$store.dispatch("list_characters/deleteChampion", id);
     },
     championLink(id) {
       this.$store.commit("champion/change", id);
-      this.$router.push({ path: "/charlist" });
+      this.$router.push({path: "/charlist"});
     },
   },
 };

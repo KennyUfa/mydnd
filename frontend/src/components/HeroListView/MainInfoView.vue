@@ -25,15 +25,15 @@
       Класс - {{ listInfo.champion_class.name }}
     </div>
     <div class="center" v-if="!show">
-      <p v-if="listInfo.my_origin">
-        Предистория - {{ listInfo.my_origin.origin }}
+      <p v-if="listInfo.origin">
+        Предистория - {{ listInfo.origin.name }}
       </p>
       <p v-else>Предистория - не выбрана</p>
     </div>
     <div class="center" v-else>
       <div>
-        <p v-if="listInfo.my_origin">
-          Предистория - {{ listInfo.my_origin.origin }}
+        <p v-if="listInfo.origin">
+          Предистория - {{ listInfo.origin.name }}
         </p>
         <p v-else>Предистория - не выбрана</p>
 
@@ -59,14 +59,14 @@
             <a
               class="dropdown-item"
               href="#"
-              @click="changeOrigin(origin.id)"
-              >{{ origin.origin }}</a
+              @click="changeOrigin(origin)"
+              >{{ origin.name }}</a
             >
           </div>
         </ul>
       </div>
     </div>
-    <div class="center">Расса - {{ listInfo.race }}</div>
+    <div class="center">Расса - {{ listInfo.race.name }}</div>
     <div class="center">
       <div class="" v-if="!show">
         <div>Мировозрение</div>
@@ -167,12 +167,12 @@ export default {
         return this.$store.state.champion.listInfo.name_champion;
       },
       set(value) {
-        console.log(value);
         this.$store.commit("champion/updateName", value);
       },
     },
     ...mapState({
       listInfo: (state) => state.champion.listInfo,
+      origin: (state) => state.origin.originlist
     }),
   },
 };

@@ -74,32 +74,32 @@
       </div>
       <div class="tab-pane fade show active" id="stats" role="tabpanel">
         <MainInfoView></MainInfoView>
-        <ability-view @callRandomWindow="callRandomWindowMethod"></ability-view>
-        <saving-throw-view
-          @callRandomWindow="callRandomWindowMethod"
-        ></saving-throw-view>
-        <skills-view></skills-view>
-        <div class="wrapper">
-          <div class="container">
-            <possession-bonus></possession-bonus>
-            <passive-perception></passive-perception>
-            <inspiration-frame></inspiration-frame>
-            <protection-class-view></protection-class-view>
-            <initiative-view></initiative-view>
-            <speed-view></speed-view>
-          </div>
-        </div>
-        <hit-vue></hit-vue>
+<!--        <ability-view @callRandomWindow="callRandomWindowMethod"></ability-view>-->
+<!--        <saving-throw-view-->
+<!--          @callRandomWindow="callRandomWindowMethod"-->
+<!--        ></saving-throw-view>-->
+<!--        <skills-view></skills-view>-->
+<!--        <div class="wrapper">-->
+<!--          <div class="container">-->
+<!--            <possession-bonus></possession-bonus>-->
+<!--            <passive-perception></passive-perception>-->
+<!--            <inspiration-frame></inspiration-frame>-->
+<!--            <protection-class-view></protection-class-view>-->
+<!--            <initiative-view></initiative-view>-->
+<!--            <speed-view></speed-view>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <hit-vue></hit-vue>-->
       </div>
-      <div class="tab-pane fade" id="prehistory" role="tabpanel">
-        <background-view></background-view>
-      </div>
-      <div class="tab-pane fade" id="skills-and-abilites" role="tabpanel">
-        УМЕНИЯ И СПОСОБНОСТИ
-      </div>
-      <div class="tab-pane fade" id="outher" role="tabpanel">
-        <proficiencie-and-languages></proficiencie-and-languages>
-      </div>
+<!--      <div class="tab-pane fade" id="prehistory" role="tabpanel">-->
+<!--        <background-view></background-view>-->
+<!--      </div>-->
+<!--      <div class="tab-pane fade" id="skills-and-abilites" role="tabpanel">-->
+<!--        УМЕНИЯ И СПОСОБНОСТИ-->
+<!--      </div>-->
+<!--      <div class="tab-pane fade" id="outher" role="tabpanel">-->
+<!--        <proficiencie-and-languages></proficiencie-and-languages>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
