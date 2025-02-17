@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # vue ip
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8001",
+    "http://localhost:8081",
     "http://localhost:8083",
     "http://localhost:8080",
     "http://127.0.0.1:9000",

@@ -30,7 +30,7 @@ class ChampionApi {
 
   async createPostChampion(data) {
     console.log(data);
-    const response = await api.post("dnd/characterlist/", data);
+    const response = await api.post("dnd/characters/create/", data);
     if (response.data) {
       return response.data;
     } else {

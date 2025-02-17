@@ -4,7 +4,7 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
 from dnd.db.background import BackgroundModel
-from dnd.db.champion_class import BaseClass, Archetype
+from dnd.db.character import BaseClass, Archetype
 from dnd.db.inventory import Item
 from dnd.db.lineament import LineamentModel
 from dnd.db.origin import OriginModel
@@ -125,16 +125,15 @@ class Character(models.Model):
     sub_race = models.ForeignKey(SubRace, on_delete=models.PROTECT, blank=True,
                                  null=True)
     background = models.ForeignKey(BackgroundModel, on_delete=models.CASCADE,
-                                   blank=True, null=True)
+                                   blank=True, null=True, verbose_name='Предыстория')
     account = models.ForeignKey('auth.User', related_name='account',
-                                on_delete=models.CASCADE,
-                                default='settings.AUTH_USER_MODEL')
+                                on_delete=models.CASCADE)
     name_champion = models.CharField(max_length=100, blank=True,
                                      default='Безымянный герой')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     is_active = models.BooleanField(default=True)
-    lvl = models.IntegerField(blank=True, default=1)
+    level = models.IntegerField(blank=True, default=1)
 
     spells = models.ManyToManyField(Spell,
                                     blank=True, related_name='my_spells')
@@ -188,8 +187,9 @@ class Character(models.Model):
                                              verbose_name="speed_ch")
     lineament = models.ManyToManyField(LineamentModel, verbose_name="Черты",
                                        blank=True)
-    origin = models.ForeignKey(OriginModel,blank=True, null=True,
+    origin = models.ForeignKey(OriginModel, blank=True, null=True,
                                on_delete=models.SET_NULL)
+
     def __str__(self):
         return self.name_champion
 
@@ -206,10 +206,10 @@ class Character(models.Model):
     def get_lineament(self):
         lineament_list = self.lineament.all()
         custom_map = {custom.lineament.id: custom for custom in
-                  self.lineament_custom.all()}
+                      self.lineament_custom.all()}
         result = []
         for lineament in lineament_list:
-            data ={
+            data = {
                 'id': lineament.id,
                 'name': lineament.name,
                 'description': lineament.description,
@@ -223,8 +223,6 @@ class Character(models.Model):
                 }
             result.append(data)
         return result
-
-
 
     class Meta:
         verbose_name_plural = 'персонажи'

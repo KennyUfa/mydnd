@@ -6,7 +6,7 @@
       </button>
       <div class="">Имя персонажа</div>
       <div class="info" v-if="!show">
-        {{ listInfo.name_champion }}
+        {{ listInfo.name_champion || "-" }}
       </div>
     </div>
     <div class="center name-champion" v-else>
@@ -33,7 +33,7 @@
     <div class="center" v-else>
       <div>
         <p v-if="listInfo.origin">
-          Предистория - {{ listInfo.origin.name }}
+          Предистория - {{ listInfo.origin.name || "- pre" }}
         </p>
         <p v-else>Предистория - не выбрана</p>
 
@@ -49,28 +49,26 @@
             v-if="!this.$store.state.origin.originlist"
             class="dropdown-item"
             href="#"
-            >Загрузка</a
+          >Загрузка</a
           >
           <div
             v-else
             v-for="origin in this.$store.state.origin.originlist"
-            :key="origin"
-          >
+            :key="origin">
             <a
               class="dropdown-item"
               href="#"
               @click="changeOrigin(origin)"
-              >{{ origin.name }}</a
-            >
+            >{{ origin.name }}</a>
           </div>
         </ul>
       </div>
     </div>
-    <div class="center">Расса - {{ listInfo.race.name }}</div>
+    <div class="center">Расса - {{ listInfo.race.name || "race" }}</div>
     <div class="center">
       <div class="" v-if="!show">
         <div>Мировозрение</div>
-        <div class="">{{ listInfo.world_outlook }}</div>
+        <div class="">{{ listInfo.world_outlook || "-" }}</div>
       </div>
       <div class="" v-else>
         <div>
@@ -88,7 +86,7 @@
                 v-if="!this.$store.state.champion.worldoutlooklist"
                 class="dropdown-item"
                 href="#"
-                >Загрузка</a
+              >Загрузка</a
               >
               <div
                 v-else
@@ -99,7 +97,7 @@
                   class="dropdown-item"
                   href="#"
                   @click="changeWorldOutlook(wlook.name)"
-                  >{{ wlook.name }}</a
+                >{{ wlook.name }}</a
                 >
               </div>
             </ul>
@@ -111,19 +109,19 @@
     <div class="center">Опыт - {{ listInfo.experience }}</div>
     <div class="center">
       <div id="buttonCountNumber">
-        Уровень - {{ listInfo.lvl }}
+        Уровень - {{ listInfo.level }}
         <div v-if="show" class="lvl_up">
           <button
             class="btn btn-danger"
-            @click="listInfo.lvl++"
-            :disabled="listInfo.lvl > 19"
+            @click="listInfo.level++"
+            :disabled="listInfo.level > 19"
           >
             +
           </button>
           <button
             class="btn btn-danger"
-            @click="listInfo.lvl--"
-            :disabled="listInfo.lvl < 2"
+            @click="listInfo.level--"
+            :disabled="listInfo.level < 2"
           >
             -
           </button>
@@ -134,7 +132,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 
 export default {
   name: "MainInfostat",

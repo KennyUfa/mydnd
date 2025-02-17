@@ -10,25 +10,10 @@ from rest_framework.views import APIView
 from .serializers import *
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.AllowAny]
-
-
-class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
 class BaseClassChViewSet(generics.ListAPIView):
     queryset = BaseClass.objects.all()
-    serializer_class = BaseClassChSerializer
+    serializer_class = BaseClassListSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return BaseClass.objects.all()
 
 
 class RaceListView(generics.ListAPIView):
@@ -36,17 +21,11 @@ class RaceListView(generics.ListAPIView):
     serializer_class = RaceListSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        return Race.objects.all()
-
 
 class OriginListView(generics.ListAPIView):
     queryset = OriginModel.objects.all()
     serializer_class = OriginListSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return OriginModel.objects.all()
 
 
 class CharacterOriginView(APIView):
@@ -74,17 +53,25 @@ class CharacterOriginView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class CharacterView(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = CharacterSerializer
-    queryset = Character.objects.select_related("character_class") \
-        .prefetch_related(
-        "character_class__levels__abilities",
-        "custom_abilities"
-    )
+class CharacterDetailView(APIView):
+    """Получение информации о персонаже."""
 
-    def get_queryset(self):
-        return Character.objects.filter(account=self.request.user)
+    def get(self, request, pk):
+        try:
+            character = Character.objects.get(pk=pk)
+        except Character.DoesNotExist:
+            return Response({"error": "Character not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = CharacterSerializer(character, context={'character': character})
+        return Response(serializer.data)
+
+    def patch(self, request, pk):
+        character = get_object_or_404(Character, pk=pk)
+        serializer = CharacterSerializer(character, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CharacterListView(APIView):
@@ -97,10 +84,23 @@ class CharacterListView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = CreateCharacterSerializer(data=request.data)
-        if serializer.is_valid():
-            data = serializer.save(account=self.request.user)
+        print('post')
+        serializer_class = CreateCharacterSerializer(data=request.data)
+        if serializer_class.is_valid():
+            print('post valid')
+            data = serializer_class.save(account=self.request.user)
             return Response(data, status=status.HTTP_201_CREATED)
+        return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CharacterCreateView(APIView):
+    def post(self, request):
+        print(request.data)
+        serializer = CreateCharacterSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save(account=self.request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

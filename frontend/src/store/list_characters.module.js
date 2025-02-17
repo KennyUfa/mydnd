@@ -42,7 +42,7 @@ export const list_characters = {
         createChampion({commit, state}) {
             const data = {
                 'name_champion': state.name_champion,
-                'lvl': state.lvl,
+                'level': state.lvl,
                 'race': state.race,
                 'champion_class': state.champion_class,
             }

@@ -1,7 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import LoginView from "@/components/LoginView";
 import CharList from "./components/CharList.vue";
-import CharactersView from "./components/CharactersView.vue";
+import CharactersView from "./components/AccountList/CharactersView.vue";
 import store from "./store";
 import SpellBookView from "./components/SpellBook/SpellBookView.vue";
 import SpellDetailView from "./components/SpellBook/SpellDetailView.vue";

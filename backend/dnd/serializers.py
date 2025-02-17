@@ -1,6 +1,6 @@
-from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
+from .db.character import *
 from .db.inventory import Properties, TypeItem, Rarity, SubType, Weapon, \
     Equipment, Armor, MagicItems
 from .db.lineament import CustomLineament
@@ -9,30 +9,16 @@ from .db.race import RaceBackground, CustomRaceBackground, FeatureRace, \
 from .models import *
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'groups']
-
-
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Group
-        fields = ['url', 'name']
-
-
-class BaseClassChSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BaseClass
-        fields = "__all__"
-
-    def to_representation(self, instance):
-        # Удалить пустые модели из вывода
-        representation = super().to_representation(instance)
-        return {
-            key: value for key, value in representation.items() if
-            value is not None
-        }
+# class UserSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ['url', 'username', 'email', 'groups']
+#
+#
+# class GroupSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = Group
+#         fields = ['url', 'name']
 
 
 class RaceBackgroundSerializer(serializers.ModelSerializer):
@@ -59,22 +45,17 @@ class CustomFeatureSerializer(serializers.ModelSerializer):
         fields = ['id', 'custom_description', 'hide_original']
 
 
-class RaceListSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Race
-        fields = ['id', 'name']
-
-
 class CreateRaceSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
+
     class Meta:
         model = Race
         fields = ['id', 'name']
+
 
 class RaceSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
-    features = FeatureRaceSerializer(many=True,required=False)
+    features = FeatureRaceSerializer(many=True, required=False)
     backgrounds = RaceBackgroundSerializer(source='background', many=True,
                                            required=False)
 
@@ -247,10 +228,12 @@ class SpellBookSerializer(serializers.ModelSerializer):
         model = Spell
         fields = ['id', 'name', 'lvl', 'class_actor']
 
+
 class OriginListSerializer(serializers.ModelSerializer):
     class Meta:
         model = OriginModel
         fields = ['id', 'name']
+
 
 class SpellSerializer(serializers.ModelSerializer):
     class Meta:
@@ -282,143 +265,188 @@ class LineamentSerializer(serializers.ModelSerializer):
         model = LineamentModel
         fields = "__all__"
 
-class CreateBaseClassSerializer(serializers.ModelSerializer):
+
+class RaceListSerializer(serializers.ModelSerializer):
+    """Сериализатор для списка расс."""
+
+    class Meta:
+        model = Race
+        fields = ['id', 'name']
+
+
+class BaseClassListSerializer(serializers.ModelSerializer):
+    """Сериализатор для списка базовых классов."""
+
     class Meta:
         model = BaseClass
-        fields = ['name', 'id']
+        fields = ['id', 'name']
+
+
+class SpellSlotSerializer(serializers.ModelSerializer):
+    """Сериализатор для ячеек заклинаний."""
+
+    class Meta:
+        model = SpellSlot
+        fields = ['slots']
+
+
+class SpecificColumnSerializer(serializers.ModelSerializer):
+    """Сериализатор для специфических колонок."""
+
+    class Meta:
+        model = SpecificColumn
+        fields = ['name', 'value']
+
+
+class AbilitySerializer(serializers.ModelSerializer):
+    """Сериализатор для способностей."""
+    custom_description = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Ability
+        fields = ['name', 'description', 'custom_description']
+
+    def get_custom_description(self, obj):
+        # Получаем пользовательское описание для текущего персонажа
+        character = self.context.get('character')
+        if character:
+            custom_ability = CustomAbility.objects.filter(
+                character=character, ability=obj
+            ).first()
+            return custom_ability.custom_description if custom_ability else None
+        return None
+
+
+class LevelSerializer(serializers.ModelSerializer):
+    """Сериализатор для уровней."""
+    abilities = serializers.SerializerMethodField()
+    specific_columns = serializers.SerializerMethodField()
+    spell_slots = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Level
+        fields = ['level', 'proficiency_bonus', 'abilities', 'specific_columns',
+                  'spell_slots']
+
+    def get_abilities(self, obj):
+        # Фильтруем способности по уровню персонажа
+        character = self.context.get('character')
+        if character and obj.level > character.level:
+            return []
+        abilities = obj.abilities.all()
+        return AbilitySerializer(abilities, many=True,
+                                 context=self.context).data
+
+    def get_specific_columns(self, obj):
+        # Возвращаем специфические колонки для уровня
+        columns = obj.specific_column.all()
+        return SpecificColumnSerializer(columns, many=True).data
+
+    def get_spell_slots(self, obj):
+        # Возвращаем ячейки заклинаний для уровня
+        spell_slots = obj.spell_slots.first()
+        return SpellSlotSerializer(spell_slots).data if spell_slots else None
+
+
+class ArchetypeSerializer(serializers.ModelSerializer):
+    """Сериализатор для архетипов."""
+    levels = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Archetype
+        fields = ['name', 'description', 'levels']
+
+    def get_levels(self, obj):
+        # Фильтруем уровни по архетипу
+        character = self.context.get('character')
+        levels = obj.levels.all()
+        if character:
+            levels = levels.filter(level__lte=character.level)
+        return LevelSerializer(levels, many=True, context=self.context).data
+
 
 class BaseClassSerializer(serializers.ModelSerializer):
-    table = serializers.SerializerMethodField()
+    """Сериализатор для базового класса."""
+    archetypes = serializers.SerializerMethodField()
+    levels = serializers.SerializerMethodField()
 
     class Meta:
         model = BaseClass
-        fields = ['name', 'description', 'table', 'hit_dice']
+        fields = [
+            'name', 'description', 'hit_dice', 'hit_at_first_level',
+            'hit_at_next_level', 'possession_armor', 'possession_weapon',
+            'possession_instrument', 'saving_throws', 'class_skills',
+            'archetypes', 'levels'
+        ]
 
-    def get_table(self, obj):
-        # Получаем все уровни для класса
-        levels = obj.levels.all().order_by('level')
+    def get_archetypes(self, obj):
+        # Возвращаем архетипы для класса
+        archetypes = obj.archetypes.all()
+        return ArchetypeSerializer(archetypes, many=True,
+                                   context=self.context).data
 
-        # Инициализируем структуру для таблицы
-        table = {
-            "columns": {
-                "level": {},
-                "proficiency_bonus": {},
-                "abilities": {},
-                "specific_columns": {}
-            }
-        }
+    def get_levels(self, obj):
+        # Возвращаем уровни для класса
+        character = self.context.get('character')
+        levels = obj.levels.filter(archetype__isnull=True)
+        if character:
+            levels = levels.filter(level__lte=character.level)
+        return LevelSerializer(levels, many=True, context=self.context).data
 
-        # Заполняем level, proficiency_bonus и abilities
-        for level in levels:
-            level_key = str(level.level)
-            table["columns"]["level"][level_key] = level.level
-            table["columns"]["proficiency_bonus"][
-                level_key] = level.proficiency_bonus
-            table["columns"]["abilities"][level_key] = [ability.name for ability
-                                                        in
-                                                        level.abilities.all()]
 
-        # Заполняем specific_columns
-        specific_columns = obj.specific_columns.all()
-        for column in specific_columns:
-            column_name = column.name
-            table["columns"]["specific_columns"][column_name] = {
-                str(value.level.level): value.value
-                for value in column.values.all()
-            }
+class CharacterSerializer(serializers.ModelSerializer):
+    account = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    """Сериализатор для персонажа."""
+    champion_class = BaseClassSerializer()
+    archetype = ArchetypeSerializer()
+    race = RaceSerializer()
 
-        return table
+    class Meta:
+        model = Character
+        fields = [
+            'id', 'champion_class', 'archetype', 'race', 'sub_race',
+            'background', 'account', 'name_champion', 'level'
+        ]
+
+
+class CreateCharacterSerializer(serializers.ModelSerializer):
+    champion_class = BaseClassListSerializer()
+    race = RaceListSerializer()
+
+    class Meta:
+        model = Character
+        fields = [
+            'id', 'champion_class', 'race', 'name_champion', 'level'
+        ]
+
+    def create(self, validated_data):
+        # Извлекаем данные для champion_class и race
+        champion_class_data = validated_data.pop('champion_class')
+        race_data = validated_data.pop('race')
+
+        # Получаем или создаем объекты BaseClass и Race
+        champion_class = BaseClass.objects.get(name=champion_class_data['name'])
+        race = Race.objects.get(name=race_data['name'])
+
+        # Создаем объект Character
+        character = Character.objects.create(
+            champion_class=champion_class,
+            race=race,
+            **validated_data
+        )
+        return character
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['champion_class'] = instance.champion_class.name if instance.champion_class else None
+        representation['race'] = instance.race.name if instance.race else None
+        return representation
 
 
 class CharacterSerializerList(serializers.ModelSerializer):
+    """Сериализатор для списка персонажей."""
     champion_class = serializers.StringRelatedField()
 
     class Meta:
         model = Character
-        fields = ["champion_class", "name_champion", "lvl", "id"]
-
-class CreateCharacterSerializer(serializers.ModelSerializer):
-    champion_class = CreateBaseClassSerializer()
-    race = CreateRaceSerializer()
-
-    class Meta:
-        model = Character
-        fields = "__all__"
-
-    def create(self, validated_data):
-        race_data = validated_data.pop('race')
-        champion_class_data = validated_data.pop('champion_class')
-        race = Race.objects.get(name__iexact=race_data['name'])
-        champion_class = BaseClass.objects.get(
-            name__iexact=champion_class_data['name'])
-
-        character = Character.objects.create(race=race, champion_class=champion_class,
-                     **validated_data)
-        response_serializer = CharacterSerializerList(character)
-        return response_serializer.data
-
-
-class CharacterSerializer(serializers.ModelSerializer):
-    champion_class = BaseClassSerializer()
-    account = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    # world_outlook = serializers.SlugRelatedField(
-    #     slug_field='name',
-    #     queryset=WorldOutlook.objects.all(), required=False)
-    background = serializers.SerializerMethodField()
-    protect_char_state = ProtectStateSerializer(required=False)
-    skill_char_state = SkillStateSerializer(required=False)
-    # spells = ChampionSpellSerializer(many=True, read_only=True, required=False)
-    # spells_id = serializers.PrimaryKeyRelatedField(many=True,
-    #                                                queryset=Spell.objects.all(),
-    #                                                source='spells',
-    #                                                required=False)
-    # my_items = InventorySerializer(many=True, read_only=True)
-    current_level_data = serializers.SerializerMethodField()
-    race = serializers.SerializerMethodField()
-    lineament = serializers.SerializerMethodField()
-    origin = OriginListSerializer()
-
-    class Meta:
-        model = Character
-        fields = "__all__"
-
-    def get_race(self, obj):
-        if not obj.race:
-            return None
-        return obj.race.get_race(obj)
-
-    def get_lineament(self, obj):
-        return obj.get_lineament()
-
-    def get_background(self, obj):
-        if not obj.background:
-            return None
-        return obj.background.get_background(obj)
-
-
-    # https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
-    def update(self, instance, validated_data):
-        print(self.context['request'].data)
-
-        for field in ['background', 'protect_char_state', 'skill_char_state']:
-            if field in validated_data:
-                nested_serializer = self.fields[field]
-                nested_instance = getattr(instance, field)
-                nested_data = validated_data.pop(field)
-                nested_serializer.update(nested_instance, nested_data)
-
-        return super(CharacterSerializer, self).update(instance,
-                                                       validated_data)
-
-    # todo разделить бэйс класс и архетип
-    def get_current_level_data(self, obj):
-        current_level = obj.lvl
-        base_class_data = obj.champion_class.get_current_level_data(
-            current_level, obj)
-
-        if obj.archetype:
-            archetype_data = obj.archetype.get_current_level_data(
-                current_level, obj)
-            base_class_data['archetype'] = archetype_data
-
-        return base_class_data
+        fields = ["champion_class", "name_champion", "level", "id"]

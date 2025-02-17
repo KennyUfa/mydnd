@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import ListChampions from "../components/AccountList/ListChampions.vue";
-import FormAddchampion from "../components/AccountList/FormAddсhampion.vue";
+import ListChampions from "./ListChampions.vue";
+import FormAddchampion from "./FormAddсhampion.vue";
 
 export default {
   components: {
