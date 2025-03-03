@@ -297,6 +297,15 @@ class SpecificColumnSerializer(serializers.ModelSerializer):
         model = SpecificColumn
         fields = ['name', 'value']
 
+class CustomAbilityPatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomAbility
+        fields = [
+            'id',
+            'ability',
+            'custom_description',
+            'hide_original'
+        ]
 
 class AbilitySerializer(serializers.ModelSerializer):
     """Сериализатор для способностей."""
@@ -304,7 +313,7 @@ class AbilitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ability
-        fields = ['name', 'description', 'custom_description']
+        fields = ['name', 'description', 'custom_description','id']
 
     def get_custom_description(self, obj):
         # Получаем пользовательское описание для текущего персонажа
@@ -313,7 +322,12 @@ class AbilitySerializer(serializers.ModelSerializer):
             custom_ability = CustomAbility.objects.filter(
                 character=character, ability=obj
             ).first()
-            return custom_ability.custom_description if custom_ability else None
+
+            return {
+                'id': custom_ability.id if custom_ability else None,
+                'custom_description': custom_ability.custom_description if custom_ability else None,
+                'hide_original': custom_ability.hide_original if custom_ability else False
+            }
         return None
 
 
@@ -400,13 +414,30 @@ class CharacterSerializer(serializers.ModelSerializer):
     champion_class = BaseClassSerializer()
     archetype = ArchetypeSerializer()
     race = RaceSerializer()
+    origin = serializers.StringRelatedField()
+    world_outlook = serializers.StringRelatedField()
+    skill_state = SkillStateSerializer()
+    protect_state = ProtectStateSerializer()
 
     class Meta:
         model = Character
         fields = [
-            'id', 'champion_class', 'archetype', 'race', 'sub_race',
-            'background', 'account', 'name_champion', 'level'
+            'id', 'champion_class', 'archetype', 'race', 'sub_race', 'skill_state', 'possession_bonus', 'protect_state', 'inspiration',
+            'protection_class', 'speed', 'account', 'name_champion', 'level', 'origin', 'world_outlook', 'strength', 'dexterity',
+            'constitution',
+            'intelligence', 'wisdom', 'charisma',
         ]
+
+    #     https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
+    def update(self, instance, validated_data):
+        if 'skill_state' in validated_data:
+            nested_serializer = self.fields['skill_state']
+            nested_instance = instance.skill_state
+            nested_data = validated_data.pop('skill_state')
+            nested_serializer.update(nested_instance, nested_data)
+
+        return super(CharacterSerializer, self).update(instance,
+                                                       validated_data)
 
 
 class CreateCharacterSerializer(serializers.ModelSerializer):
@@ -446,7 +477,8 @@ class CreateCharacterSerializer(serializers.ModelSerializer):
 class CharacterSerializerList(serializers.ModelSerializer):
     """Сериализатор для списка персонажей."""
     champion_class = serializers.StringRelatedField()
+    race = serializers.StringRelatedField()
 
     class Meta:
         model = Character
-        fields = ["champion_class", "name_champion", "level", "id"]
+        fields = ["champion_class", "name_champion", "level", "id", "race"]

@@ -20,11 +20,11 @@ class ChampionApi {
   }
 
   async deleteChampion(id) {
-    const response = await api.delete("dnd/character/" + id + "/");
+    const response = await api.delete("dnd/characters/delete/" + id + "/");
     if (response.data) {
       return response.data;
     } else {
-      return "delet" + id;
+      return "delete" + id;
     }
   }
 
@@ -110,8 +110,8 @@ class ChampionApi {
     }
   }
 
-  async originPatch(id_origin, id_character) {
-    const data = { origin_id: id_origin };
+  async originPatch(origin, id_character) {
+    const data = { origin_id: origin.id};
     const response = await api.patch(
       "/dnd/characters/" + id_character.character_id + "/origin/",
       data
@@ -122,7 +122,18 @@ class ChampionApi {
       console.log(response);
     }
   }
-
+async worldOutlookPatch(world_outlook, id_character) {
+    const data = { world_outlook_id: world_outlook.id};
+    const response = await api.patch(
+      "/dnd/characters/" + id_character + "/world-outlook/",
+      data
+    );
+    if (response.data) {
+      return response.data;
+    } else {
+      console.log(response);
+    }
+  }
   async itemPost(data, id) {
     const response = await api.post(
       "/dnd/characters/" + id + "/inventory/",
@@ -144,6 +155,18 @@ class ChampionApi {
       return response.data;
     } else {
       console.log(response);
+    }
+  }
+
+  async UpdateAbilityHideOriginal(data, champion_id){
+    const response = await api.patch(
+      "/dnd/characters/" + champion_id + "/custom-ability/hide-original/",
+      data
+    );
+    if (response.data) {
+      return response.data;
+    } else {
+      console.log('UpdateAbilityHideOriginal',response);
     }
   }
 }

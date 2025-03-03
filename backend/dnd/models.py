@@ -124,8 +124,6 @@ class Character(models.Model):
                              null=True)
     sub_race = models.ForeignKey(SubRace, on_delete=models.PROTECT, blank=True,
                                  null=True)
-    background = models.ForeignKey(BackgroundModel, on_delete=models.CASCADE,
-                                   blank=True, null=True, verbose_name='Предыстория')
     account = models.ForeignKey('auth.User', related_name='account',
                                 on_delete=models.CASCADE)
     name_champion = models.CharField(max_length=100, blank=True,
@@ -155,9 +153,6 @@ class Character(models.Model):
         null=True
     )
 
-    ProficienciesAndLanguages = models.CharField(max_length=4000,
-                                                 default="Список навыков и языков")
-
     max_hit = models.PositiveSmallIntegerField(default=0)
     temp_hit = models.PositiveSmallIntegerField(default=0)
     current_hit = models.PositiveSmallIntegerField(default=0)
@@ -182,13 +177,13 @@ class Character(models.Model):
     inspiration = models.PositiveSmallIntegerField(default=0)
 
     protection_class = models.PositiveSmallIntegerField(default=10,
-                                                        verbose_name="kz")
+                                                        verbose_name="Класс защиты")
     speed = models.PositiveSmallIntegerField(default=30,
                                              verbose_name="speed_ch")
     lineament = models.ManyToManyField(LineamentModel, verbose_name="Черты",
                                        blank=True)
     origin = models.ForeignKey(OriginModel, blank=True, null=True,
-                               on_delete=models.SET_NULL)
+                               on_delete=models.SET_NULL, verbose_name='Предыстория')
 
     def __str__(self):
         return self.name_champion

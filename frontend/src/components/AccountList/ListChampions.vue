@@ -10,6 +10,7 @@
         <div class="champ">
           Класс - {{ mychampion.champion_class }}
         </div>
+        <div class="champ">Расса - {{ mychampion.race }}</div>
         <div class="champ">Уровень - {{ mychampion.level }}</div>
       </button>
       <button class="btn btn-primary" @click="deleteChampion(mychampion.id)">

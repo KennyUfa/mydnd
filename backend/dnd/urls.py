@@ -12,6 +12,8 @@ router.register('items', ItemView, basename='item')
 # router.register('character', CharacterView, basename='character')
 
 
+
+
 urlpatterns = [
     path('', include(router.urls)),
     path('character/<int:pk>/', CharacterDetailView.as_view(), name='character-detail'),
@@ -20,8 +22,13 @@ urlpatterns = [
     path('originlist/', OriginListView.as_view(), name='origin-list'),
     path('characters/<int:character_id>/origin/', CharacterOriginView.as_view(),
          name='character-origin'),
+    path('characters/<int:character_id>/world-outlook/', CharacterWorldOutlookView.as_view(),
+         name='character-world-outlook'),
+    # Изменение отображения способности класса
+    path('characters/<int:pk>/custom-ability/hide-original/',CharacterHideOriginalAbilityView.as_view(), name='hide-original-ability'),
     path('characterlist/', CharacterListView.as_view(), name='character-list'),
     path('characters/create/', CharacterCreateView.as_view(), name='character-create'),
+    path('characters/delete/<int:pk>/', CharacterDeleteView.as_view(), name='character-delete'),
 
     # path('origin/', OriginView.as_view(), name='origin-list'),
     path('random_protect/', RandomSaveView.as_view(), name='random-save'),

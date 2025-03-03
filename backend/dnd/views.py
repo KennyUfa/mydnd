@@ -53,6 +53,62 @@ class CharacterOriginView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class CharacterHideOriginalAbilityView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, pk):
+        character = get_object_or_404(Character, pk=pk)
+        custom_ability_id = request.data.get('custom_ability_id')
+        original_ability_id = request.data.get('original_ability_id')
+        custom_ability_id = CustomAbility.objects.filter(id=custom_ability_id, character=character).first()
+
+        # Если custom_ability_id не передан, то создаем новую запись в CustomAbility с hide_original=True
+        if not custom_ability_id:
+            original_ability = Ability.objects.filter(id=original_ability_id).first()
+            custom_ability_id = CustomAbility.objects.create(character=character, ability=original_ability, hide_original=True,
+                                                             custom_description=original_ability.description)
+            # Изменяем hide_original
+        custom_ability_id.hide_original = not custom_ability_id.hide_original
+        custom_ability_id.save()
+        serializer = CustomAbilityPatchSerializer(custom_ability_id)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CharacterWorldOutlookView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, character_id):
+        # Получаем персонажа по id
+        character = get_object_or_404(Character, id=character_id)
+
+        # Получаем ID мировоззрения из данных запроса
+        world_outlook_id = request.data.get('world_outlook_id')
+        if not world_outlook_id:
+            return Response({'error': 'world_outlook_id is required'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Получаем объект предыстории
+        world_outlook = get_object_or_404(WorldOutlook, id=world_outlook_id)
+
+        # Привязываем предысторию к персонажу
+        character.world_outlook = world_outlook
+        character.save()
+
+        # Возвращаем сериализованные данные персонажа
+        serializer = CharacterSerializer(character)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CharacterDeleteView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CharacterSerializer
+
+    def delete(self, request, pk):
+        character = get_object_or_404(Character, pk=pk)
+        character.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class CharacterDetailView(APIView):
     """Получение информации о персонаже."""
 
@@ -67,7 +123,7 @@ class CharacterDetailView(APIView):
 
     def patch(self, request, pk):
         character = get_object_or_404(Character, pk=pk)
-        serializer = CharacterSerializer(character, data=request.data, partial=True)
+        serializer = CharacterSerializer(character, context={'character': character}, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -95,7 +151,6 @@ class CharacterListView(APIView):
 
 class CharacterCreateView(APIView):
     def post(self, request):
-        print(request.data)
         serializer = CreateCharacterSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -220,13 +275,13 @@ class RandomSaveView(APIView):
         character = Character.objects.get(id=request.data.get('championId'))
         skillvalue = getattr(character, request.data.get('statValue'))
         if 'protectValueName' in request.data:
-            protect_char_state = getattr(character.protect_char_state,
-                                         request.data.get('protectValueName'))
+            protect_state = getattr(character.protect_state,
+                                    request.data.get('protectValueName'))
             possession_bonus = character.possession_bonus
             result = math.floor((skillvalue - 10) / 2)
             random_result = random.randint(1, 20)
 
-            match protect_char_state:
+            match protect_state:
                 case 1:
                     resp = {
                         'total': random_result + result,
@@ -246,7 +301,7 @@ class RandomSaveView(APIView):
                 case _:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
         elif 'abilityValueName' in request.data:
-            abilityValueName = getattr(character.skill_char_state,
+            abilityValueName = getattr(character.skill_state,
                                        request.data.get('abilityValueName'))
             possession_bonus = character.possession_bonus
             result = math.floor((skillvalue - 10) / 2)

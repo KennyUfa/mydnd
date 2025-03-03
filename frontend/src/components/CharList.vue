@@ -5,11 +5,11 @@
     <ul class="nav nav-tabs" role="tablist">
       <li class="nav-item" role="presentation">
         <a
-          class="nav-link active"
+          class="nav-link"
           data-bs-toggle="tab"
           href="#stats"
           role="tab"
-          aria-selected="true"
+          aria-selected="false"
         >Характеристики</a
         >
       </li>
@@ -35,32 +35,12 @@
       </li>
       <li class="nav-item" role="presentation">
         <a
-          class="nav-link"
+          class="nav-link active"
           data-bs-toggle="tab"
-          href="#prehistory"
+          href="#class-information"
           role="tab"
-          aria-selected="false"
-        >Предыстория</a
-        >
-      </li>
-      <li class="nav-item" role="presentation">
-        <a
-          class="nav-link"
-          data-bs-toggle="tab"
-          href="#skills-and-abilites"
-          role="tab"
-          aria-selected="false"
-        >Умения и способнисти</a
-        >
-      </li>
-      <li class="nav-item" role="presentation">
-        <a
-          class="nav-link"
-          data-bs-toggle="tab"
-          href="#outher"
-          role="tab"
-          aria-selected="false"
-        >ПРОЧИЕ ВЛАДЕНИЯ И ЯЗЫКИ</a
+          aria-selected="True"
+        >Классовая информация</a
         >
       </li>
     </ul>
@@ -72,34 +52,35 @@
       <div class="tab-pane fade" id="spells" role="tabpanel">
         <spell-view></spell-view>
       </div>
-      <div class="tab-pane fade show active" id="stats" role="tabpanel">
+      <div class="tab-pane fade" id="stats" role="tabpanel">
         <MainInfoView></MainInfoView>
-        <!--        <ability-view @callRandomWindow="callRandomWindowMethod"></ability-view>-->
-        <!--        <saving-throw-view-->
-        <!--          @callRandomWindow="callRandomWindowMethod"-->
-        <!--        ></saving-throw-view>-->
-        <!--        <skills-view></skills-view>-->
-        <!--        <div class="wrapper">-->
-        <!--          <div class="container">-->
-        <!--            <possession-bonus></possession-bonus>-->
-        <!--            <passive-perception></passive-perception>-->
-        <!--            <inspiration-frame></inspiration-frame>-->
-        <!--            <protection-class-view></protection-class-view>-->
-        <!--            <initiative-view></initiative-view>-->
-        <!--            <speed-view></speed-view>-->
-        <!--          </div>-->
-        <!--        </div>-->
-        <!--        <hit-vue></hit-vue>-->
+        <ability-view @callRandomWindow="callRandomWindowMethod"></ability-view>
+        <saving-throw-view
+          @callRandomWindow="callRandomWindowMethod"
+        ></saving-throw-view>
+        <skills-view></skills-view>
+        <div class="wrapper">
+          <div class="container">
+            <possession-bonus></possession-bonus>
+            <passive-perception></passive-perception>
+            <inspiration-frame></inspiration-frame>
+            <protection-class-view></protection-class-view>
+            <initiative-view></initiative-view>
+            <speed-view></speed-view>
+          </div>
+        </div>
+        <hit-vue></hit-vue>
       </div>
-      <!--      <div class="tab-pane fade" id="prehistory" role="tabpanel">-->
-      <!--        <background-view></background-view>-->
-      <!--      </div>-->
-      <!--      <div class="tab-pane fade" id="skills-and-abilites" role="tabpanel">-->
-      <!--        УМЕНИЯ И СПОСОБНОСТИ-->
-      <!--      </div>-->
-      <!--      <div class="tab-pane fade" id="outher" role="tabpanel">-->
-      <!--        <proficiencie-and-languages></proficiencie-and-languages>-->
-      <!--      </div>-->
+      <!--            <div class="tab-pane fade" id="prehistory" role="tabpanel">-->
+      <!--              <background-view></background-view>-->
+      <!--            </div>-->
+      <div class="tab-pane fade show active" id="class-information"
+           role="tabpanel">
+        <class-information-view></class-information-view>
+      </div>
+      <!--            <div class="tab-pane fade" id="outher" role="tabpanel">-->
+      <!--              <proficiencie-and-languages></proficiencie-and-languages>-->
+      <!--            </div>-->
     </div>
   </div>
 </template>
@@ -118,16 +99,15 @@ import InitiativeView from "./HeroListView/InitiativeView.vue";
 import SpeedView from "./HeroListView/SpeedView.vue";
 import SpellView from "./HeroListView/SpellView.vue";
 import HitVue from "./HeroListView/HitVue.vue";
-import ProficiencieAndLanguages
-  from "./HeroListView/ProficiencieAndLanguages.vue";
 import InventoryView from "./HeroListView/InventoryView.vue";
 import RandomWindow from "@/components/UI/RandomWindow.vue";
+import ClassInformationView from "@/components/HeroListView/ClassInformationsView.vue";
 
 export default {
   components: {
+    ClassInformationView,
     RandomWindow,
     InventoryView,
-    ProficiencieAndLanguages,
     HitVue,
     InitiativeView,
     ProtectionClassView,

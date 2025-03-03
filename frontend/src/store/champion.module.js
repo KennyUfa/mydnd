@@ -42,7 +42,6 @@ export const champion = {
                 }
             );
         },
-
         loadWorldOutlook({commit}) {
             return DndListService.getWorldOutlook().then(
                 (data) => {
@@ -109,7 +108,7 @@ export const champion = {
             );
         },
         patchAbilitySkills({commit, state}) {
-            const data = {skill_char_state: state.listInfo.skill_char_state};
+            const data = {skill_state: state.listInfo.skill_state};
             return DndListService.postBackground(data, state.champion_id).then(
                 (data) => Promise.resolve(data),
                 (error) => {
@@ -122,8 +121,7 @@ export const champion = {
         patchMainInfo({commit, state}) {
             const data = {
                 name_champion: state.listInfo.name_champion,
-                lvl: state.listInfo.lvl,
-                world_outlook: state.listInfo.world_outlook,
+                level: state.listInfo.level,
             };
             return DndListService.patchMainInfo(data, state.champion_id).then(
                 (data) => {
@@ -294,40 +292,73 @@ export const champion = {
                 }
             );
         },
-        changeWorldOutlook({commit}, selected) {
-            return commit("mutWorldOutlook", selected);
+        changeWorldOutlook({commit, state}, selected) {
+            return DndListService.worldOutlookPatch(selected, state.champion_id).then(
+                (data) => {
+                    commit("champion/mutWorldOutlook", selected, {root: true});
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+
         },
+        updateHideOriginal({commit, state}, ability_id) {
+            const data = { custom_ability_id: ability_id.customAbilityId , original_ability_id: ability_id.OriginalAbilityId};
+            console.log(data);
+            return DndListService.UpdateAbilityHideOriginal(data, state.champion_id).then(
+                (data) => {
+                    commit("champion/UpdateAbilityHideOriginal", customAbilityId, {root: true});
+                    return Promise.resolve(data);
+                },
+                (error) => {
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+
+        }
     },
     mutations: {
         dataSuccess(state, data) {
             state.listInfo = data;
-        },
+        }
+        ,
         itemSuccess(state, data) {
             state.listInfo.my_items.push(data);
-        },
+        }
+        ,
         originSuccess(state, data) {
-            console.log(data);
-            state.listInfo.origin = data;
-        },
+            state.listInfo.origin = data.name;
+        }
+        ,
         change(state, id) {
             state.champion_id = id;
             localStorage.setItem("champion_id", state.champion_id);
-        },
+        }
+        ,
         itemsSuccess(state, data) {
             state.listInfo.my_items = data;
-        },
+        }
+        ,
         dataFailure(state) {
             state.listInfo = null;
-        },
+        }
+        ,
         WorldOutlookListEdit(state, data) {
             state.worldoutlooklist = data;
-        },
+        }
+        ,
         mutWorldOutlook(state, data) {
-            state.listInfo.world_outlook = data;
-        },
+            state.listInfo.world_outlook = data.name;
+        }
+        ,
         mutHealHit(state, hit) {
             state.listInfo.current_hit = Math.min(state.listInfo.current_hit + hit, state.listInfo.max_hit);
-        },
+        }
+        ,
         mutDamageHit(state, hit) {
             let state_hit = state.listInfo.temp_hit - hit;
             if (state_hit >= 0) {
@@ -336,20 +367,27 @@ export const champion = {
                 state.listInfo.temp_hit = 0;
                 state.listInfo.current_hit = Math.max(state.listInfo.current_hit + state_hit, 0);
             }
-        },
+        }
+        ,
         updateName(state, data) {
             state.listInfo.name_champion = data;
-        },
+        }
+        ,
         switchProtectState(state, skill) {
-            state.listInfo.protect_char_state[skill] = state.listInfo.protect_char_state[skill] === 1 ? 2 : 1;
-        },
+            state.listInfo.protect_state[skill] = state.listInfo.protect_state[skill] === 1 ? 2 : 1;
+        }
+        ,
         switchAbilityState(state, skill) {
-            state.listInfo.skill_char_state[skill] = (state.listInfo.skill_char_state[skill] % 3) + 1;
-        },
+            state.listInfo.skill_state[skill] = (state.listInfo.skill_state[skill] % 3) + 1;
+        }
+        ,
     },
     getters: {
         getChampionId(state) {
             return state.champion_id;
+        },
+        getChampionClass(state) {
+            return state.listInfo.champion_class;
         },
     },
 };

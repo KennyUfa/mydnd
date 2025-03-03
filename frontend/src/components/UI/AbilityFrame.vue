@@ -5,16 +5,16 @@
         class="ui button big toggle"
         @click="stateProtect(skillValue)"
       >
-        {{ champion.listInfo.skill_char_state[skillValue] }}
+        {{ champion.listInfo.skill_state[skillValue] }}
       </button>
       <div class="card-header">
         {{ skillName }}
       </div>
       <div class="digital-check text-wrap text-center">
-        <div v-if="champion.listInfo.skill_char_state[skillValue] === 1">
+        <div v-if="champion.listInfo.skill_state[skillValue] === 1">
           {{ Math.floor((champion.listInfo[stat] - 10) / 2) }}
         </div>
-        <div v-else-if="champion.listInfo.skill_char_state[skillValue] === 2">
+        <div v-else-if="champion.listInfo.skill_state[skillValue] === 2">
           {{
             Math.floor((champion.listInfo[stat] - 10) / 2) +
             champion.listInfo.possession_bonus

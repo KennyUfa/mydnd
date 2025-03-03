@@ -24,7 +24,7 @@ export const origin = {
             const character_id = {
                 character_id: rootState.champion.champion_id, // Получить текущее значение champion_id из модуля champion
             };
-            return DndListService.originPatch(origin.id, character_id).then(
+            return DndListService.originPatch(origin, character_id).then(
                 (data) => {
                     commit("champion/originSuccess", origin, {root: true});
                     return Promise.resolve(data);

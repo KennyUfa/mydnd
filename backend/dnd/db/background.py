@@ -9,8 +9,6 @@ class BackgroundSpecification(models.Model):
         return self.name
 
 
-
-
 class BackgroundModel(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -18,47 +16,6 @@ class BackgroundModel(models.Model):
 
     def __str__(self):
         return self.name
-
-    def get_background(self, obj):
-        if not obj.background:
-            return {"message": "No background assigned"}
-
-        race_data = {
-            "id": obj.background.id,
-            "name": obj.background.name,
-            "description": obj.background.description,
-            "specifications": self.get_specification_with_custom(obj),
-
-        }
-        return race_data
-
-    def get_specification_with_custom(self, obj):
-        custom_specifications = CustomBackground.objects.filter(character=obj)
-        custom_map = {custom.race_background_id: custom for custom in
-                      custom_specifications}
-        specification = obj.background.specifications.all()
-
-        result = []
-
-        for specific in specification:
-            data = {
-                "id": specific.id,
-                "name": specific.name,
-                "description": specific.description,
-
-            }
-            custom = custom_map.get(specific.id)
-
-            if custom:
-                specific.description = custom.custom_description
-                specific.hide_original = custom.hide_original
-                data["custom"] = {
-                    "id": custom.id,
-                    "custom_description": custom.custom_description,
-                    "hide_original": custom.hide_original,
-                }
-            result.append(data)
-        return result
 
 
 class CustomBackground(models.Model):

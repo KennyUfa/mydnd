@@ -25,17 +25,17 @@
       Класс - {{ listInfo.champion_class.name }}
     </div>
     <div class="center" v-if="!show">
-      <p v-if="listInfo.origin">
-        Предистория - {{ listInfo.origin.name }}
-      </p>
-      <p v-else>Предистория - не выбрана</p>
+      <div v-if="listInfo.origin">
+        Предистория - {{ listInfo.origin }}
+      </div>
+      <div v-else>Предистория - не выбрана</div>
     </div>
     <div class="center" v-else>
       <div>
-        <p v-if="listInfo.origin">
-          Предистория - {{ listInfo.origin.name || "- pre" }}
-        </p>
-        <p v-else>Предистория - не выбрана</p>
+        <div v-if="listInfo.origin">
+          Предистория - {{ listInfo.origin || "- pre" }}
+        </div>
+        <div v-else>Предистория - не выбрана</div>
 
         <button
           type="button"
@@ -96,7 +96,7 @@
                 <a
                   class="dropdown-item"
                   href="#"
-                  @click="changeWorldOutlook(wlook.name)"
+                  @click="changeWorldOutlook(wlook)"
                 >{{ wlook.name }}</a
                 >
               </div>
