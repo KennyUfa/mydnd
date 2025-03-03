@@ -96,11 +96,18 @@ export default {
     },
   },
   methods: {
-    updateHideOriginal(OriginalAbilityId, customAbilityId) {
-      console.log(OriginalAbilityId, customAbilityId);
-      this.$store.dispatch('champion/updateHideOriginal',
-        {OriginalAbilityId, customAbilityId});
-    }
+    async updateHideOriginal(originalAbilityId, customAbilityId) {
+      try {
+        // Вызываем Vuex action и получаем ответ
+        const response = await this.$store.dispatch('champion/updateHideOriginal', {
+          OriginalAbilityId: originalAbilityId,
+          customAbilityId: customAbilityId
+        });
+        console.log("Данные успешно обновлены:", response);
+      } catch (error) {
+        console.error("Ошибка при обновлении данных:", error);
+      }
+    },
   }
 };
 

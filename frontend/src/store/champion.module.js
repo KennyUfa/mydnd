@@ -306,12 +306,21 @@ export const champion = {
 
         },
         updateHideOriginal({commit, state}, ability_id) {
-            const data = { custom_ability_id: ability_id.customAbilityId , original_ability_id: ability_id.OriginalAbilityId};
-            console.log(data);
+            const data = {
+                custom_ability_id: ability_id.customAbilityId,
+                original_ability_id: ability_id.OriginalAbilityId
+            };
             return DndListService.UpdateAbilityHideOriginal(data, state.champion_id).then(
-                (data) => {
-                    commit("champion/UpdateAbilityHideOriginal", customAbilityId, {root: true});
-                    return Promise.resolve(data);
+                (response) => {
+                    commit("updateCustomDescription", {
+                        abilityId: ability_id.OriginalAbilityId,
+                        updatedData: {
+                            id: response.id,
+                            custom_description: response.custom_description,
+                            hide_original: response.hide_original
+                        }
+                    });
+                    return Promise.resolve(response);
                 },
                 (error) => {
                     commit("dataFailure");
@@ -322,8 +331,24 @@ export const champion = {
         }
     },
     mutations: {
+
         dataSuccess(state, data) {
             state.listInfo = data;
+        }
+        ,
+        updateCustomDescription(state, payload) {
+            const {abilityId, updatedData} = payload;
+            console.log("updatedData", payload);
+
+            // Ищем способность в массиве levels
+            for (const level of state.listInfo.champion_class.levels) {
+                const ability = level.abilities.find(ability => ability.id === abilityId);
+                if (ability) {
+                    // Обновляем custom_description
+                    ability.custom_description = updatedData;
+                    break;
+                }
+            }
         }
         ,
         itemSuccess(state, data) {
