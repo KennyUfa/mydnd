@@ -326,7 +326,8 @@ class AbilitySerializer(serializers.ModelSerializer):
             return {
                 'id': custom_ability.id if custom_ability else None,
                 'custom_description': custom_ability.custom_description if custom_ability else None,
-                'hide_original': custom_ability.hide_original if custom_ability else False
+                'hide_original': custom_ability.hide_original if custom_ability else False,
+                'hide_custom': custom_ability.hide_custom if custom_ability else False,
             }
         return None
 

@@ -61,14 +61,14 @@ class CharacterHideOriginalAbilityView(APIView):
         character = get_object_or_404(Character, pk=pk)
         custom_ability_id = request.data.get('custom_ability_id')
         original_ability_id = request.data.get('original_ability_id')
-        custom_ability_id = CustomAbility.objects.filter(id=custom_ability_id).first()
+        custom_ability_id = CustomAbility.objects.filter(id=custom_ability_id, character=character).first()
 
 
         # Если custom_ability_id не передан, то создаем новую запись в CustomAbility с hide_original=True
         if not custom_ability_id:
-            original_ability = Ability.objects.filter(id=original_ability_id, character=character).first()
+            original_ability = Ability.objects.filter(id=original_ability_id).first()
             custom_ability_id = CustomAbility.objects.create(character=character, ability=original_ability, hide_original=True,
-                                                             custom_description=original_ability.description)
+                                                             custom_description=f"Своё описание способности: {original_ability.description}")
             # Изменяем hide_original
         custom_ability_id.hide_original = not custom_ability_id.hide_original
         custom_ability_id.save()

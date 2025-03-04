@@ -338,7 +338,6 @@ export const champion = {
         ,
         updateCustomDescription(state, payload) {
             const {abilityId, updatedData} = payload;
-            console.log("updatedData", payload);
 
             // Ищем способность в массиве levels
             for (const level of state.listInfo.champion_class.levels) {

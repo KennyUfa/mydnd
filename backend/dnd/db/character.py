@@ -72,6 +72,7 @@ class CustomAbility(models.Model):
                                 related_name='custom_versions')
     custom_description = models.TextField(blank=True, null=True)
     hide_original = models.BooleanField(default=False)
+    hide_custom = models.BooleanField(default=True)
 
 
 class SpecificColumn(models.Model):
