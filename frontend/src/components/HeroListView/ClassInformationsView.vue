@@ -53,17 +53,24 @@
           <input
             type="checkbox"
             v-model="ability.custom_description.hide_original"
-            @change="updateHideOriginal(ability.id,
-            ability.custom_description.id)"
+            @change="updateHideOriginal(ability)"
           />
           Скрыть оригинальное описание
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            v-model="ability.custom_description.hide_custom"
+            @change="updateHideCustomAbility(ability)"
+          />
+          Скрыть пользовательское описание
         </label>
         <!-- Оригинальное описание -->
         <p v-if="!ability.custom_description?.hide_original">
           {{ ability.description }}
         </p>
         <!-- Кастомное описание -->
-        <p v-if="ability.custom_description?.custom_description">
+        <p v-if="!ability.custom_description?.hide_custom">
           {{ ability.custom_description.custom_description }}
         </p>
       </div>
@@ -92,23 +99,29 @@ export default {
           }
         });
       });
-      return Array.from(abilitiesMap.values()); // Преобразуем в массив
+      return Array.from(abilitiesMap.values());
     },
   },
   methods: {
-    async updateHideOriginal(originalAbilityId, customAbilityId) {
+    async updateHideOriginal(ability) {
       try {
-        // Вызываем Vuex action и получаем ответ
-        const response = await this.$store.dispatch('champion/updateHideOriginal', {
-          OriginalAbilityId: originalAbilityId,
-          customAbilityId: customAbilityId
+        await this.$store.dispatch('champion/updateHideOriginal', {
+          ability
         });
-        console.log("Данные успешно обновлены:", response);
       } catch (error) {
-        console.error("Ошибка при обновлении данных:", error);
+        console.error("Ошибка при обновлении данных updateHideOriginal:", error);
       }
     },
-  }
+    async updateHideCustomAbility(ability) {
+      try {
+        await this.$store.dispatch('champion/updateHideCustomAbility', {
+          ability
+        });
+      } catch (error) {
+        console.error("Ошибка при обновлении данных updateHideCustomAbility:", error);
+      }
+    }
+  },
 };
 
 </script>

@@ -305,20 +305,13 @@ export const champion = {
             );
 
         },
-        updateHideOriginal({commit, state}, ability_id) {
-            const data = {
-                custom_ability_id: ability_id.customAbilityId,
-                original_ability_id: ability_id.OriginalAbilityId
-            };
-            return DndListService.UpdateAbilityHideOriginal(data, state.champion_id).then(
+        updateHideOriginal({commit, state}, ability) {
+            return DndListService.UpdateAbilityHideOriginal(ability, state.champion_id).then(
                 (response) => {
+                    console.log(ability)
                     commit("updateCustomDescription", {
-                        abilityId: ability_id.OriginalAbilityId,
-                        updatedData: {
-                            id: response.id,
-                            custom_description: response.custom_description,
-                            hide_original: response.hide_original
-                        }
+                        abilityId: ability.ability.id,
+                        updatedData: response
                     });
                     return Promise.resolve(response);
                 },
@@ -328,7 +321,26 @@ export const champion = {
                 }
             );
 
-        }
+        },
+        updateHideCustomAbility({commit, state}, ability) {
+            return DndListService.UpdateAbilityHideCustom(ability, state.champion_id).then(
+                (response) => {
+                    commit("updateCustomDescription", {
+                        abilityId: ability.id,
+                        updatedData: {
+                            id: response.id,
+                            custom_description: response.custom_description,
+                            hide_custom: response.hide_custom
+                        }
+                    });
+                    return Promise.resolve(response);
+                },
+                (error) => {
+                    commit("dataFailure");
+                    return Promise.reject(error);
+                }
+            );
+        },
     },
     mutations: {
 
@@ -338,6 +350,9 @@ export const champion = {
         ,
         updateCustomDescription(state, payload) {
             const {abilityId, updatedData} = payload;
+            // console.log('updateCustomDescription');
+            // console.log(abilityId);
+            // console.log(updatedData);
 
             // Ищем способность в массиве levels
             for (const level of state.listInfo.champion_class.levels) {
@@ -348,8 +363,7 @@ export const champion = {
                     break;
                 }
             }
-        }
-        ,
+        },
         itemSuccess(state, data) {
             state.listInfo.my_items.push(data);
         }

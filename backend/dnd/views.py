@@ -36,7 +36,7 @@ class CharacterOriginView(APIView):
         character = get_object_or_404(Character, id=character_id)
 
         # Получаем ID предыстории из данных запроса
-        origin_id = request.data.get('origin_id')
+        origin_id = request.data.get('id')
         if not origin_id:
             return Response({'error': 'origin_id is required'},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -49,7 +49,7 @@ class CharacterOriginView(APIView):
         character.save()
 
         # Возвращаем сериализованные данные персонажа
-        serializer = CharacterSerializer(character)
+        serializer = Origin(character.origin)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -59,18 +59,36 @@ class CharacterHideOriginalAbilityView(APIView):
 
     def patch(self, request, pk):
         character = get_object_or_404(Character, pk=pk)
+        custom_ability_id = request.data.get('ability').get('custom_description').get('id')
+        original_ability_id = request.data.get('ability').get('id')
+        custom_ability = CustomAbility.objects.filter(id=custom_ability_id, character=character).first()
+        # Если custom_ability_id не передан, то создаем новую запись в CustomAbility с hide_original=True
+        if not custom_ability:
+            original_ability = Ability.objects.filter(id=original_ability_id).first()
+            custom_ability = CustomAbility.objects.create(character=character, ability=original_ability, hide_original=False,
+                                                             hide_custom=request.data.get('ability').get('custom_description').get('hide_custom'),
+                                                             custom_description=f"Своё описание способности: {original_ability.description}")
+            # Изменяем hide_original
+        custom_ability.hide_original = not custom_ability.hide_original
+        custom_ability.save()
+        serializer = CustomAbilityPatchSerializer(custom_ability)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CharacterHideCustomAbilityView(APIView):
+    """Обновления описания способностей класса персонажа"""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, pk):
+        character = get_object_or_404(Character, pk=pk)
         custom_ability_id = request.data.get('custom_ability_id')
         original_ability_id = request.data.get('original_ability_id')
         custom_ability_id = CustomAbility.objects.filter(id=custom_ability_id, character=character).first()
-
-
-        # Если custom_ability_id не передан, то создаем новую запись в CustomAbility с hide_original=True
         if not custom_ability_id:
             original_ability = Ability.objects.filter(id=original_ability_id).first()
-            custom_ability_id = CustomAbility.objects.create(character=character, ability=original_ability, hide_original=True,
+            custom_ability_id = CustomAbility.objects.create(character=character, ability=original_ability, hide_original=True, hide_custom=True,
                                                              custom_description=f"Своё описание способности: {original_ability.description}")
-            # Изменяем hide_original
-        custom_ability_id.hide_original = not custom_ability_id.hide_original
+        custom_ability_id.hide_custom = not custom_ability_id.hide_custom
         custom_ability_id.save()
         serializer = CustomAbilityPatchSerializer(custom_ability_id)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -84,9 +102,9 @@ class CharacterWorldOutlookView(APIView):
         character = get_object_or_404(Character, id=character_id)
 
         # Получаем ID мировоззрения из данных запроса
-        world_outlook_id = request.data.get('world_outlook_id')
+        world_outlook_id = request.data.get('id')
         if not world_outlook_id:
-            return Response({'error': 'world_outlook_id is required'},
+            return Response({'error': 'id is required'},
                             status=status.HTTP_400_BAD_REQUEST)
 
         # Получаем объект предыстории
@@ -97,7 +115,7 @@ class CharacterWorldOutlookView(APIView):
         character.save()
 
         # Возвращаем сериализованные данные персонажа
-        serializer = CharacterSerializer(character)
+        serializer = WorldOutlookSerializer(character.world_outlook)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

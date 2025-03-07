@@ -234,6 +234,15 @@ class OriginListSerializer(serializers.ModelSerializer):
         model = OriginModel
         fields = ['id', 'name']
 
+class Origin(serializers.ModelSerializer):
+    class Meta:
+        model = OriginModel
+        fields = ['id', 'name', 'description']
+
+
+class RaceBackgroundSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BackgroundModel
 
 class SpellSerializer(serializers.ModelSerializer):
     class Meta:
@@ -304,7 +313,8 @@ class CustomAbilityPatchSerializer(serializers.ModelSerializer):
             'id',
             'ability',
             'custom_description',
-            'hide_original'
+            'hide_original',
+            'hide_custom'
         ]
 
 class AbilitySerializer(serializers.ModelSerializer):
@@ -327,7 +337,7 @@ class AbilitySerializer(serializers.ModelSerializer):
                 'id': custom_ability.id if custom_ability else None,
                 'custom_description': custom_ability.custom_description if custom_ability else None,
                 'hide_original': custom_ability.hide_original if custom_ability else False,
-                'hide_custom': custom_ability.hide_custom if custom_ability else False,
+                'hide_custom': custom_ability.hide_custom if custom_ability else True,
             }
         return None
 
@@ -416,7 +426,7 @@ class CharacterSerializer(serializers.ModelSerializer):
     archetype = ArchetypeSerializer()
     race = RaceSerializer()
     origin = serializers.StringRelatedField()
-    world_outlook = serializers.StringRelatedField()
+    world_outlook = WorldOutlookSerializer()
     skill_state = SkillStateSerializer()
     protect_state = ProtectStateSerializer()
 
