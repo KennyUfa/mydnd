@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia';
 import api from "@/services/api.js";
+import {useClassInformationStore} from "@/stores/classStore.js";
 
 export const useCharacterStore = defineStore('character', {
     state: () => {
@@ -11,13 +12,21 @@ export const useCharacterStore = defineStore('character', {
             world_outlook_list: [],
         };
     },
+    getters: {
+        get_character_id(state) {
+            return state.character_id
+        },
+    },
     actions: {
         async fetchCharacter(characterId) {
             this.isLoading = true; // Начало загрузки
             try {
+                console.log("fetch character")
+                const class_store = useClassInformationStore();
                 const response = await api.get("dnd/character/" + characterId + "/");
                 this.character = response.data; // Обновляем список персонажей
                 this.character_id = characterId;
+                class_store.setClassInfo(response.data.champion_class)
                 localStorage.setItem("champion_id", characterId);
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);
@@ -64,8 +73,10 @@ export const useCharacterStore = defineStore('character', {
                 level: this.character.level,
             }
             try {
+                const class_store = useClassInformationStore();
                 const response = await api.patch("dnd/character/" + this.character_id + "/", data);
                 this.character = response.data;
+                class_store.setClassInfo(response.data.champion_class)
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);
             }

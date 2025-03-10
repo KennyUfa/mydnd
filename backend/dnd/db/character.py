@@ -52,11 +52,11 @@ class Level(models.Model):
     proficiency_bonus = models.PositiveIntegerField()
 
     def __str__(self):
-        return str(f"{self.class_obj.name} {self.archetype.name if self.archetype else ''} - {self.level}")
+        return str(f"{self.class_obj} {self.archetype.name if self.archetype else ''} - {self.level}")
 
 
 class Ability(models.Model):
-    level = models.ForeignKey(Level, on_delete=models.CASCADE,
+    level_id = models.ForeignKey(Level, on_delete=models.CASCADE,
                               related_name="abilities")
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)

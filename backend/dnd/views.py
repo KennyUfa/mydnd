@@ -9,6 +9,17 @@ from rest_framework.views import APIView
 
 from .serializers import *
 
+class CharacterCustomAbilityUpdateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = AbilitySerializer
+    def patch(self, request, pk):
+
+        ability = get_object_or_404(CustomAbility, pk=pk)
+        ability.custom_description = request.data.get('custom_description')
+        ability.save()
+        return Response(CustomAbilitySerializer(ability).data)
+
+        # if not custom_ability_id:
 
 class BaseClassChViewSet(generics.ListAPIView):
     queryset = BaseClass.objects.all()
@@ -59,14 +70,18 @@ class CharacterHideOriginalAbilityView(APIView):
 
     def patch(self, request, pk):
         character = get_object_or_404(Character, pk=pk)
-        custom_ability_id = request.data.get('ability').get('custom_description').get('id')
-        original_ability_id = request.data.get('ability').get('id')
-        custom_ability = CustomAbility.objects.filter(id=custom_ability_id, character=character).first()
+        print(request.data)
+        original_ability_id = request.data.get('id')
+        custom_ability = CustomAbility.objects.filter(ability=original_ability_id, character=character).first()
+        print(custom_ability)
+        if custom_ability:
+            print("Есть custom_ability_id")
         # Если custom_ability_id не передан, то создаем новую запись в CustomAbility с hide_original=True
         if not custom_ability:
+            print("Нет custom_ability_id")
             original_ability = Ability.objects.filter(id=original_ability_id).first()
             custom_ability = CustomAbility.objects.create(character=character, ability=original_ability, hide_original=False,
-                                                             hide_custom=request.data.get('ability').get('custom_description').get('hide_custom'),
+                                                             hide_custom=request.data.get('custom_description').get('hide_custom'),
                                                              custom_description=f"Своё описание способности: {original_ability.description}")
             # Изменяем hide_original
         custom_ability.hide_original = not custom_ability.hide_original
@@ -81,9 +96,8 @@ class CharacterHideCustomAbilityView(APIView):
 
     def patch(self, request, pk):
         character = get_object_or_404(Character, pk=pk)
-        custom_ability_id = request.data.get('custom_ability_id')
-        original_ability_id = request.data.get('original_ability_id')
-        custom_ability_id = CustomAbility.objects.filter(id=custom_ability_id, character=character).first()
+        original_ability_id = request.data.get('id')
+        custom_ability_id = CustomAbility.objects.filter(ability=original_ability_id, character=character).first()
         if not custom_ability_id:
             original_ability = Ability.objects.filter(id=original_ability_id).first()
             custom_ability_id = CustomAbility.objects.create(character=character, ability=original_ability, hide_original=True, hide_custom=True,

@@ -16,6 +16,7 @@ const routes = [
         path: "/character", // Используйте параметр ID для гибкости
         component: Character,
         async beforeEnter(to, from, next) {
+            console.log("Перед входом в страницу персонажа...");
             const characterStore = useCharacterStore();
             const championId = localStorage.getItem("champion_id"); // Получаем ID из URL
 

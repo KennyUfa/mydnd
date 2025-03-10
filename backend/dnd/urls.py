@@ -17,6 +17,8 @@ router.register('items', ItemView, basename='item')
 urlpatterns = [
     path('', include(router.urls)),
     path('character/<int:pk>/', CharacterDetailView.as_view(), name='character-detail'),
+    # обновление способности класса персонажа
+    path('character/custom-ability/update/<int:pk>/', CharacterCustomAbilityUpdateView.as_view(), name='custom-ability-update'),
     path('class-list/', BaseClassChViewSet.as_view(), name='class-list'),
     path('race-list/', RaceListView.as_view(), name='race-list'),
     path('origin-list/', OriginListView.as_view(), name='origin-list'),

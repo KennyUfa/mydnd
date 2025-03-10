@@ -54,8 +54,9 @@ const deleteChampion = (id) => {
 };
 // Функция перехода к деталям персонажа
 const championLink = (id) => {
+  localStorage.setItem("champion_id", id);
   console.log('Переход к персонажу с ID:', id);
-  characterStore.fetchCharacter(id);
+  // characterStore.fetchCharacter(id);
   router.push({path: '/character'}); // Перенаправляем на страницу персонажа
 };
 

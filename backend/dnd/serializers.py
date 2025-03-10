@@ -234,6 +234,7 @@ class OriginListSerializer(serializers.ModelSerializer):
         model = OriginModel
         fields = ['id', 'name']
 
+
 class Origin(serializers.ModelSerializer):
     class Meta:
         model = OriginModel
@@ -243,6 +244,7 @@ class Origin(serializers.ModelSerializer):
 class RaceBackgroundSerializer(serializers.ModelSerializer):
     class Meta:
         model = BackgroundModel
+
 
 class SpellSerializer(serializers.ModelSerializer):
     class Meta:
@@ -306,6 +308,17 @@ class SpecificColumnSerializer(serializers.ModelSerializer):
         model = SpecificColumn
         fields = ['name', 'value']
 
+
+class CustomAbilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomAbility
+        fields = [
+            'id',
+            'custom_description',
+            'hide_original',
+            'hide_custom']
+
+
 class CustomAbilityPatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomAbility
@@ -317,13 +330,14 @@ class CustomAbilityPatchSerializer(serializers.ModelSerializer):
             'hide_custom'
         ]
 
+
 class AbilitySerializer(serializers.ModelSerializer):
     """Сериализатор для способностей."""
     custom_description = serializers.SerializerMethodField()
 
     class Meta:
         model = Ability
-        fields = ['name', 'description', 'custom_description','id']
+        fields = ['name', 'description', 'custom_description', 'id', 'level_id']
 
     def get_custom_description(self, obj):
         # Получаем пользовательское описание для текущего персонажа

@@ -1,11 +1,12 @@
 <template>
+  <Button variant="destructive">Click me</Button>
   <!--  <random-window ref="RandomWindow"></random-window>-->
   <div class="col">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
       <li class="nav-item" role="presentation">
         <a
-          class="nav-link active"
+          class="nav-link"
           data-bs-toggle="tab"
           href="#main"
           role="tab"
@@ -33,16 +34,16 @@
       <!--        >Заклинания</a-->
       <!--        >-->
       <!--      </li>-->
-      <!--      <li class="nav-item" role="presentation">-->
-      <!--        <a-->
-      <!--          class="nav-link"-->
-      <!--          data-bs-toggle="tab"-->
-      <!--          href="#class-information"-->
-      <!--          role="tab"-->
-      <!--          aria-selected="True"-->
-      <!--        >Классовая информация</a-->
-      <!--        >-->
-      <!--      </li>-->
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link active"
+          data-bs-toggle="tab"
+          href="#class-information"
+          role="tab"
+          aria-selected="True"
+        >Классовая информация</a
+        >
+      </li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
@@ -52,7 +53,7 @@
       <!--      <div class="tab-pane fade" id="spells" role="tabpanel">-->
       <!--        <spell-view></spell-view>-->
       <!--      </div>-->
-      <div class="tab-pane fade show active" id="main" role="tabpanel">
+      <div class="tab-pane fade" id="main" role="tabpanel">
         <MainInformation></MainInformation>
         <!--        <ability-view @callRandomWindow="callRandomWindowMethod"></ability-view>-->
         <!--        <saving-throw-view-->
@@ -76,10 +77,10 @@
   <!--                  <div class="tab-pane fade" id="prehistory" role="tabpanel">-->
   <!--                    <background-view></background-view>-->
   <!--                  </div>-->
-  <!--  <div class="tab-pane fade" id="class-information"-->
-  <!--       role="tabpanel">-->
-  <!--    <class-information-view></class-information-view>-->
-  <!--  </div>-->
+  <div class="tab-pane fade show active" id="class-information"
+       role="tabpanel">
+    <class-information-view></class-information-view>
+  </div>
   <!--                  <div class="tab-pane fade" id="outher" role="tabpanel">-->
   <!--                    <proficiencie-and-languages></proficiencie-and-languages>-->
   <!--                  </div>-->
@@ -88,10 +89,12 @@
 </template>
 
 <script setup>
-import {onMounted} from "vue";
+import Button from '@/components/ui/button/Button.vue'
 import {useCharacterStore} from "@/stores/characterStore.js";
 import MainInformation
   from "@/views/CharacterView/MainInformations/MainInformation.vue";
+import ClassInformationView
+  from "@/views/CharacterView/ClassInformations/ClassInformationsView.vue";
 import {useRouter} from "vue-router";
 
 const characterStore = useCharacterStore();

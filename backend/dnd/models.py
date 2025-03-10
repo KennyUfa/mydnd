@@ -136,7 +136,7 @@ class Character(models.Model):
     spells = models.ManyToManyField(Spell,
                                     blank=True, related_name='my_spells')
 
-    world_outlook = models.OneToOneField(WorldOutlook,
+    world_outlook = models.ForeignKey(WorldOutlook,
                                          on_delete=models.PROTECT,
                                          blank=True, null=True)
     experience = models.IntegerField(blank=True, default=0)

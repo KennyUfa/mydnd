@@ -1,5 +1,4 @@
 <template>
-  hello world
   <div class="wrapper">
     <div class="center name-champion" v-if="!show">
       <button class="btn btn-success" v-on:click="show = !show">
@@ -23,7 +22,7 @@
       />
     </div>
     <div class="center">
-      Класс - {{ character.champion_class.name }}
+      Класс - {{ character.champion_class?.name }}
     </div>
     <div class="center" v-if="!show">
       <div v-if="character.origin">
@@ -61,11 +60,11 @@
         </ul>
       </div>
     </div>
-    <div class="center">Расса - {{ character.race.name || "race" }}</div>
+    <div class="center">Расса - {{ character.race?.name || "race" }}</div>
     <div class="center">
       <div class="" v-if="!show">
         <div>Мировоззрение</div>
-        <div class="">{{ character.world_outlook.name || "-" }}</div>
+        <div class="">{{ character.world_outlook?.name || "-" }}</div>
       </div>
       <div class="" v-else>
         <div>
@@ -99,7 +98,7 @@
               </div>
             </ul>
           </div>
-          <div class="">{{ character.world_outlook.name }}</div>
+          <div class="">{{ character.world_outlook?.name || "-" }}</div>
         </div>
       </div>
     </div>
@@ -158,41 +157,6 @@ const changeWorldOutlook = (selected) => {
 const changeOrigin = (selected) => {
   store.changeOrigin(selected);
 }
-
-//   methods: {
-//     patchMainInfo() {
-//       this.$store.dispatch("champion/patchMainInfo");
-//       this.show = !this.show;
-//     },
-//     loadOrigin() {
-//       this.$store.dispatch("origin/loadOrigin");
-//     },
-//     changeOrigin(selected) {
-//       this.$store.dispatch("origin/changeOrigin", selected);
-//     },
-//     loadWorldOutlook() {
-//       this.$store.dispatch("champion/loadWorldOutlook");
-//     },
-//     changeWorldOutlook(selected) {
-//       this.$store.dispatch("champion/changeWorldOutlook", selected);
-//     },
-//   },
-//   computed: {
-//     name: {
-//       get() {
-//         return this.$store.state.champion.listInfo.name_champion;
-//       },
-//       set(value) {
-//         this.$store.commit("champion/updateName", value);
-//       },
-//     },
-//     ...mapState({
-//       listInfo: (state) => state.champion.listInfo,
-//       origin: (state) => state.origin.originlist
-//     }),
-//   },
-// };
-
 </script>
 
 <style scoped>
