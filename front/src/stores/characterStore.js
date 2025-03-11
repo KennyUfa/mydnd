@@ -81,5 +81,48 @@ export const useCharacterStore = defineStore('character', {
                 console.error('Ошибка при получении списка персонажей:', error);
             }
         },
-    },
+        async postSkills() {
+            const data = {
+                strength: this.character.skills.strength,
+                dexterity: this.character.skills.dexterity,
+                constitution: this.character.skills.constitution,
+                intelligence: this.character.skills.intelligence,
+                wisdom: this.character.skills.wisdom,
+                charisma: this.character.skills.charisma,
+                id: this.character.skills.id,
+            };
+            try {
+                const response = await api.patch("dnd/character/" + this.character_id + "/skills/", data);
+                this.character.skills = response.data;
+
+            } catch (error) {
+                console.error('Ошибка при получении списка персонажей:', error);
+            }
+
+        },
+        async getRandomAbility(data) {
+            try {
+                const response = await api.post("dnd/random_protect/", data);
+                return response.data
+
+            } catch (error) {
+                console.error('Ошибка при получении списка персонажей:', error);
+            }
+        },
+        async switchAbilityState(data) {
+            console.log(data);
+            this.character.skill_state[data] = (this.character.skill_state[data] % 3) + 1;
+        },
+        async patchAbilityState() {
+            const data = {
+                skill_state: this.character.skill_state
+            }
+            try {
+                const response = await api.patch("dnd/character/" + this.character_id + "/skill_state/", data);
+                this.character.skill_state = response.data;
+            } catch (error) {
+                console.error('Ошибка при получении списка персонажей:', error);
+            }
+        }
+    }
 })

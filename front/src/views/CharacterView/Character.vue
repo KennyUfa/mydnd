@@ -1,86 +1,58 @@
 <template>
-  <Button variant="destructive">Click me</Button>
-  <!--  <random-window ref="RandomWindow"></random-window>-->
-  <div class="col">
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
-      <li class="nav-item" role="presentation">
-        <a
-          class="nav-link"
-          data-bs-toggle="tab"
-          href="#main"
-          role="tab"
-          aria-selected="false"
-        >Характеристики</a
-        >
-      </li>
-      <!--      <li class="nav-item" role="presentation">-->
-      <!--        <a-->
-      <!--          class="nav-link"-->
-      <!--          data-bs-toggle="tab"-->
-      <!--          href="#inventory"-->
-      <!--          role="tab"-->
-      <!--          aria-selected="false"-->
-      <!--        >Инвентарь</a-->
-      <!--        >-->
-      <!--      </li>-->
-      <!--      <li class="nav-item" role="presentation">-->
-      <!--        <a-->
-      <!--          class="nav-link"-->
-      <!--          data-bs-toggle="tab"-->
-      <!--          href="#spells"-->
-      <!--          role="tab"-->
-      <!--          aria-selected="false"-->
-      <!--        >Заклинания</a-->
-      <!--        >-->
-      <!--      </li>-->
-      <li class="nav-item" role="presentation">
-        <a
-          class="nav-link active"
-          data-bs-toggle="tab"
-          href="#class-information"
-          role="tab"
-          aria-selected="True"
-        >Классовая информация</a
-        >
-      </li>
-    </ul>
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <!--      <div class="tab-pane fade" id="inventory" role="tabpanel">-->
-      <!--        <inventory-view></inventory-view>-->
-      <!--      </div>-->
-      <!--      <div class="tab-pane fade" id="spells" role="tabpanel">-->
-      <!--        <spell-view></spell-view>-->
-      <!--      </div>-->
-      <div class="tab-pane fade" id="main" role="tabpanel">
-        <MainInformation></MainInformation>
-        <!--        <ability-view @callRandomWindow="callRandomWindowMethod"></ability-view>-->
-        <!--        <saving-throw-view-->
-        <!--          @callRandomWindow="callRandomWindowMethod"-->
-        <!--        ></saving-throw-view>-->
-        <!--        <skills-view></skills-view>-->
-        <!--        <div class="wrapper">-->
-        <!--          <div class="container">-->
-        <!--            <possession-bonus></possession-bonus>-->
-        <!--            <passive-perception></passive-perception>-->
-        <!--            <inspiration-frame></inspiration-frame>-->
-        <!--            <protection-class-view></protection-class-view>-->
-        <!--            <initiative-view></initiative-view>-->
-        <!--            <speed-view></speed-view>-->
-        <!--          </div>-->
-        <!--        </div>-->
-        <!--        <hit-vue></hit-vue>-->
-      </div>
-    </div>
-  </div>
+  <Toaster position="boottom-right"/>
+  <button @click="callRandomWindow">Показать уведомление</button>
+
+  <Tabs default-value="main" class="">
+    <TabsList>
+      <TabsTrigger value="main">
+        Главная
+      </TabsTrigger>
+      <TabsTrigger value="class-information">
+        Информация по классу
+      </TabsTrigger>
+    </TabsList>
+    <TabsContent value="main">
+      <MainInformation></MainInformation>
+      <ability-view @callRandomWindow="callRandomWindowMethod"></ability-view>
+      <saving-throw-view
+        @callRandomWindow="callRandomWindowMethod"></saving-throw-view>
+      <skills-view></skills-view>
+      <!--        <div class="wrapper">-->
+      <!--          <div class="container">-->
+      <!--            <possession-bonus></possession-bonus>-->
+      <!--            <passive-perception></passive-perception>-->
+      <!--            <inspiration-frame></inspiration-frame>-->
+      <!--            <protection-class-view></protection-class-view>-->
+      <!--            <initiative-view></initiative-view>-->
+      <!--            <speed-view></speed-view>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--        <hit-vue></hit-vue>-->
+    </TabsContent>
+    <TabsContent value="class-information">
+      <class-information-view></class-information-view>
+    </TabsContent>
+  </Tabs>
+  <!-- Tab panes -->
+  <!--    <div class="tab-content">tab-content-->
+  <!--      <div class="tab-pane fade" id="inventory" role="tabpanel">-->
+  <!--        <inventory-view></inventory-view>-->
+  <!--      </div>-->
+  <!--      <div class="tab-pane fade" id="spells" role="tabpanel">-->
+  <!--        <spell-view></spell-view>-->
+  <!--      </div>-->
+  <!--      <div class="tab-pane fade show active" id="main" role="tabpanel">-->
+
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
   <!--                  <div class="tab-pane fade" id="prehistory" role="tabpanel">-->
   <!--                    <background-view></background-view>-->
   <!--                  </div>-->
-  <div class="tab-pane fade show active" id="class-information"
-       role="tabpanel">
-    <class-information-view></class-information-view>
-  </div>
+  <!--  <div class="tab-pane fade" id="class-information"-->
+  <!--       role="tabpanel">-->
+
+  <!--  </div>-->
   <!--                  <div class="tab-pane fade" id="outher" role="tabpanel">-->
   <!--                    <proficiencie-and-languages></proficiencie-and-languages>-->
   <!--                  </div>-->
@@ -89,16 +61,35 @@
 </template>
 
 <script setup>
-import Button from '@/components/ui/button/Button.vue'
-import {useCharacterStore} from "@/stores/characterStore.js";
+import {useRouter} from "vue-router";
+
 import MainInformation
   from "@/views/CharacterView/MainInformations/MainInformation.vue";
 import ClassInformationView
   from "@/views/CharacterView/ClassInformations/ClassInformationsView.vue";
-import {useRouter} from "vue-router";
+import SkillsView from "@/views/CharacterView/Skills/SkillsView.vue";
+import AbilityView from "@/views/CharacterView/Skills/АbilityView.vue";
+import {Toaster} from "@/components/ui/toast";
+import {useToast} from "@/components/ui/toast/use-toast";
+import {h} from "vue";
+import ToastContent from "@/views/CharacterView/Skills/ui/ToastContent.vue";
 
-const characterStore = useCharacterStore();
+import {Button} from '@/components/ui/button'
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+
+
 const router = useRouter();
+const {toast} = useToast();
 
+
+// Метод для показа тоста
+const callRandomWindowMethod = (responseData) => {
+  toast({
+    title: "Бросок кубиков!",
+    description: h(ToastContent, {data: responseData}), // Используем компонент
+    variant: "default",
+    position: "bottom-left",
+  });
+};
 
 </script>

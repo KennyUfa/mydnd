@@ -112,6 +112,41 @@ class Spell(models.Model):
         return self.name
 
 
+class Skills(models.Model):
+    # характеристики
+    strength = models.PositiveSmallIntegerField(verbose_name="Сила",
+                                                blank=True, default=10)
+    dexterity = models.PositiveSmallIntegerField(verbose_name="Ловкость",
+                                                 blank=True, default=10)
+    constitution = models.PositiveSmallIntegerField(
+        verbose_name="Телосложение",
+        blank=True, default=10)
+    intelligence = models.PositiveSmallIntegerField(
+        verbose_name="Интеллект",
+        blank=True, default=10)
+    wisdom = models.PositiveSmallIntegerField(verbose_name="Мудрость",
+                                              blank=True, default=10)
+    charisma = models.PositiveSmallIntegerField(verbose_name="Харизма",
+                                                blank=True, default=10)
+
+    def __str__(self):
+        return f'{self.strength} {self.dexterity} {self.constitution} ' \
+               f'{self.intelligence} {self.wisdom} {self.charisma}'
+
+    @classmethod
+    def default_skill(cls):
+        created = cls.objects.create()
+        return created.pk
+
+class Lineament(models.Model):
+    name = models.CharField(max_length=100, blank=True)
+    description = models.CharField(blank=True, null=True, max_length=4000)
+
+    def __str__(self):
+        return self.name
+
+
+
 class Character(models.Model):
     champion_class = models.ForeignKey(BaseClass,
                                        on_delete=models.SET_NULL,
@@ -137,41 +172,33 @@ class Character(models.Model):
                                     blank=True, related_name='my_spells')
 
     world_outlook = models.ForeignKey(WorldOutlook,
-                                         on_delete=models.PROTECT,
-                                         blank=True, null=True)
+                                      on_delete=models.PROTECT,
+                                      blank=True, null=True)
     experience = models.IntegerField(blank=True, default=0)
     protect_state = models.OneToOneField(
         ProtectStateModel,
         on_delete=models.CASCADE,
         blank=True,
-        null=True
+        null=True,
+        verbose_name="Спасброски"
     )
     skill_state = models.OneToOneField(
         SkillStateModel,
         on_delete=models.CASCADE,
         blank=True,
-        null=True
+        null=True,
+        verbose_name="Владения навыками"
     )
-
+    skills = models.OneToOneField(
+        Skills,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        verbose_name="Характеристики"
+    )
     max_hit = models.PositiveSmallIntegerField(default=0)
     temp_hit = models.PositiveSmallIntegerField(default=0)
     current_hit = models.PositiveSmallIntegerField(default=0)
-
-    # характеристики
-    strength = models.PositiveSmallIntegerField(verbose_name="Сила",
-                                                blank=True, default=10)
-    dexterity = models.PositiveSmallIntegerField(verbose_name="Ловкость",
-                                                 blank=True, default=10)
-    constitution = models.PositiveSmallIntegerField(
-        verbose_name="Телосложение",
-        blank=True, default=10)
-    intelligence = models.PositiveSmallIntegerField(
-        verbose_name="Интеллект",
-        blank=True, default=10)
-    wisdom = models.PositiveSmallIntegerField(verbose_name="Мудрость",
-                                              blank=True, default=10)
-    charisma = models.PositiveSmallIntegerField(verbose_name="Харизма",
-                                                blank=True, default=10)
     possession_bonus = models.PositiveSmallIntegerField(default=2,
                                                         verbose_name="bonus")
     inspiration = models.PositiveSmallIntegerField(default=0)
@@ -196,6 +223,8 @@ class Character(models.Model):
         if not self.skill_state:
             self.skill_state = SkillStateModel.objects.create()
         # Сохраняем объект Character
+        if not self.skills:
+            self.skills = Skills.objects.create()
         super().save(*args, **kwargs)
 
     def get_lineament(self):

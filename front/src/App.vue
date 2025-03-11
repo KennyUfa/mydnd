@@ -1,13 +1,10 @@
 <template>
-  <navbar-view></navbar-view>
-  <router-view></router-view>
+
+    <navbar-view></navbar-view>
+    <router-view></router-view>
 </template>
 
-<script>
-import NavbarView from "./components/NavbarView.vue";
+<script setup>
 
-export default {
-  components: { NavbarView },
-  name: "App",
-};
+import NavbarView from "./components/NavbarView.vue";
 </script>

@@ -9,17 +9,71 @@ from rest_framework.views import APIView
 
 from .serializers import *
 
+
+class CharacterSkillStateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = SkillStateSerializer
+
+    def patch(self, request, pk):
+        # Получаем объект Character
+        character = get_object_or_404(Character, pk=pk)
+
+        # Проверяем права доступа
+        if character.account != request.user:
+            return Response({"error": "You do not have permission to edit this character."}, status=403)
+
+        # Получаем данные skill_state из запроса
+        skill_state_data = request.data.get('skill_state', {})
+        skill_state_id = skill_state_data.pop('id', None)
+
+        try:
+            # Обновляем существующий объект или создаем новый
+            skill_state, created = SkillStateModel.objects.update_or_create(
+                id=skill_state_id,
+                defaults=skill_state_data
+            )
+        except Exception as e:
+            return Response({"error": f"Failed to update skill state: {str(e)}"}, status=400)
+
+        # Присваиваем объект character.skill_state
+        character.skill_state = skill_state
+        character.save()
+
+        # Возвращаем сериализованные данные
+        return Response(SkillStateSerializer(skill_state).data)
+
+
+class CharacterSkillsView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = SkillsSerializer
+
+    def patch(self, request, pk):
+        character = get_object_or_404(Character, pk=pk)
+        if character.skills:
+            # Обновляем значения существующего объекта
+            character.skills.strength = request.data.get('strength')
+            character.skills.dexterity = request.data.get('dexterity')
+            character.skills.constitution = request.data.get('constitution')
+            character.skills.intelligence = request.data.get('intelligence')
+            character.skills.wisdom = request.data.get('wisdom')
+            character.skills.charisma = request.data.get('charisma')
+            character.skills.save()
+        return Response(SkillsSerializer(character.skills).data)
+
+
 class CharacterCustomAbilityUpdateView(APIView):
+    """ Update a custom ability"""
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = AbilitySerializer
-    def patch(self, request, pk):
 
+    def patch(self, request, pk):
         ability = get_object_or_404(CustomAbility, pk=pk)
         ability.custom_description = request.data.get('custom_description')
         ability.save()
         return Response(CustomAbilitySerializer(ability).data)
 
         # if not custom_ability_id:
+
 
 class BaseClassChViewSet(generics.ListAPIView):
     queryset = BaseClass.objects.all()
@@ -81,8 +135,8 @@ class CharacterHideOriginalAbilityView(APIView):
             print("Нет custom_ability_id")
             original_ability = Ability.objects.filter(id=original_ability_id).first()
             custom_ability = CustomAbility.objects.create(character=character, ability=original_ability, hide_original=False,
-                                                             hide_custom=request.data.get('custom_description').get('hide_custom'),
-                                                             custom_description=f"Своё описание способности: {original_ability.description}")
+                                                          hide_custom=request.data.get('custom_description').get('hide_custom'),
+                                                          custom_description=f"Своё описание способности: {original_ability.description}")
             # Изменяем hide_original
         custom_ability.hide_original = not custom_ability.hide_original
         custom_ability.save()
@@ -100,7 +154,8 @@ class CharacterHideCustomAbilityView(APIView):
         custom_ability_id = CustomAbility.objects.filter(ability=original_ability_id, character=character).first()
         if not custom_ability_id:
             original_ability = Ability.objects.filter(id=original_ability_id).first()
-            custom_ability_id = CustomAbility.objects.create(character=character, ability=original_ability, hide_original=True, hide_custom=True,
+            custom_ability_id = CustomAbility.objects.create(character=character, ability=original_ability, hide_original=True,
+                                                             hide_custom=True,
                                                              custom_description=f"Своё описание способности: {original_ability.description}")
         custom_ability_id.hide_custom = not custom_ability_id.hide_custom
         custom_ability_id.save()
@@ -307,7 +362,7 @@ class RandomSaveView(APIView):
         print(request.data)
 
         character = Character.objects.get(id=request.data.get('championId'))
-        skillvalue = getattr(character, request.data.get('statValue'))
+        skillvalue = getattr(character.skills, request.data.get('statValue'))
         if 'protectValueName' in request.data:
             protect_state = getattr(character.protect_state,
                                     request.data.get('protectValueName'))
@@ -337,6 +392,7 @@ class RandomSaveView(APIView):
         elif 'abilityValueName' in request.data:
             abilityValueName = getattr(character.skill_state,
                                        request.data.get('abilityValueName'))
+
             possession_bonus = character.possession_bonus
             result = math.floor((skillvalue - 10) / 2)
             random_result = random.randint(1, 20)
@@ -349,10 +405,8 @@ class RandomSaveView(APIView):
                         'random_result': random_result,
                         'possession_bonus': possession_bonus,
                     }
-                    print('1')
                     return Response(resp)
                 case 2:
-                    print('2')
                     resp = {
                         'total': random_result + result + possession_bonus,
                         'skillValue': skillvalue,
@@ -360,5 +414,11 @@ class RandomSaveView(APIView):
                         'possession_bonus': possession_bonus,
                     }
                     return Response(resp)
-                case _:
-                    return Response(status=status.HTTP_400_BAD_REQUEST)
+                case 3:
+                    resp = {
+                        'total': random_result + result + possession_bonus + possession_bonus,
+                        'skillValue': skillvalue,
+                        'random_result': random_result,
+                        'possession_bonus': possession_bonus,
+                    }
+                    return Response(resp)

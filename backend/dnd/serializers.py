@@ -433,6 +433,13 @@ class BaseClassSerializer(serializers.ModelSerializer):
         return LevelSerializer(levels, many=True, context=self.context).data
 
 
+class SkillsSerializer(serializers.ModelSerializer):
+    """Сериализатор для навыков."""
+    class Meta:
+        model = Skills
+        fields = "__all__"
+
+
 class CharacterSerializer(serializers.ModelSerializer):
     account = serializers.HiddenField(default=serializers.CurrentUserDefault())
     """Сериализатор для персонажа."""
@@ -443,14 +450,13 @@ class CharacterSerializer(serializers.ModelSerializer):
     world_outlook = WorldOutlookSerializer()
     skill_state = SkillStateSerializer()
     protect_state = ProtectStateSerializer()
+    skills = SkillsSerializer()
 
     class Meta:
         model = Character
         fields = [
             'id', 'champion_class', 'archetype', 'race', 'sub_race', 'skill_state', 'possession_bonus', 'protect_state', 'inspiration',
-            'protection_class', 'speed', 'account', 'name_champion', 'level', 'origin', 'world_outlook', 'strength', 'dexterity',
-            'constitution',
-            'intelligence', 'wisdom', 'charisma',
+            'protection_class', 'speed', 'account', 'name_champion', 'level', 'origin', 'world_outlook','skills'
         ]
 
     #     https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers

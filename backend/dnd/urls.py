@@ -17,14 +17,18 @@ router.register('items', ItemView, basename='item')
 urlpatterns = [
     path('', include(router.urls)),
     path('character/<int:pk>/', CharacterDetailView.as_view(), name='character-detail'),
-    # обновление способности класса персонажа
-    path('character/custom-ability/update/<int:pk>/', CharacterCustomAbilityUpdateView.as_view(), name='custom-ability-update'),
+
     path('class-list/', BaseClassChViewSet.as_view(), name='class-list'),
     path('race-list/', RaceListView.as_view(), name='race-list'),
     path('origin-list/', OriginListView.as_view(), name='origin-list'),
     # установить выбор происхождения
     path('character/<int:character_id>/origin/', CharacterOriginView.as_view(),
          name='character-origin'),
+    # установить выбор характеристик класса персонажа
+    path('character/<int:pk>/skills/', CharacterSkillsView.as_view(),
+         name='character-skills'),
+    # установить выбор способностей класса персонажа
+    path('character/<int:pk>/skill_state/', CharacterSkillStateView.as_view(), name='character-skill-state'),
     # установить выбор мировоззрения
     path('character/<int:character_id>/world-outlook/', CharacterWorldOutlookView.as_view(),
          name='character-world-outlook'),
@@ -38,9 +42,11 @@ urlpatterns = [
     path('characters/delete/<int:pk>/', CharacterDeleteView.as_view(), name='character-delete'),
 
     # path('origin/', OriginView.as_view(), name='origin-list'),
-    path('random_protect/', RandomSaveView.as_view(), name='random-save'),
+    path('random_protect/', RandomSaveView.as_view(), name='random'),
     # список мировоззрений
     path('world-outlook-list/', WorldOutlookView.as_view(), name='world-outlook-list'),
     path('characters/<int:character_id>/inventory/', InventoryItemView.as_view()),
     # path('origin/<int:origin_id>/change/', OriginChangeView.as_view(), name='origin-change'),
+    # обновление способности класса персонажа
+    path('character/custom-ability/update/<int:pk>/', CharacterCustomAbilityUpdateView.as_view(), name='custom-ability-update'),
 ]
