@@ -1,18 +1,18 @@
 <template>
   <div class="wrapper">
     <div class="center name-champion" v-if="!show">
-      <button class="btn btn-success" v-on:click="show = !show">
+      <Button class="btn btn-success" v-on:click="show = !show">
         <i class="bi bi-vector-pen"></i>
-      </button>
+      </Button>
       <div class="">Имя персонажа</div>
       <div class="info" v-if="!show">
         {{ character.name_champion || "-" }}
       </div>
     </div>
     <div class="center name-champion" v-else>
-      <button class="btn btn-danger" v-on:click="patchMainInfo">
+      <Button class="btn btn-danger" v-on:click="patchMainInfo">
         <i class="bi bi-vector-pen"></i>
-      </button>
+      </Button>
       <div class="">Имя персонажа</div>
       <input
         type="name"
@@ -36,13 +36,13 @@
           Предистория - {{ character.origin.name || "- pre" }}
         </div>
         <div v-else>Предистория - не выбрана</div>
-        <button
+        <Button
           type="button"
           @click="loadOrigin"
           class="btn btn-danger dropdown-toggle dropdown-toggle-split"
           data-bs-toggle="dropdown"
           aria-expanded="false"
-        ></button>
+        >Быврать</Button>
         <ul class="dropdown-menu">
           <a v-if="!origin_list" class="dropdown-item"
              href="#">
@@ -70,13 +70,13 @@
         <div>
           <div>
             Мировозрение
-            <button
+            <Button
               type="button"
               @click="loadWorldOutlook"
               class="btn btn-danger dropdown-toggle dropdown-toggle-split"
               data-bs-toggle="dropdown"
               aria-expanded="false"
-            ></button>
+            >Быврать</Button>
             <ul class="dropdown-menu">
               <a
                 v-if="!world_outlook_list"
@@ -107,20 +107,20 @@
       <div id="buttonCountNumber">
         Уровень - {{ character.level }}
         <div v-if="show" class="lvl_up">
-          <button
+          <Button
             class="btn btn-danger"
             @click="character.level++"
             :disabled="character.level > 19"
           >
             +
-          </button>
-          <button
+          </Button>
+          <Button
             class="btn btn-danger"
             @click="character.level--"
             :disabled="character.level < 2"
           >
             -
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -130,6 +130,7 @@
 <script setup>
 import {computed, ref} from "vue";
 import {useCharacterStore} from "@/stores/characterStore";
+import { Button } from '@/components/ui/button';
 
 const store = useCharacterStore();
 const character = computed(() => store.character,);

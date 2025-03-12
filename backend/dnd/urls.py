@@ -19,6 +19,10 @@ urlpatterns = [
     path('character/<int:pk>/', CharacterDetailView.as_view(), name='character-detail'),
 
     path('class-list/', BaseClassChViewSet.as_view(), name='class-list'),
+
+    path('class-archetype-list/<int:pk>/', ArchetypeViewSet.as_view(), name='archetype-list'),
+    path('character/<int:pk>/archetype-change/', ArchetypeChangeView.as_view(), name='archetype-change'),
+
     path('race-list/', RaceListView.as_view(), name='race-list'),
     path('origin-list/', OriginListView.as_view(), name='origin-list'),
     # установить выбор происхождения
@@ -29,6 +33,8 @@ urlpatterns = [
          name='character-skills'),
     # установить выбор способностей класса персонажа
     path('character/<int:pk>/skill_state/', CharacterSkillStateView.as_view(), name='character-skill-state'),
+    # установить Спасброски
+    path('character/<int:pk>/protect_state/', CharacterProtectStateView.as_view(), name='character-protect_state'),
     # установить выбор мировоззрения
     path('character/<int:character_id>/world-outlook/', CharacterWorldOutlookView.as_view(),
          name='character-world-outlook'),

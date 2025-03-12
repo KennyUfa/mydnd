@@ -2,7 +2,7 @@
   <Toaster position="boottom-right"/>
   <button @click="callRandomWindow">Показать уведомление</button>
 
-  <Tabs default-value="main" class="">
+  <Tabs default-value="class-information" class="">
     <TabsList>
       <TabsTrigger value="main">
         Главная
@@ -10,13 +10,16 @@
       <TabsTrigger value="class-information">
         Информация по классу
       </TabsTrigger>
+      <TabsTrigger value="race-information">
+        Расы и происхождения
+      </TabsTrigger>
     </TabsList>
     <TabsContent value="main">
+      <skills-view></skills-view>
       <MainInformation></MainInformation>
       <ability-view @callRandomWindow="callRandomWindowMethod"></ability-view>
       <saving-throw-view
         @callRandomWindow="callRandomWindowMethod"></saving-throw-view>
-      <skills-view></skills-view>
       <!--        <div class="wrapper">-->
       <!--          <div class="container">-->
       <!--            <possession-bonus></possession-bonus>-->
@@ -32,7 +35,11 @@
     <TabsContent value="class-information">
       <class-information-view></class-information-view>
     </TabsContent>
+    <TabsContent value="race-information">
+      <race-and-origin></race-and-origin>
+    </TabsContent>
   </Tabs>
+
   <!-- Tab panes -->
   <!--    <div class="tab-content">tab-content-->
   <!--      <div class="tab-pane fade" id="inventory" role="tabpanel">-->
@@ -60,6 +67,7 @@
   <!--  </div>-->
 </template>
 
+
 <script setup>
 import {useRouter} from "vue-router";
 
@@ -69,6 +77,8 @@ import ClassInformationView
   from "@/views/CharacterView/ClassInformations/ClassInformationsView.vue";
 import SkillsView from "@/views/CharacterView/Skills/SkillsView.vue";
 import AbilityView from "@/views/CharacterView/Skills/АbilityView.vue";
+import SavingThrowView from "@/views/CharacterView/Skills/SavingThrowView.vue";
+import RaceAndOrigin from "@/views/CharacterView/RaceAndOrigin/RaceAndOrigin.vue"
 import {Toaster} from "@/components/ui/toast";
 import {useToast} from "@/components/ui/toast/use-toast";
 import {h} from "vue";

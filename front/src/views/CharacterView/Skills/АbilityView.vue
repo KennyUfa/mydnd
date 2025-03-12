@@ -1,9 +1,9 @@
 <template>
   <button v-if="!show" v-on:click="show = !show">изменить</button>
-  <button v-if="show" v-on:click="patchProtectSkills">применить
+  <button v-if="show" v-on:click="patchAbilitySkills">применить
   </button>
   <div>Навыки</div>
-  <div class="grid grid-cols-3">
+  <div class="grid grid-cols-6">
     <ability-frame
       @callRandomWindow="handleCallRandomWindow"
       skill-name="Атлетика"
@@ -142,8 +142,7 @@ const emit = defineEmits(["callRandomWindow"]);
 const show = ref(false);
 const champion = useCharacterStore();
 
-const patchProtectSkills = () => {
-  // this.$store.dispatch("champion/patchAbilitySkills");
+const patchAbilitySkills = () => {
   champion.patchAbilityState();
   show.value = !show.value;
 }
@@ -151,23 +150,5 @@ const patchProtectSkills = () => {
 const handleCallRandomWindow = (data) => {
   emit("callRandomWindow", data);
 };
-// export default {
-//   data() {
-//     return {
-//       show: false,
-//     };
-//   },
-//   components: { AbilityFrame },
-//   name: "AbilityView",
-//   methods: {
-//     patchProtectSkills() {
-//       this.$store.dispatch("champion/patchAbilitySkills");
-//       this.show = !this.show;
-//     },
-//
-//     callRandomWindow(data) {
-//       this.$emit("callRandomWindow", data);
-//     },
-//   },
-// };
+
 </script>

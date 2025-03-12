@@ -27,6 +27,7 @@ export const useCharacterStore = defineStore('character', {
                 this.character = response.data; // Обновляем список персонажей
                 this.character_id = characterId;
                 class_store.setClassInfo(response.data.champion_class)
+                class_store.setArchetype(response.data.archetype)
                 localStorage.setItem("champion_id", characterId);
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);
@@ -77,6 +78,7 @@ export const useCharacterStore = defineStore('character', {
                 const response = await api.patch("dnd/character/" + this.character_id + "/", data);
                 this.character = response.data;
                 class_store.setClassInfo(response.data.champion_class)
+                class_store.setArchetype(response.data.archetype)
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);
             }
@@ -113,6 +115,9 @@ export const useCharacterStore = defineStore('character', {
             console.log(data);
             this.character.skill_state[data] = (this.character.skill_state[data] % 3) + 1;
         },
+        async switchProtectState(data) {
+            this.character.protect_state[data] = this.character.protect_state[data] === 1 ? 2 : 1;
+        },
         async patchAbilityState() {
             const data = {
                 skill_state: this.character.skill_state
@@ -120,6 +125,17 @@ export const useCharacterStore = defineStore('character', {
             try {
                 const response = await api.patch("dnd/character/" + this.character_id + "/skill_state/", data);
                 this.character.skill_state = response.data;
+            } catch (error) {
+                console.error('Ошибка при получении списка персонажей:', error);
+            }
+        },
+        async patchProtectSkills() {
+            const data = {
+                protect_state: this.character.protect_state
+            }
+            try {
+                const response = await api.patch("dnd/character/" + this.character_id + "/protect_state/", data);
+                this.character.protect_state = response.data;
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);
             }

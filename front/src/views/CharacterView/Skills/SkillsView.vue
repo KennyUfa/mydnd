@@ -3,7 +3,7 @@
     {{ show }} не видно
   </button>
   <button v-if="show" v-on:click="postSkills">{{ show }} видно</button>
-  <div class="wrapper">
+  <div class="grid grid-cols-6">
     <SkillButton
       skill-name="Сила"
       v-model:skill-value="skills.strength"

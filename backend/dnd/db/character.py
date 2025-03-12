@@ -62,7 +62,8 @@ class Ability(models.Model):
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return str(f"{self.name} - {self.level_id.class_obj.name} -{self.level_id.level}-"
+                   f" {self.level_id.archetype.name if self.level_id.archetype else ''}")
 
 
 class CustomAbility(models.Model):

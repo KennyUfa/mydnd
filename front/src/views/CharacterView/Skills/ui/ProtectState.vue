@@ -3,27 +3,21 @@
     <Badge
       v-if="show"
       class="ui button big toggle"
-      @click="switchAbilityState(skillValue)"
+      @click="switchProtectState(skillValue)"
     >
-      {{ skill_state[skillValue] }}
+      {{ protect_state[skillValue] }}
     </Badge>
-    <div  @click="random_save">
+    <div @click="random_save()">
       <div class="card-header">
         {{ skillName }}
       </div>
       <div class="digital-check text-wrap text-center">
-        <div v-if="skill_state[skillValue] === 1">
+        <div v-if="protect_state[skillValue] === 1">
           {{ Math.floor((skills[stat] - 10) / 2) }}
         </div>
-        <div v-else-if="skill_state[skillValue] === 2">
+        <div v-bind:style="{ 'background-color': '#d8c13b' }" v-else>
           {{
             Math.floor((skills[stat] - 10) / 2) +
-            champion.character.possession_bonus
-          }}
-        </div>
-        <div v-else>
-          {{
-            Math.floor((skills[stat] - 10) / 2) * 2 +
             champion.character.possession_bonus
           }}
         </div>
@@ -33,11 +27,11 @@
 </template>
 
 <script setup>
-import {useCharacterStore} from "@/stores/characterStore";
+import {useCharacterStore} from "@/stores/characterStore.js";
 import {Badge} from '@/components/ui/badge'
 
 const champion = useCharacterStore();
-const skill_state = champion.character.skill_state;
+const protect_state = champion.character.protect_state;
 const skills = champion.character.skills;
 
 const emit = defineEmits(["callRandomWindow"]);
@@ -49,12 +43,15 @@ const props = defineProps({
   show: Boolean,
 });
 
-const switchAbilityState = (skillValue) => {
-  champion.switchAbilityState(skillValue)
+
+const switchProtectState = (skillValue) => {
+  console.log(skillValue)
+  champion.switchProtectState(skillValue)
 }
+
 const random_save = () => {
   const data = {
-    abilityValueName: props.skillValue,
+    protectValueName: props.skillValue,
     statValue: props.stat,
     championId: champion.character.id,
   };
@@ -62,4 +59,7 @@ const random_save = () => {
     emit("callRandomWindow", response); // Эмитим данные наверх
   });
 };
+
 </script>
+
+<style scoped></style>

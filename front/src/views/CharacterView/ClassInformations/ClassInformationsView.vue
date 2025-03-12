@@ -2,17 +2,44 @@
   <div class="card" style="">
     <div class="card-body">
       <h5 class="card-title">{{ champion_class.name }}</h5>
+      <DropdownMenu>
+        <DropdownMenuTrigger v-on:click="loadArchetypes">
+          <Button variant="outline">
+            {{ archetype?.name || 'Выбрать архетип' }}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>
+            {{ archetype?.name || 'Выбрать архетип' }}
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator/>
+          <DropdownMenuItem
+            v-for="arch in archetype_list"
+            :key="arch.id"
+            @click="changeArchetype(arch)">
+            {{ arch.name }} <!-- Отображаем имя архетипа -->
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
       <p class="card-text">{{
           champion_class.description
         }}</p>
     </div>
+    <div class="card-body" v-if="archetype">
+      <h5 class="card-title">{{ archetype.name }}</h5>
+      <p class="card-text">{{
+          archetype.description
+        }}</p>
+    </div>
+    <!--таблица способностей-->
     <table class="class-table">
       <thead>
       <tr>
         <th>Уровень</th>
         <th>Бонус мастерства</th>
         <th>Способности</th>
-        <th v-if="champion_class.levels[0].specific_columns.length>0">
+        <th v-if="champion_class.levels[0]?.specific_columns.length>0">
           Дополнительные свойства
         </th>
       </tr>
@@ -116,9 +143,20 @@
 import {computed} from "vue";
 import {useClassInformationStore} from "@/stores/classStore.js";
 import {Switch} from '@/components/ui/switch'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {Button} from '@/components/ui/button';
 
 const store = useClassInformationStore();
 const champion_class = computed(() => store.class_info);
+const archetype = computed(() => store.archetype);
+const archetype_list = computed(() => store.archetype_list);
 
 const updateHideOriginal = (ability) => {
   store.updateHideOriginal(ability)
@@ -158,34 +196,33 @@ const updateCustomDescription = async (ability) => {
   }
 };
 
-
 const allLevelsWithAbilities = computed(() => {
+
+
   const levelsMap = new Map();
 
   // Добавляем уровни из основного класса
-  champion_class.value.levels.forEach(level => {
-    levelsMap.set(level.level, {
-      ...level,
-      abilities: [...(level.abilities || [])], // Копируем способности
+  if (champion_class.value.levels) {
+    champion_class.value.levels.forEach(level => {
+      levelsMap.set(level.level, {
+        ...level,
+        abilities: [...(level.abilities || [])], // Копируем способности
+      });
     });
-  });
+  }
 
-  // Добавляем уровни из архетипов
-  if (champion_class.value.archetypes && Array.isArray(champion_class.value.archetypes)) {
-    champion_class.value.archetypes.forEach(archetype => {
-      if (archetype.levels && Array.isArray(archetype.levels)) {
-        archetype.levels.forEach(archetypeLevel => {
-          if (levelsMap.has(archetypeLevel.level)) {
-            // Если уровень уже существует, добавляем способности из архетипа
-            const existingLevel = levelsMap.get(archetypeLevel.level);
-            existingLevel.abilities.push(...(archetypeLevel.abilities || []));
-          } else {
-            // Если уровня нет, создаем новый
-            levelsMap.set(archetypeLevel.level, {
-              ...archetypeLevel,
-              abilities: [...(archetypeLevel.abilities || [])],
-            });
-          }
+  // Добавляем уровни из архетипа
+  if (archetype.value?.levels) {
+    archetype.value.levels.forEach(level => {
+      if (levelsMap.has(level.level)) {
+        // Если уровень уже существует, добавляем способности из архетипа
+        const existingLevel = levelsMap.get(level.level);
+        existingLevel.abilities.push(...(level.abilities || []));
+      } else {
+        // Если уровня нет, создаем новую запись
+        levelsMap.set(level.level, {
+          ...level,
+          abilities: [...(level.abilities || [])],
         });
       }
     });
@@ -194,6 +231,15 @@ const allLevelsWithAbilities = computed(() => {
   // Преобразуем Map обратно в массив и сортируем по уровню
   return Array.from(levelsMap.values()).sort((a, b) => a.level - b.level);
 });
+const loadArchetypes = () => {
+  store.loadArchetypes()
+  console.log('loadArchetypes')
+}
+const changeArchetype = (id) => {
+  store.changeArchetype(id).then(() => {
+    console.log('archetype changed')
+  })
+}
 </script>
 <style>
 table {

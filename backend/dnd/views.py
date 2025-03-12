@@ -7,7 +7,43 @@ from rest_framework import filters, viewsets, permissions, status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import *
+from .serializers.class_serializers import *
+from .serializers.race_serializers import *
+from .serializers.serializers import *
+
+
+class CharacterProtectStateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ProtectStateSerializer
+
+    def patch(self, request, pk):
+        # Получаем объект Character
+        character = get_object_or_404(Character, pk=pk)
+
+        # Проверяем права доступа
+        if character.account != request.user:
+            return Response({"error": "You do not have permission to edit this character."}, status=403)
+
+        # Получаем данные skill_state из запроса
+        print(request.data)
+        protect_state_data = request.data.get('protect_state', {})
+        protect_state_id = protect_state_data.pop('id', None)
+
+        try:
+            # Обновляем существующий объект или создаем новый
+            protect_state, created = ProtectStateModel.objects.update_or_create(
+                id=protect_state_id,
+                defaults=protect_state_data
+            )
+        except Exception as e:
+            return Response({"error": f"Failed to update skill state: {str(e)}"}, status=400)
+
+        # Присваиваем объект character.skill_state
+        character.protect_state = protect_state
+        character.save()
+
+        # Возвращаем сериализованные данные
+        return Response(ProtectStateSerializer(protect_state).data)
 
 
 class CharacterSkillStateView(APIView):
@@ -79,6 +115,33 @@ class BaseClassChViewSet(generics.ListAPIView):
     queryset = BaseClass.objects.all()
     serializer_class = BaseClassListSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class ArchetypeViewSet(generics.ListAPIView):
+    serializer_class = ArchetypeListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        # Фильтруем и сортируем queryset
+        return Archetype.objects.filter(character_class=pk)
+
+
+class ArchetypeChangeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, pk):
+        character = get_object_or_404(Character, pk=pk)
+        if character.account != request.user:
+            return Response({"error": "You do not have permission to edit this character."}, status=403)
+        else:
+            print(request.data)
+            archetype = request.data.get('id')
+            print(archetype)
+            change_archetype = get_object_or_404(Archetype, id=archetype)
+            character.archetype = change_archetype
+            character.save()
+            return Response(ArchetypeSerializer(character.archetype, context={'character': character}).data)
 
 
 class RaceListView(generics.ListAPIView):

@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class FeatureRace(models.Model):
+class SmallFeaturesRace(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название особенности")
     description = models.TextField(verbose_name="Описание особенности")
 
@@ -13,19 +13,18 @@ class FeatureRace(models.Model):
         return self.name
 
 
-class CustomFeatureRace(models.Model):
+class CustomSmallFeaturesRace(models.Model):
     character = models.ForeignKey(
         'Character', on_delete=models.CASCADE, related_name='custom_features'
     )
     feature = models.ForeignKey(
-        FeatureRace, on_delete=models.CASCADE, related_name='custom_features'
+        SmallFeaturesRace, on_delete=models.CASCADE, related_name='custom_features'
     )
     custom_description = models.TextField(
         verbose_name="Пользовательское описание", blank=True, null=True
     )
-    hide_original = models.BooleanField(
-        verbose_name="Скрыть оригинальный текст", default=False
-    )
+    hide_original = models.BooleanField(default=False)
+    hide_custom = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "Пользовательская общая особенность расы"
@@ -59,9 +58,8 @@ class CustomRaceBackground(models.Model):
     custom_description = models.TextField(
         verbose_name="Пользовательское описание", blank=True, null=True
     )
-    hide_original = models.BooleanField(
-        verbose_name="Скрыть оригинальный текст", default=False
-    )
+    hide_original = models.BooleanField(default=False)
+    hide_custom = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "Пользовательская историческая особенность расы"
@@ -77,11 +75,11 @@ class Race(models.Model):
     description = models.TextField(verbose_name="Описание", blank=True, null=True)
     background = models.ManyToManyField(RaceBackground, verbose_name="История "
                                                                      "рассы",
-                                        related_name='races_backgrounds',
+                                        related_name='race',
                                         blank=True)
     features = models.ManyToManyField(
-        FeatureRace,
-        related_name="races_features",
+        SmallFeaturesRace,
+        related_name="race",
         verbose_name="Особенности", blank=True
     )
 
@@ -92,95 +90,12 @@ class Race(models.Model):
     def __str__(self):
         return self.name
 
-    def get_race(self, obj):
-        if not obj.race:
-            return None
-
-        race_data = {
-            "id": obj.race.id,
-            "name": obj.race.name,
-            "description": obj.race.description,
-            "features": self.get_features_with_custom(obj,
-                                                      obj.race.features.all()),
-            "backgrounds": self.get_backgrounds_with_custom(obj,
-                                                            obj.race.background.all())
-        }
-
-        if obj.sub_race:
-            race_data["sub_race"] = self.get_sub_race(obj)
-
-        return race_data
-
-    def get_sub_race(self, obj):
-        if not obj.sub_race:
-            return None
-
-        return {
-            "id": obj.sub_race.id,
-            "name": obj.sub_race.name,
-            "description": obj.sub_race.description,
-            "features": self.get_features_with_custom(obj,
-                                                      obj.sub_race.features.all()),
-            "backgrounds": self.get_backgrounds_with_custom(obj,
-                                                            obj.sub_race.background.all()),
-            "race": obj.sub_race.race.id if obj.sub_race.race else None
-        }
-
-    def get_features_with_custom(self, obj, features):
-        """
-        Возвращает список особенностей с учетом пользовательских данных.
-        """
-        custom_features = CustomFeatureRace.objects.filter(character=obj)
-        custom_map = {custom.feature_id: custom for custom in custom_features}
-
-        result = []
-        for feature in features:
-            custom_data = custom_map.get(feature.id)
-            feature_data = {
-                "id": feature.id,
-                "name": feature.name,
-                "description": feature.description,
-            }
-            if custom_data:
-                feature_data["custom"] = {
-                    "custom_description": custom_data.custom_description,
-                    "hide_original": custom_data.hide_original,
-                }
-            result.append(feature_data)
-
-        return result
-
-    def get_backgrounds_with_custom(self, obj, backgrounds):
-        """
-        Возвращает список фонов с учетом пользовательских данных.
-        """
-        custom_backgrounds = CustomRaceBackground.objects.filter(character=obj)
-        custom_map = {custom.race_background_id: custom for custom in
-                      custom_backgrounds}
-
-        result = []
-        for background in backgrounds:
-            custom_data = custom_map.get(background.id)
-            background_data = {
-                "id": background.id,
-                "name": background.name,
-                "description": background.description,
-            }
-            if custom_data:
-                background_data["custom"] = {
-                    "custom_description": custom_data.custom_description,
-                    "hide_original": custom_data.hide_original,
-                }
-            result.append(background_data)
-
-        return result
-
 
 class SubRace(models.Model):
     race = models.ForeignKey(
         Race,
         on_delete=models.CASCADE,
-        related_name="subraces",
+        related_name="sub_race",
         verbose_name="Основная раса"
     )
     name = models.CharField(max_length=100, verbose_name="Название подвида")
@@ -189,8 +104,8 @@ class SubRace(models.Model):
                                         verbose_name="История подвида",
                                         related_name='sub_races_backgrounds')
     features = models.ManyToManyField(
-        FeatureRace,
-        related_name="sub_races_features_race",
+        SmallFeaturesRace,
+        related_name="sub_race",
         verbose_name="Особенности подвида"
     )
 
