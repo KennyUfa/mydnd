@@ -1,3 +1,4 @@
+from .background_serializers import BackgroundSerializer
 from .class_serializers import *
 from .race_serializers import *
 from ..db.inventory import Properties, TypeItem, Rarity, SubType, Weapon, \
@@ -9,12 +10,6 @@ from ..models import *
 class WorldOutlookSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorldOutlook
-        fields = '__all__'
-
-
-class BackgroundSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BackgroundModel
         fields = '__all__'
 
 
@@ -155,16 +150,6 @@ class ItemsSerializer(serializers.ModelSerializer):
         return data
 
 
-class OriginListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OriginModel
-        fields = ['id', 'name']
-
-
-class Origin(serializers.ModelSerializer):
-    class Meta:
-        model = OriginModel
-        fields = ['id', 'name', 'description']
 
 
 class SpellBookSerializer(serializers.ModelSerializer):
@@ -262,7 +247,7 @@ class CharacterSerializer(serializers.ModelSerializer):
     champion_class = BaseClassSerializer()
     archetype = ArchetypeSerializer()
     race = RaceSerializer()
-    origin = serializers.StringRelatedField()
+    background = BackgroundSerializer()
     world_outlook = WorldOutlookSerializer()
     skill_state = SkillStateSerializer()
     protect_state = ProtectStateSerializer()
@@ -272,7 +257,7 @@ class CharacterSerializer(serializers.ModelSerializer):
         model = Character
         fields = [
             'id', 'champion_class', 'archetype', 'race', 'sub_race', 'skill_state', 'possession_bonus', 'protect_state', 'inspiration',
-            'protection_class', 'speed', 'account', 'name_champion', 'level', 'origin', 'world_outlook', 'skills'
+            'protection_class', 'speed', 'account', 'name_champion', 'level', 'world_outlook', 'skills','background',
         ]
 
     #     https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers

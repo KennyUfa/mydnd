@@ -1,6 +1,8 @@
 import {defineStore} from 'pinia';
 import api from "@/services/api.js";
 import {useClassInformationStore} from "@/stores/classStore.js";
+import {useRaceStore} from "@/stores/raceStore.js";
+import {useBackground} from "@/stores/BackgroundStore.js";
 
 export const useCharacterStore = defineStore('character', {
     state: () => {
@@ -23,11 +25,17 @@ export const useCharacterStore = defineStore('character', {
             try {
                 console.log("fetch character")
                 const class_store = useClassInformationStore();
+                const race_store = useRaceStore();
+                const background = useBackground();
+
                 const response = await api.get("dnd/character/" + characterId + "/");
                 this.character = response.data; // Обновляем список персонажей
                 this.character_id = characterId;
                 class_store.setClassInfo(response.data.champion_class)
                 class_store.setArchetype(response.data.archetype)
+                race_store.setRace(response.data.race)
+                background.setBackground(response.data.background)
+
                 localStorage.setItem("champion_id", characterId);
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);
@@ -74,11 +82,15 @@ export const useCharacterStore = defineStore('character', {
                 level: this.character.level,
             }
             try {
+                const race_store = useRaceStore();
                 const class_store = useClassInformationStore();
+                const background = useBackground();
                 const response = await api.patch("dnd/character/" + this.character_id + "/", data);
                 this.character = response.data;
                 class_store.setClassInfo(response.data.champion_class)
                 class_store.setArchetype(response.data.archetype)
+                background.setBackground(response.data.background)
+                race_store.setRace(response.data.race)
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);
             }

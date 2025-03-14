@@ -3,11 +3,10 @@ from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
-from dnd.db.background import BackgroundModel
+from dnd.db.background import Background
 from dnd.db.character import BaseClass, Archetype
 from dnd.db.inventory import Item
 from dnd.db.lineament import LineamentModel
-from dnd.db.origin import OriginModel
 from dnd.db.race import Race, SubRace
 
 
@@ -209,7 +208,7 @@ class Character(models.Model):
                                              verbose_name="speed_ch")
     lineament = models.ManyToManyField(LineamentModel, verbose_name="Черты",
                                        blank=True)
-    origin = models.ForeignKey(OriginModel, blank=True, null=True,
+    background = models.ForeignKey(Background, blank=True, null=True,
                                on_delete=models.SET_NULL, verbose_name='Предыстория')
 
     def __str__(self):

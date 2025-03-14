@@ -4,16 +4,16 @@ import api from "@/services/api.js";
 
 export const useClassInformationStore = defineStore("classInformation", {
     state: () => ({
-        class_info: null, // Здесь будет храниться ссылка на character.class_info
+        class_info: null,
         archetype: null,
         archetype_list: [],
     }),
     actions: {
         setClassInfo(data) {
-            this.class_info = data; // Устанавливаем ссылку на данные
+            this.class_info = data;
         },
         setArchetype(data) {
-            this.archetype = data; // Устанавливаем ссылку на данные
+            this.archetype = data;
         },
         async updateHideOriginal(data) {
             const characterStore = useCharacterStore();
@@ -33,6 +33,11 @@ export const useClassInformationStore = defineStore("classInformation", {
                     "/dnd/characters/" + characterStore.get_character_id + "/custom-ability/hide-custom/",
                     ability
                 );
+                const ab = this.allAbilities.find(ability => ability.id === response.data.ability);
+                ab.custom_description.id = response.data.id;
+                ab.custom_description.custom_description = response.data.custom_description;
+                ab.custom_description.hide_original = response.data.hide_original;
+                ab.custom_description.hide_custom = response.data.hide_custom;
             } catch (error) {
                 console.error("Ошибка при обновлении данных updateHideOriginal:", error);
             }
@@ -77,7 +82,8 @@ export const useClassInformationStore = defineStore("classInformation", {
                         if (!abilitiesMap.has(uniqueKey)) {
                             abilitiesMap.set(uniqueKey, {
                                 ...ability,
-                                source: sourceName
+                                source: sourceName,
+                                isEditing: false,
                             });
                         }
                     });

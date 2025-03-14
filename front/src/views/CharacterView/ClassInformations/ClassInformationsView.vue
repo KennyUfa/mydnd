@@ -121,7 +121,7 @@
 
         <!-- Кастомное описание -->
         <div v-if="!ability.custom_description?.hide_custom">
-          <div v-if="!ability.isEditing">
+          <div v-if="!ability.custom_description?.isEditing">
             {{ ability.custom_description.custom_description }}
           </div>
           <textarea
@@ -170,16 +170,18 @@ const updateHideCustomAbility = (ability) => {
 
 const toggleEdit = (ability) => {
   // Если свойство isEditing отсутствует, добавляем его
-  if (ability.isEditing === undefined) {
-    ability.isEditing = false;
+  if (ability.custom_description.isEditing === undefined) {
+    ability.custom_description.isEditing = false;
   }
 
-  if (ability.isEditing) {
+  if (ability.custom_description.isEditing) {
     // Если уже в режиме редактирования, отправляем данные на сервер
     updateCustomDescription(ability);
+    ability.custom_description.isEditing = false;
+
   } else {
     // Включаем режим редактирования
-    ability.isEditing = true;
+    ability.custom_description.isEditing = true;
   }
 };
 
@@ -231,14 +233,12 @@ const allLevelsWithAbilities = computed(() => {
   // Преобразуем Map обратно в массив и сортируем по уровню
   return Array.from(levelsMap.values()).sort((a, b) => a.level - b.level);
 });
+
 const loadArchetypes = () => {
   store.loadArchetypes()
-  console.log('loadArchetypes')
 }
 const changeArchetype = (id) => {
-  store.changeArchetype(id).then(() => {
-    console.log('archetype changed')
-  })
+  store.changeArchetype(id)
 }
 </script>
 <style>

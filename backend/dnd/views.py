@@ -7,8 +7,8 @@ from rest_framework import filters, viewsets, permissions, status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers.class_serializers import *
-from .serializers.race_serializers import *
+from .db.background import SelectedFeatureOption, FeatureOption, Feature, Flaw, SelectedOrigin, Bond, Trait, Ideal
+from .serializers.background_serializers import BackgroundListSerializer, SelectedOriginSerializer
 from .serializers.serializers import *
 
 
@@ -117,6 +117,12 @@ class BaseClassChViewSet(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
+class BackgroundListView(generics.ListAPIView):
+    queryset = Background.objects.all()
+    serializer_class = BackgroundListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
 class ArchetypeViewSet(generics.ListAPIView):
     serializer_class = ArchetypeListSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -135,13 +141,97 @@ class ArchetypeChangeView(APIView):
         if character.account != request.user:
             return Response({"error": "You do not have permission to edit this character."}, status=403)
         else:
-            print(request.data)
             archetype = request.data.get('id')
-            print(archetype)
             change_archetype = get_object_or_404(Archetype, id=archetype)
             character.archetype = change_archetype
             character.save()
             return Response(ArchetypeSerializer(character.archetype, context={'character': character}).data)
+
+
+class SubRaceChangeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, pk):
+        character = get_object_or_404(Character, pk=pk)
+        if character.account != request.user:
+            return Response({"error": "You do not have permission to edit this character."}, status=403)
+        else:
+
+            sub_race_id = request.data.get('id')
+            change_sub_race = get_object_or_404(SubRace, id=sub_race_id)
+            character.sub_race = change_sub_race
+            character.save()
+            return Response(SubRaceSerializer(character.sub_race, context={'character': character}).data)
+
+
+class BackgroundChangeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, pk):
+        character = get_object_or_404(Character, pk=pk)
+        if character.account != request.user:
+            return Response({"error": "You do not have permission to edit this character."}, status=403)
+        else:
+
+            background_id = request.data.get('id')
+            change = get_object_or_404(Background, id=background_id)
+            character.background = change
+            character.save()
+            return Response(BackgroundSerializer(character.background, context={'character': character}).data)
+
+
+class BackgroundChangeOptionsView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, pk):
+        character = get_object_or_404(Character, pk=pk)
+        option = get_object_or_404(FeatureOption, id=request.data.get('option'))
+        feature = get_object_or_404(Feature, id=request.data.get('feature'))
+        existing_option = SelectedFeatureOption.objects.filter(character=character, feature=feature).first()
+        if existing_option:
+            # Обновляем существующую запись
+            existing_option.option = option
+            existing_option.save()
+            return Response(BackgroundSerializer(character.background, context={'character': character}).data)
+
+        # Создаем новую запись
+        new_option = SelectedFeatureOption.objects.create(
+            character=character,
+            feature=feature,
+            option=option
+        )
+        return Response(BackgroundSerializer(character.background, context={'character': character}).data)
+
+
+class BackgroundChangeOriginView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, pk):
+        character = get_object_or_404(Character, pk=pk)
+        if request.data.get('flaw'):
+            flaw = Flaw.objects.get(id=request.data.get('flaw').get('id'))
+            character_selected_origin_options = SelectedOrigin.objects.get(character=character)
+            character_selected_origin_options.flaw = flaw
+            character_selected_origin_options.save()
+            return Response(SelectedOriginSerializer(character_selected_origin_options).data)
+        if request.data.get('bond'):
+            bond = Bond.objects.get(id=request.data.get('bond').get('id'))
+            character_selected_origin_options = SelectedOrigin.objects.get(character=character)
+            character_selected_origin_options.bond = bond
+            character_selected_origin_options.save()
+            return Response(SelectedOriginSerializer(character_selected_origin_options).data)
+        if request.data.get('trait'):
+            trait = Trait.objects.get(id=request.data.get('trait').get('id'))
+            character_selected_origin_options = SelectedOrigin.objects.get(character=character)
+            character_selected_origin_options.trait = trait
+            character_selected_origin_options.save()
+            return Response(SelectedOriginSerializer(character_selected_origin_options).data)
+        if request.data.get('ideal'):
+            ideal = Ideal.objects.get(id=request.data.get('ideal').get('id'))
+            character_selected_origin_options = SelectedOrigin.objects.get(character=character)
+            character_selected_origin_options.ideal = ideal
+            character_selected_origin_options.save()
+            return Response(SelectedOriginSerializer(character_selected_origin_options).data)
 
 
 class RaceListView(generics.ListAPIView):
@@ -150,35 +240,13 @@ class RaceListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class OriginListView(generics.ListAPIView):
-    queryset = OriginModel.objects.all()
-    serializer_class = OriginListSerializer
+class SubRaceListView(generics.ListAPIView):
+    serializer_class = SubRaceSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-
-class CharacterOriginView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def patch(self, request, character_id):
-        # Получаем персонажа по id
-        character = get_object_or_404(Character, id=character_id)
-
-        # Получаем ID предыстории из данных запроса
-        origin_id = request.data.get('id')
-        if not origin_id:
-            return Response({'error': 'origin_id is required'},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        # Получаем объект предыстории
-        origin = get_object_or_404(OriginModel, id=origin_id)
-
-        # Привязываем предысторию к персонажу
-        character.origin = origin
-        character.save()
-
-        # Возвращаем сериализованные данные персонажа
-        serializer = Origin(character.origin)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        return SubRace.objects.filter(race=pk)
 
 
 class CharacterHideOriginalAbilityView(APIView):

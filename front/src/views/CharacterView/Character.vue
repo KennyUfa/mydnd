@@ -1,8 +1,6 @@
 <template>
   <Toaster position="boottom-right"/>
-  <button @click="callRandomWindow">Показать уведомление</button>
-
-  <Tabs default-value="class-information" class="">
+  <Tabs default-value="inventory">
     <TabsList>
       <TabsTrigger value="main">
         Главная
@@ -12,6 +10,12 @@
       </TabsTrigger>
       <TabsTrigger value="race-information">
         Расы и происхождения
+      </TabsTrigger>
+      <TabsTrigger value="background">
+        Предыстория
+      </TabsTrigger>
+      <TabsTrigger value="inventory">
+        Инвентарь
       </TabsTrigger>
     </TabsList>
     <TabsContent value="main">
@@ -38,33 +42,13 @@
     <TabsContent value="race-information">
       <race-and-origin></race-and-origin>
     </TabsContent>
+    <TabsContent value="background">
+      <background-view></background-view>
+    </TabsContent>
+    <TabsContent value="inventory">
+      <inventory-view></inventory-view>
+    </TabsContent>
   </Tabs>
-
-  <!-- Tab panes -->
-  <!--    <div class="tab-content">tab-content-->
-  <!--      <div class="tab-pane fade" id="inventory" role="tabpanel">-->
-  <!--        <inventory-view></inventory-view>-->
-  <!--      </div>-->
-  <!--      <div class="tab-pane fade" id="spells" role="tabpanel">-->
-  <!--        <spell-view></spell-view>-->
-  <!--      </div>-->
-  <!--      <div class="tab-pane fade show active" id="main" role="tabpanel">-->
-
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--  </div>-->
-  <!--                  <div class="tab-pane fade" id="prehistory" role="tabpanel">-->
-  <!--                    <background-view></background-view>-->
-  <!--                  </div>-->
-  <!--  <div class="tab-pane fade" id="class-information"-->
-  <!--       role="tabpanel">-->
-
-  <!--  </div>-->
-  <!--                  <div class="tab-pane fade" id="outher" role="tabpanel">-->
-  <!--                    <proficiencie-and-languages></proficiencie-and-languages>-->
-  <!--                  </div>-->
-  <!--    </div>-->
-  <!--  </div>-->
 </template>
 
 
@@ -77,14 +61,15 @@ import ClassInformationView
   from "@/views/CharacterView/ClassInformations/ClassInformationsView.vue";
 import SkillsView from "@/views/CharacterView/Skills/SkillsView.vue";
 import AbilityView from "@/views/CharacterView/Skills/АbilityView.vue";
+import BackgroundView from "@/views/CharacterView/Background/BackgroundView.vue"
 import SavingThrowView from "@/views/CharacterView/Skills/SavingThrowView.vue";
-import RaceAndOrigin from "@/views/CharacterView/RaceAndOrigin/RaceAndOrigin.vue"
+import RaceAndOrigin
+  from "@/views/CharacterView/RaceAndOrigin/RaceAndOrigin.vue"
+import InventoryView from "@/views/CharacterView/Inventory/InventoryView.vue"
 import {Toaster} from "@/components/ui/toast";
 import {useToast} from "@/components/ui/toast/use-toast";
 import {h} from "vue";
 import ToastContent from "@/views/CharacterView/Skills/ui/ToastContent.vue";
-
-import {Button} from '@/components/ui/button'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
 
 
