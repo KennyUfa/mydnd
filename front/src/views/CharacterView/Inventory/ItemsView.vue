@@ -18,6 +18,7 @@
             >
               +
             </Badge>
+            пример
             <Badge
               v-if="isItemInMyList(item.id)"
               type="button"
