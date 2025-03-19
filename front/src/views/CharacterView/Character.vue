@@ -14,6 +14,9 @@
       <TabsTrigger value="background">
         Предыстория
       </TabsTrigger>
+      <TabsTrigger value="item_list">
+        База предметов
+      </TabsTrigger>
       <TabsTrigger value="inventory">
         Инвентарь
       </TabsTrigger>
@@ -45,6 +48,9 @@
     <TabsContent value="background">
       <background-view></background-view>
     </TabsContent>
+    <TabsContent value="item_list">
+      <ItemsView></ItemsView>
+    </TabsContent>
     <TabsContent value="inventory">
       <inventory-view></inventory-view>
     </TabsContent>
@@ -65,12 +71,14 @@ import BackgroundView from "@/views/CharacterView/Background/BackgroundView.vue"
 import SavingThrowView from "@/views/CharacterView/Skills/SavingThrowView.vue";
 import RaceAndOrigin
   from "@/views/CharacterView/RaceAndOrigin/RaceAndOrigin.vue"
-import InventoryView from "@/views/CharacterView/Inventory/InventoryView.vue"
+import ItemsView from "@/views/CharacterView/Inventory/ItemsView.vue"
 import {Toaster} from "@/components/ui/toast";
 import {useToast} from "@/components/ui/toast/use-toast";
 import {h} from "vue";
 import ToastContent from "@/views/CharacterView/Skills/ui/ToastContent.vue";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import InventoryView
+  from "@/views/CharacterView/Inventory/InventoryView.vue";
 
 
 const router = useRouter();

@@ -444,54 +444,65 @@ class ItemView(viewsets.ReadOnlyModelViewSet):
 class InventoryItemView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, character_id):
+    def post(self, request, character_id,pk):
         character = get_object_or_404(Character, id=character_id)
-        item_id = request.data.get('item_id')
-        quantity = request.data.get('quantity', 1)
-        item = get_object_or_404(Item, id=item_id)
-        inventory_item, created = InventoryItem.objects.get_or_create(
-            character=character, item=item)
-        if not created:
-            inventory_item.quantity = quantity
-        else:
-            inventory_item.quantity = quantity
-        inventory_item.save()
-        serializer = InventorySerializer(inventory_item)
-        return Response(serializer.data)
+        # item_id = request.data.get('item_id')  # Получаем ID предмета
+        quantity = request.data.get('quantity', 1)  # Количество (по умолчанию 1)
 
-    def delete(self, request, character_id):
+        # Проверяем, существует ли предмет
+        item = get_object_or_404(Item, id=pk)
+
+        # Проверяем, есть ли предмет уже в инвентаре
+        inventory_item, created = InventoryItem.objects.get_or_create(
+            character=character,
+            item=item,
+            defaults={'quantity': quantity}  # Если создается новый объект
+        )
+
+        if not created:
+            # Если предмет уже существует, увеличиваем количество
+            inventory_item.quantity += quantity
+            inventory_item.save()
+
+        # Сериализуем данные и возвращаем ответ
+        serializer = InventorySerializer(inventory_item)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, character_id, pk):
         character = get_object_or_404(Character, id=character_id)
-        item_id = request.data.get('item_id')
-        item = get_object_or_404(Item, id=item_id)
-        inventory_item = get_object_or_404(InventoryItem,
-                                           character=character, item=item)
+        item = get_object_or_404(Item, id=pk)  # Используем pk из URL
+
+        # Находим предмет в инвентаре
+        inventory_item = get_object_or_404(InventoryItem, character=character, item=item)
+
+        # Удаляем предмет
         inventory_item.delete()
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def patch(self, request, character_id):
         character = get_object_or_404(Character, id=character_id)
-        for item in request.data.get('my_items'):
-            item_id = int(item.get('item').get("id"))
-            quantity = int(item.get('quantity'))
-            inventory_item = get_object_or_404(InventoryItem,
-                                               character=character,
-                                               item__id=item_id)
-            inventory_item.quantity = quantity
-            if quantity <= 0:
-                inventory_item.delete()
-            else:
-                inventory_item.save()
-        inventory = character.my_items.all()
-        serializer = InventorySerializer(inventory, many=True)
-        return Response(serializer.data)
+        print(request.data)
+        # for item in request.data.get('my_items'):
+        #     item_id = int(item.get('item').get("id"))
+        #     quantity = int(item.get('quantity'))
+        #     inventory_item = get_object_or_404(InventoryItem,
+        #                                        character=character,
+        #                                        item__id=item_id)
+        #     inventory_item.quantity = quantity
+        #     if quantity <= 0:
+        #         inventory_item.delete()
+        #     else:
+        #         inventory_item.save()
+        # inventory = character.my_items.all()
+        # serializer = InventorySerializer(inventory, many=True)
+        # return Response(serializer.data)
 
 
 class RandomSaveView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        print(request.data)
-
         character = Character.objects.get(id=request.data.get('championId'))
         skillvalue = getattr(character.skills, request.data.get('statValue'))
         if 'protectValueName' in request.data:

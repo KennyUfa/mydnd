@@ -54,8 +54,9 @@ urlpatterns = [
     path('random_protect/', RandomSaveView.as_view(), name='random'),
     # список мировоззрений
     path('world-outlook-list/', WorldOutlookView.as_view(), name='world-outlook-list'),
-    path('characters/<int:character_id>/inventory/', InventoryItemView.as_view()),
-    # path('origin/<int:origin_id>/change/', OriginChangeView.as_view(), name='origin-change'),
+
+    path('character/<int:character_id>/inventory/<int:pk>/', InventoryItemView.as_view()),
+
     # обновление способности класса персонажа
     path('character/custom-ability/update/<int:pk>/', CharacterCustomAbilityUpdateView.as_view(), name='custom-ability-update'),
 ]

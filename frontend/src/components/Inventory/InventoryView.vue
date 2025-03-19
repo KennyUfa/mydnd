@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>SpellBook</h2>
+    <h2>Предметы</h2>
     <router-link to="/charlist">Лист персонажа</router-link>
     <form id="search">Search <input name="query" v-model="search" /></form>
     <div

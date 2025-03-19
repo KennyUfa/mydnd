@@ -136,6 +136,7 @@ class ItemsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = '__all__'
+        depth = 3
 
     def to_representation(self, instance):
         data = super(ItemsSerializer, self).to_representation(instance)
@@ -148,8 +149,6 @@ class ItemsSerializer(serializers.ModelSerializer):
         if not data['magic_item']:
             del data['magic_item']
         return data
-
-
 
 
 class SpellBookSerializer(serializers.ModelSerializer):
@@ -252,12 +251,14 @@ class CharacterSerializer(serializers.ModelSerializer):
     skill_state = SkillStateSerializer()
     protect_state = ProtectStateSerializer()
     skills = SkillsSerializer()
+    my_items = InventorySerializer(many=True)
+
 
     class Meta:
         model = Character
         fields = [
             'id', 'champion_class', 'archetype', 'race', 'sub_race', 'skill_state', 'possession_bonus', 'protect_state', 'inspiration',
-            'protection_class', 'speed', 'account', 'name_champion', 'level', 'world_outlook', 'skills','background',
+            'protection_class', 'speed', 'account', 'name_champion', 'level', 'world_outlook', 'skills', 'background','my_items'
         ]
 
     #     https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
