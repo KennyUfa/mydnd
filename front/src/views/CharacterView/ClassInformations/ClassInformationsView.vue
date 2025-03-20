@@ -21,7 +21,6 @@
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
       <p class="card-text">{{
           champion_class.description
         }}</p>
@@ -32,22 +31,51 @@
           archetype.description
         }}</p>
     </div>
+
     <!--таблица способностей-->
     <table class="class-table">
       <thead>
       <tr>
+        <!-- Общие столбцы -->
         <th>Уровень</th>
         <th>Бонус мастерства</th>
         <th>Способности</th>
-        <th v-if="champion_class.levels[0]?.specific_columns.length>0">
-          Дополнительные свойства
+
+        <!-- Динамические столбцы для specific_columns -->
+        <th v-for="(specificColumn, index) in champion_class.specific_columns"
+            :key="'specific-column-' + index">
+          {{ specificColumn.name }}
+        </th>
+        <th v-for="(specificColumn, index) in
+        archetype?.specific_columns"
+            :key="'specific-column-' + index">
+          {{ specificColumn.name }}
+        </th>
+        <th v-if="archetype?.spell_slots?.length > 0" v-for="(slotLevel,
+        index) in archetype.spell_slots[0].slots"
+            :key="'header-' + index"
+        >
+          Ячейки заклинаний ({{ index }})
+        </th>
+        <th v-if="champion_class?.spell_slots?.length > 0" v-for="(slotLevel,
+        index) in champion_class.spell_slots[0].slots"
+            :key="'header-' + index"
+        >
+          Ячейки заклинаний ({{ index }})
         </th>
       </tr>
+
+
       </thead>
       <tbody>
       <tr v-for="(levelData, index) in allLevelsWithAbilities" :key="index">
+        <!-- Уровень -->
         <td>{{ levelData.level }}</td>
+
+        <!-- Бонус мастерства -->
         <td>+{{ levelData.proficiency_bonus }}</td>
+
+        <!-- Способности -->
         <td>
           <ul>
             <li v-for="ability in levelData.abilities" :key="ability.name">
@@ -59,16 +87,32 @@
             </li>
           </ul>
         </td>
-        <td v-if="champion_class.levels[0].specific_columns.length > 0">
-          <ul>
-            <li v-for="column in levelData.specific_columns" :key="column.name">
-              {{ column.name }}: {{ column.value }}
-            </li>
-          </ul>
+
+        <!-- Значения для specific_columns -->
+        <td
+          v-for="(specificColumn, colIndex) in champion_class.specific_columns"
+          :key="'specific-column-value-' + colIndex">
+          {{ specificColumn.value[index] }}
         </td>
+        <td
+          v-if="archetype?.specific_columns?.length > 0"
+          v-for="(specificColumn, colIndex) in archetype.specific_columns"
+          :key="'specific-column-value-' + colIndex">
+          {{ specificColumn.value[index] }}
+        </td>
+        <td v-if="archetype?.spell_slots?.length > 0"
+            v-for="i in (archetype.spell_slots[0].slots)">
+          {{ i[index + 1] }}
+        </td>
+        <td v-if="champion_class?.spell_slots?.length > 0"
+            v-for="i in (champion_class.spell_slots[0].slots)">
+          {{ i[index + 1] }}
+        </td>
+
       </tr>
       </tbody>
     </table>
+
     <!-- Описание способностей -->
     <div v-if="store.allAbilities.length > 0" class="ability-descriptions">
       <h3>Описание способностей</h3>
@@ -169,16 +213,10 @@ const updateHideCustomAbility = (ability) => {
 
 
 const toggleEdit = (ability) => {
-  // Если свойство isEditing отсутствует, добавляем его
-  if (ability.custom_description.isEditing === undefined) {
-    ability.custom_description.isEditing = false;
-  }
-
   if (ability.custom_description.isEditing) {
     // Если уже в режиме редактирования, отправляем данные на сервер
     updateCustomDescription(ability);
     ability.custom_description.isEditing = false;
-
   } else {
     // Включаем режим редактирования
     ability.custom_description.isEditing = true;
@@ -190,7 +228,6 @@ const updateCustomDescription = async (ability) => {
   try {
     // Отправляем данные на сервер
     await store.updateCustomDescriptionOnServer(ability.custom_description);
-
     // Выключаем режим редактирования
     ability.isEditing = false;
   } catch (error) {

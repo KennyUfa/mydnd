@@ -77,14 +77,16 @@ class CustomAbility(models.Model):
 
 
 class SpecificColumn(models.Model):
-    level = models.ForeignKey(Level, on_delete=models.CASCADE,
-                              related_name="specific_column")
     class_obj = models.ForeignKey(BaseClass, on_delete=models.CASCADE,
-                                  related_name="specific_columns")
+                                  related_name="specific_columns", blank=True, null=True)
+    archetype = models.ForeignKey(Archetype, related_name="specific_columns", on_delete=models.CASCADE,
+                                  blank=True, null=True)
     name = models.CharField(max_length=255)
-    value = models.CharField(max_length=10)
+    value = models.JSONField()
 
 class SpellSlot(models.Model):
-    level = models.ForeignKey(Level, on_delete=models.CASCADE,
-                              related_name="spell_slots")
+    class_obj = models.ForeignKey(BaseClass, on_delete=models.CASCADE,
+                                  related_name="spell_slots",blank=True, null=True)
+    archetype = models.ForeignKey(Archetype, related_name="spell_slots", on_delete=models.CASCADE,
+                                  blank=True, null=True)
     slots = models.JSONField()

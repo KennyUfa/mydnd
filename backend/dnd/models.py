@@ -7,6 +7,7 @@ from dnd.db.background import Background
 from dnd.db.character import BaseClass, Archetype
 from dnd.db.inventory import Item
 from dnd.db.lineament import LineamentModel
+from dnd.db.magic import Spell
 from dnd.db.race import Race, SubRace
 
 
@@ -16,6 +17,8 @@ class WorldOutlook(models.Model):
 
     def __str__(self):
         return self.name
+
+
 
 
 class ProtectStateModel(models.Model):
@@ -82,35 +85,6 @@ class SkillStateModel(models.Model):
         return created.pk
 
 
-class Spell(models.Model):
-    link = models.CharField(max_length=100, verbose_name='ссылка')
-    name = models.CharField(max_length=100, verbose_name='название')
-    lvl = models.CharField(max_length=15, verbose_name='уровень')
-    school = models.CharField(max_length=60, verbose_name='школа')
-    time_cast = models.CharField(max_length=200,
-                                 verbose_name='время накладывания')
-    distance = models.CharField(max_length=100, verbose_name='дистанция')
-    components = models.CharField(max_length=400, verbose_name='компоненты')
-    timing = models.CharField(max_length=100, verbose_name='Длительность')
-    class_actor = models.ManyToManyField('BaseClass',
-                                         related_name="class_spells",
-                                         blank=True)
-    archetype = models.ManyToManyField('Archetype',
-                                       related_name='archetype_spells',
-                                       blank=True)
-    origin = models.CharField(blank=True, null=True, max_length=100,
-                              verbose_name='источник')
-    instruction = models.TextField(verbose_name='описание')
-
-    class Meta:
-        verbose_name_plural = 'Заклинания'
-        verbose_name = 'Заклинание'
-        ordering = ['name']
-
-    def __str__(self):
-        return self.name
-
-
 class Skills(models.Model):
     # характеристики
     strength = models.PositiveSmallIntegerField(verbose_name="Сила",
@@ -137,13 +111,13 @@ class Skills(models.Model):
         created = cls.objects.create()
         return created.pk
 
+
 class Lineament(models.Model):
     name = models.CharField(max_length=100, blank=True)
     description = models.CharField(blank=True, null=True, max_length=4000)
 
     def __str__(self):
         return self.name
-
 
 
 class Character(models.Model):
@@ -209,7 +183,7 @@ class Character(models.Model):
     lineament = models.ManyToManyField(LineamentModel, verbose_name="Черты",
                                        blank=True)
     background = models.ForeignKey(Background, blank=True, null=True,
-                               on_delete=models.SET_NULL, verbose_name='Предыстория')
+                                   on_delete=models.SET_NULL, verbose_name='Предыстория')
 
     def __str__(self):
         return self.name_champion

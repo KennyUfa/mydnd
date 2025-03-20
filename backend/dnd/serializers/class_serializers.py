@@ -77,13 +77,11 @@ class AbilitySerializer(serializers.ModelSerializer):
 class LevelSerializer(serializers.ModelSerializer):
     """Сериализатор для уровней."""
     abilities = serializers.SerializerMethodField()
-    specific_columns = serializers.SerializerMethodField()
-    spell_slots = serializers.SerializerMethodField()
+
 
     class Meta:
         model = Level
-        fields = ['level', 'proficiency_bonus', 'abilities', 'specific_columns',
-                  'spell_slots']
+        fields = ['level', 'proficiency_bonus', 'abilities']
 
     def get_abilities(self, obj):
         # Фильтруем способности по уровню персонажа
@@ -93,16 +91,6 @@ class LevelSerializer(serializers.ModelSerializer):
         abilities = obj.abilities.all()
         return AbilitySerializer(abilities, many=True,
                                  context=self.context).data
-
-    def get_specific_columns(self, obj):
-        # Возвращаем специфические колонки для уровня
-        columns = obj.specific_column.all()
-        return SpecificColumnSerializer(columns, many=True).data
-
-    def get_spell_slots(self, obj):
-        # Возвращаем ячейки заклинаний для уровня
-        spell_slots = obj.spell_slots.first()
-        return SpellSlotSerializer(spell_slots).data if spell_slots else None
 
 
 class ArchetypeListSerializer(serializers.ModelSerializer):
@@ -114,10 +102,12 @@ class ArchetypeListSerializer(serializers.ModelSerializer):
 class ArchetypeSerializer(serializers.ModelSerializer):
     """Сериализатор для архетипов."""
     levels = serializers.SerializerMethodField()
+    specific_columns = SpecificColumnSerializer(many=True, read_only=True)
+    spell_slots = SpellSlotSerializer(many=True)
 
     class Meta:
         model = Archetype
-        fields = ['id', 'name', 'description', 'levels']
+        fields = ['id', 'name', 'description', 'levels', 'specific_columns', 'spell_slots']
 
     def get_levels(self, obj):
         # Фильтруем уровни по архетипу
@@ -132,6 +122,8 @@ class BaseClassSerializer(serializers.ModelSerializer):
     """Сериализатор для базового класса."""
     archetypes = serializers.SerializerMethodField()
     levels = serializers.SerializerMethodField()
+    specific_columns = SpecificColumnSerializer(many=True, read_only=True)
+    spell_slots = SpellSlotSerializer(many=True)
 
     class Meta:
         model = BaseClass
@@ -140,7 +132,7 @@ class BaseClassSerializer(serializers.ModelSerializer):
             'name', 'description', 'hit_dice', 'hit_at_first_level',
             'hit_at_next_level', 'possession_armor', 'possession_weapon',
             'possession_instrument', 'saving_throws', 'class_skills',
-            'archetypes', 'levels'
+            'archetypes', 'levels', 'specific_columns', 'spell_slots'
         ]
 
     def get_archetypes(self, obj):

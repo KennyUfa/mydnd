@@ -19,16 +19,13 @@ class CharacterProtectStateView(APIView):
     def patch(self, request, pk):
         # Получаем объект Character
         character = get_object_or_404(Character, pk=pk)
-
         # Проверяем права доступа
         if character.account != request.user:
             return Response({"error": "You do not have permission to edit this character."}, status=403)
-
         # Получаем данные skill_state из запроса
         print(request.data)
         protect_state_data = request.data.get('protect_state', {})
         protect_state_id = protect_state_data.pop('id', None)
-
         try:
             # Обновляем существующий объект или создаем новый
             protect_state, created = ProtectStateModel.objects.update_or_create(
@@ -255,10 +252,8 @@ class CharacterHideOriginalAbilityView(APIView):
 
     def patch(self, request, pk):
         character = get_object_or_404(Character, pk=pk)
-        print(request.data)
         original_ability_id = request.data.get('id')
         custom_ability = CustomAbility.objects.filter(ability=original_ability_id, character=character).first()
-        print(custom_ability)
         if custom_ability:
             print("Есть custom_ability_id")
         # Если custom_ability_id не передан, то создаем новую запись в CustomAbility с hide_original=True
@@ -306,14 +301,11 @@ class CharacterWorldOutlookView(APIView):
         if not world_outlook_id:
             return Response({'error': 'id is required'},
                             status=status.HTTP_400_BAD_REQUEST)
-
         # Получаем объект предыстории
         world_outlook = get_object_or_404(WorldOutlook, id=world_outlook_id)
-
         # Привязываем предысторию к персонажу
         character.world_outlook = world_outlook
         character.save()
-
         # Возвращаем сериализованные данные персонажа
         serializer = WorldOutlookSerializer(character.world_outlook)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -337,7 +329,6 @@ class CharacterDetailView(APIView):
             character = Character.objects.get(pk=pk)
         except Character.DoesNotExist:
             return Response({"error": "Character not found"}, status=status.HTTP_404_NOT_FOUND)
-
         serializer = CharacterSerializer(character, context={'character': character})
         return Response(serializer.data)
 
@@ -360,10 +351,8 @@ class CharacterListView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        print('post')
         serializer_class = CreateCharacterSerializer(data=request.data)
         if serializer_class.is_valid():
-            print('post valid')
             data = serializer_class.save(account=self.request.user)
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -372,7 +361,6 @@ class CharacterListView(APIView):
 class CharacterCreateView(APIView):
     def post(self, request):
         serializer = CreateCharacterSerializer(data=request.data)
-
         if serializer.is_valid():
             serializer.save(account=self.request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -444,26 +432,22 @@ class ItemView(viewsets.ReadOnlyModelViewSet):
 class InventoryItemView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, character_id,pk):
+    def post(self, request, character_id, pk):
         character = get_object_or_404(Character, id=character_id)
         # item_id = request.data.get('item_id')  # Получаем ID предмета
         quantity = request.data.get('quantity', 1)  # Количество (по умолчанию 1)
-
         # Проверяем, существует ли предмет
         item = get_object_or_404(Item, id=pk)
-
         # Проверяем, есть ли предмет уже в инвентаре
         inventory_item, created = InventoryItem.objects.get_or_create(
             character=character,
             item=item,
             defaults={'quantity': quantity}  # Если создается новый объект
         )
-
         if not created:
             # Если предмет уже существует, увеличиваем количество
             inventory_item.quantity += quantity
             inventory_item.save()
-
         # Сериализуем данные и возвращаем ответ
         serializer = InventorySerializer(inventory_item)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -471,10 +455,8 @@ class InventoryItemView(APIView):
     def delete(self, request, character_id, pk):
         character = get_object_or_404(Character, id=character_id)
         item = get_object_or_404(Item, id=pk)  # Используем pk из URL
-
         # Находим предмет в инвентаре
         inventory_item = get_object_or_404(InventoryItem, character=character, item=item)
-
         # Удаляем предмет
         inventory_item.delete()
 
@@ -482,21 +464,20 @@ class InventoryItemView(APIView):
 
     def patch(self, request, character_id):
         character = get_object_or_404(Character, id=character_id)
-        print(request.data)
-        # for item in request.data.get('my_items'):
-        #     item_id = int(item.get('item').get("id"))
-        #     quantity = int(item.get('quantity'))
-        #     inventory_item = get_object_or_404(InventoryItem,
-        #                                        character=character,
-        #                                        item__id=item_id)
-        #     inventory_item.quantity = quantity
-        #     if quantity <= 0:
-        #         inventory_item.delete()
-        #     else:
-        #         inventory_item.save()
-        # inventory = character.my_items.all()
-        # serializer = InventorySerializer(inventory, many=True)
-        # return Response(serializer.data)
+        for item in request.data:
+            item_id = int(item.get('item').get("id"))
+            quantity = int(item.get('quantity'))
+            inventory_item = get_object_or_404(InventoryItem,
+                                               character=character,
+                                               item__id=item_id)
+            inventory_item.quantity = quantity
+            if quantity <= 0:
+                inventory_item.delete()
+            else:
+                inventory_item.save()
+        inventory = character.my_items.all()
+        serializer = InventorySerializer(inventory, many=True)
+        return Response(serializer.data)
 
 
 class RandomSaveView(APIView):
@@ -534,7 +515,6 @@ class RandomSaveView(APIView):
         elif 'abilityValueName' in request.data:
             abilityValueName = getattr(character.skill_state,
                                        request.data.get('abilityValueName'))
-
             possession_bonus = character.possession_bonus
             result = math.floor((skillvalue - 10) / 2)
             random_result = random.randint(1, 20)

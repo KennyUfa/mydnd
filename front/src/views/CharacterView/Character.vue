@@ -1,6 +1,6 @@
 <template>
   <Toaster position="boottom-right"/>
-  <Tabs default-value="inventory">
+  <Tabs default-value="spell-book">
     <TabsList>
       <TabsTrigger value="main">
         Главная
@@ -19,6 +19,9 @@
       </TabsTrigger>
       <TabsTrigger value="inventory">
         Инвентарь
+      </TabsTrigger>
+      <TabsTrigger value="spell-book">
+        Книга заклинаний
       </TabsTrigger>
     </TabsList>
     <TabsContent value="main">
@@ -54,6 +57,9 @@
     <TabsContent value="inventory">
       <inventory-view></inventory-view>
     </TabsContent>
+    <TabsContent value="spell-book">
+      <spell-book-view></spell-book-view>
+    </TabsContent>
   </Tabs>
 </template>
 
@@ -77,9 +83,8 @@ import {useToast} from "@/components/ui/toast/use-toast";
 import {h} from "vue";
 import ToastContent from "@/views/CharacterView/Skills/ui/ToastContent.vue";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
-import InventoryView
-  from "@/views/CharacterView/Inventory/InventoryView.vue";
-
+import InventoryView from "@/views/CharacterView/Inventory/InventoryView.vue";
+import SpellBookView from "@/views/CharacterView/SpellBook/SpellBookView.vue";
 
 const router = useRouter();
 const {toast} = useToast();

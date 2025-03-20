@@ -27,7 +27,7 @@
   <!--  выбор предыстории-->
   <CardDescription>{{ background?.description }}</CardDescription>
   <CardTitle>Слабости -{{
-      background.selected_origins.flaw?.name
+      background?.selected_origins.flaw?.name
     }}
   </CardTitle>
 
@@ -49,7 +49,7 @@
 
 
   <CardTitle>Привязанности - {{
-      background.selected_origins.bond?.name
+      background?.selected_origins.bond?.name
     }}
   </CardTitle>
   <DropdownMenu>
@@ -69,7 +69,7 @@
   </DropdownMenu>
 
   <CardTitle>Идеалы - {{
-      background.selected_origins.ideal?.name
+      background?.selected_origins.ideal?.name
     }}
   </CardTitle>
   <DropdownMenu>
@@ -88,7 +88,7 @@
     </DropdownMenuContent>
   </DropdownMenu>
   <CardTitle>Черта характера - {{
-      background.selected_origins.trait?.name
+      background?.selected_origins.trait?.name
     }}
   </CardTitle>
   <DropdownMenu>
@@ -116,7 +116,7 @@
       }}
     </CardDescription>
   </CardHeader>
-  <CardHeader v-for="feature in background.features" :key="feature.id"
+  <CardHeader v-for="feature in background?.features" :key="feature.id"
               class="p-2">
     <CardTitle>{{ feature.name }}</CardTitle>
     <CardDescription>{{ feature.description }}</CardDescription>

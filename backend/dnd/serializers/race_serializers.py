@@ -61,7 +61,10 @@ class RaceSerializer(serializers.ModelSerializer):
     sub_race = serializers.SerializerMethodField()
 
     def get_sub_race(self, obj):
-        sub_race_id = self.context.get('character').sub_race.id
+        try:
+            sub_race_id = self.context.get('character').sub_race.id
+        except AttributeError:
+            return  None
         return SubRaceSerializer(SubRace.objects.get(id=sub_race_id)).data
 
     class Meta:

@@ -18,7 +18,6 @@
             >
               +
             </Badge>
-            пример
             <Badge
               v-if="isItemInMyList(item.id)"
               type="button"
@@ -42,11 +41,11 @@ import {Badge} from "@/components/ui/badge/index.js";
 
 const search = ref('');
 const polling = ref(null);
-const items_id = ref([]);
 const store = useInventoryStore()
 const character = useCharacterStore()
 const my_items = computed(() => character.character.my_items)
 const item_list = computed(() => store.item_list)
+
 watch(search, () => {
     patchSearch();
 
@@ -56,6 +55,7 @@ const patchSearch = () => {
   destroyInterval();
   createTimer();
 }
+
 onMounted(() => {
   store.getInventory()
 });
@@ -97,7 +97,6 @@ const patchItem = (item) => {
 
 
 const deleteItem = (item) => {
-  console.log(item);
   store.deleteItem(item);
 };
 
