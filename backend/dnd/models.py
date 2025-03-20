@@ -7,7 +7,7 @@ from dnd.db.background import Background
 from dnd.db.character import BaseClass, Archetype
 from dnd.db.inventory import Item
 from dnd.db.lineament import LineamentModel
-from dnd.db.magic import Spell
+from dnd.db.magic import Spell, CharacterSpellSlots, SpellSlotLevel, CharacterSpellSlotLevel
 from dnd.db.race import Race, SubRace
 
 
@@ -199,6 +199,25 @@ class Character(models.Model):
         if not self.skills:
             self.skills = Skills.objects.create()
         super().save(*args, **kwargs)
+        try:
+            # Создаем CharacterSpellSlots для персонажа
+            character_spell_slots = CharacterSpellSlots.objects.create(character=self)
+
+            # Создаем стандартные уровни ячеек заклинаний
+
+            spell_slot_level, _ = SpellSlotLevel.objects.get_or_create(level=0, defaults={
+                'count': 0,  # По умолчанию количество ячеек равно 0
+                'used': 0  # Использованные ячейки тоже равны 0
+            })
+
+            # Создаем связь между персонажем и уровнем ячеек
+            CharacterSpellSlotLevel.objects.create(
+                character_spell_slots=character_spell_slots,
+                spell_slot_level=spell_slot_level
+            )
+        except Exception as e:
+            print(f"Ошибка создания ячеек заклинаний: {e}")
+
 
     def get_lineament(self):
         lineament_list = self.lineament.all()

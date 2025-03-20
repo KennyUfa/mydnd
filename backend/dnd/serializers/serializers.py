@@ -1,6 +1,7 @@
 from .background_serializers import BackgroundSerializer
 from .class_serializers import *
 from .race_serializers import *
+from .spellbook import CharacterSpellSlotsSerializer
 from ..db.inventory import Properties, TypeItem, Rarity, SubType, Weapon, \
     Equipment, Armor, MagicItems
 from ..db.lineament import CustomLineament
@@ -252,13 +253,14 @@ class CharacterSerializer(serializers.ModelSerializer):
     protect_state = ProtectStateSerializer()
     skills = SkillsSerializer()
     my_items = InventorySerializer(many=True)
+    spell_slots = CharacterSpellSlotsSerializer(read_only=True)
 
 
     class Meta:
         model = Character
         fields = [
             'id', 'champion_class', 'archetype', 'race', 'sub_race', 'skill_state', 'possession_bonus', 'protect_state', 'inspiration',
-            'protection_class', 'speed', 'account', 'name_champion', 'level', 'world_outlook', 'skills', 'background','my_items'
+            'protection_class', 'speed', 'account', 'name_champion', 'level', 'world_outlook', 'skills', 'background','my_items', 'spell_slots',
         ]
 
     #     https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers
