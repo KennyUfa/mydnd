@@ -1,17 +1,10 @@
 <template>
-  <div class="card-body d-flex justify-content-between">
-    <Badge
-      v-if="show"
-      class="ui button big toggle"
-      @click="switchAbilityState(skillValue)"
-    >
-      {{ skill_state[skillValue] }}
-    </Badge>
-    <div  @click="random_save">
-      <div class="card-header">
+  <div class="bg-white text-slate-900 border-2 border-red-600 rounded-lg p-2">
+    <div class="flex flex-row justify-between" @click="random_save">
+      <div class="">
         {{ skillName }}
       </div>
-      <div class="digital-check text-wrap text-center">
+      <div class="">
         <div v-if="skill_state[skillValue] === 1">
           {{ Math.floor((skills[stat] - 10) / 2) }}
         </div>
@@ -34,7 +27,6 @@
 
 <script setup>
 import {useCharacterStore} from "@/stores/characterStore";
-import {Badge} from '@/components/ui/badge'
 
 const champion = useCharacterStore();
 const skill_state = champion.character.skill_state;
@@ -46,12 +38,8 @@ const props = defineProps({
   skillName: String,
   skillValue: String,
   stat: String,
-  show: Boolean,
 });
 
-const switchAbilityState = (skillValue) => {
-  champion.switchAbilityState(skillValue)
-}
 const random_save = () => {
   const data = {
     abilityValueName: props.skillValue,

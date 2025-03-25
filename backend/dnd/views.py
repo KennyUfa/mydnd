@@ -1,6 +1,8 @@
 import math
 import random
+from collections import defaultdict
 
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets, permissions, status, generics
@@ -10,6 +12,7 @@ from rest_framework.views import APIView
 from .db.background import SelectedFeatureOption, FeatureOption, Feature, Flaw, SelectedOrigin, Bond, Trait, Ideal
 from .serializers.background_serializers import BackgroundListSerializer, SelectedOriginSerializer
 from .serializers.serializers import *
+from .serializers.spellbook import CharacterSpellSlotLevelSerializer, SpellSlotLevelSerializer, SpellSerializer
 
 
 class CharacterProtectStateView(APIView):
@@ -330,6 +333,7 @@ class CharacterDetailView(APIView):
         except Character.DoesNotExist:
             return Response({"error": "Character not found"}, status=status.HTTP_404_NOT_FOUND)
         serializer = CharacterSerializer(character, context={'character': character})
+
         return Response(serializer.data)
 
     def patch(self, request, pk):
@@ -372,11 +376,11 @@ class SpellView(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter,
                        DjangoFilterBackend]
-    serializer_class = SpellBookSerializer
+    serializer_class = SpellSerializer
 
     def retrieve(self, request, pk=None):
         spell = get_object_or_404(Spell, pk=pk)
-        serializer = ChampionSpellSerializer(spell)
+        serializer = SpellSerializer(spell)
         return Response(serializer.data)
 
     def get_queryset(self):
@@ -386,6 +390,103 @@ class SpellView(viewsets.ReadOnlyModelViewSet):
         if search_query:
             queryset = queryset.filter(name__iregex=search_query.strip())
         return queryset
+
+class SpellBookSlotPatch(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, character_id):
+        character = get_object_or_404(Character, id=character_id)
+        slot_data = request.data.get('level_slots')
+        level = slot_data.get('level')
+        count = slot_data.get('count')
+        used = slot_data.get('used')
+        change_level_slot = character.spell_slots.levels.get(level=level)
+        change_level_slot.count = count
+        change_level_slot.used = used
+        change_level_slot.save()
+
+        return Response(SpellSlotLevelSerializer(change_level_slot).data)
+
+
+
+
+
+class SpellBookPatch(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, character_id):
+        character = get_object_or_404(Character, id=character_id)
+        level_slot =character.spell_slots.levels.get(level=request.data['level_slots'])
+        spell = get_object_or_404(Spell, id=request.data['spell'])
+        spell_book = get_object_or_404(CharacterSpellSlotLevel,spell_slot_level=level_slot,)
+        print(spell_book.spells)
+        spell_book.spells.append(spell.id)
+        spell_book.save()
+        return Response(CharacterSpellSlotLevelSerializer(spell_book).data)
+
+    def delete(self, request, character_id):
+        character = get_object_or_404(Character, id=character_id)
+        # print(request.query_params.get('level_slots[level]'))
+        level_slot = character.spell_slots.levels.get(level=request.query_params.get('level_slots[level]'))
+        spell_book = get_object_or_404(CharacterSpellSlotLevel, spell_slot_level=level_slot )
+        spell_book.spells.pop(int(request.query_params.get('spell_index')))
+        spell_book.save()
+        return Response(CharacterSpellSlotLevelSerializer(spell_book).data)
+
+
+class SpellSearchView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+
+        # Получаем параметры из запроса
+        class_names = request.query_params.getlist('class_actor[]', [])
+        archetype = request.query_params.getlist('archetype[]', [])
+        search_query = request.query_params.get('search', '').strip()
+
+        # Начинаем с базового запроса
+        queryset = Spell.objects.all()
+
+        # Создаем Q-объект для хранения всех условий
+        query = Q()
+        grouped_spells = defaultdict(list)
+
+        # Фильтрация по классам
+        if class_names:
+            for class_name in class_names:
+                query |= Q(class_actor__id=class_name)
+        if archetype:
+            for arh in archetype:
+                query |= Q(archetype__id=arh)
+
+        # Поиск по названию или описанию
+        if search_query:
+            query &= Q(name__icontains=search_query) | Q(instruction__icontains=search_query)
+
+        # применяем фильтры и группируем результаты
+        queryset = queryset.filter(query)
+
+        grouped_spells = defaultdict(list)
+        for spell in queryset:
+            serializer = SpellSerializer(spell)
+            grouped_spells[spell.level].append(serializer.data)
+
+        # Сериализация данных
+        # serializer = SpellSerializer(queryset, many=True)
+        return Response(dict(grouped_spells))
+
+
+class Archetypes(APIView):
+    def get(self, request):
+        class_names = request.query_params.getlist('class_actor[]', [])
+        query = Q()
+        queryset = Archetype.objects.all()
+        if class_names:
+            for class_name in class_names:
+                query |= Q(character_class__id=class_name)
+
+        queryset = queryset.filter(query)
+        return Response(ArchetypeListSerializer(queryset, many=True).data)
 
 
 class ProtectStateView(viewsets.ModelViewSet):

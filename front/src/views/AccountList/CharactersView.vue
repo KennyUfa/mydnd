@@ -1,20 +1,13 @@
 <template>
-  <div class="container">
-    <list-champions></list-champions>
-    <form-add></form-add>
-  </div>
+    <div class="container mx-auto px-4">
+        <list-champions></list-champions>
+        <form-add></form-add>
+    </div>
 </template>
 
-<script>
+<script setup>
 import ListChampions from "@/views/AccountList/ListChampions.vue";
 import FormAdd from "@/views/AccountList/FormAdd.vue";
-
-export default {
-  components: {
-    FormAdd,
-    ListChampions,
-  },
-};
 </script>
 
 <style scoped></style>

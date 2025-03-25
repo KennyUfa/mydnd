@@ -204,17 +204,17 @@ class Character(models.Model):
             character_spell_slots = CharacterSpellSlots.objects.create(character=self)
 
             # Создаем стандартные уровни ячеек заклинаний
+            for level in range(0, 10):  # Уровни от 1 до 9
+                spell_slot_level, _ = SpellSlotLevel.objects.get_or_create(level=level, defaults={
+                    'count': 0,  # По умолчанию количество ячеек равно 0
+                    'used': 0  # Использованные ячейки тоже равны 0
+                })
 
-            spell_slot_level, _ = SpellSlotLevel.objects.get_or_create(level=0, defaults={
-                'count': 0,  # По умолчанию количество ячеек равно 0
-                'used': 0  # Использованные ячейки тоже равны 0
-            })
-
-            # Создаем связь между персонажем и уровнем ячеек
-            CharacterSpellSlotLevel.objects.create(
-                character_spell_slots=character_spell_slots,
-                spell_slot_level=spell_slot_level
-            )
+                # Создаем связь между персонажем и уровнем ячеек
+                CharacterSpellSlotLevel.objects.create(
+                    character_spell_slots=character_spell_slots,
+                    spell_slot_level=spell_slot_level
+                )
         except Exception as e:
             print(f"Ошибка создания ячеек заклинаний: {e}")
 

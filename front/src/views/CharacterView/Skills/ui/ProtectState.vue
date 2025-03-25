@@ -1,21 +1,14 @@
 <template>
-  <div class="card-body d-flex justify-content-between">
-    <Badge
-      v-if="show"
-      class="ui button big toggle"
-      @click="switchProtectState(skillValue)"
-    >
-      {{ protect_state[skillValue] }}
-    </Badge>
-    <div @click="random_save()">
+  <div class="bg-white text-slate-900 border-2 border-red-600 rounded-lg p-2">
+    <div class="flex flex-row justify-between" @click="random_save()">
       <div class="card-header">
         {{ skillName }}
       </div>
-      <div class="digital-check text-wrap text-center">
+      <div class="">
         <div v-if="protect_state[skillValue] === 1">
           {{ Math.floor((skills[stat] - 10) / 2) }}
         </div>
-        <div v-bind:style="{ 'background-color': '#d8c13b' }" v-else>
+        <div v-else>
           {{
             Math.floor((skills[stat] - 10) / 2) +
             champion.character.possession_bonus
@@ -40,14 +33,8 @@ const props = defineProps({
   skillName: String,
   skillValue: String,
   stat: String,
-  show: Boolean,
 });
 
-
-const switchProtectState = (skillValue) => {
-  console.log(skillValue)
-  champion.switchProtectState(skillValue)
-}
 
 const random_save = () => {
   const data = {

@@ -1,25 +1,38 @@
 <template>
-  <transition-group name="list-champions">
-    <div v-if="isLoading">Загрузка...</div>
-    <div v-else-if="error">{{ error }}</div>
-    <div v-else
-         class="champion row"
-         v-for="champion in characterList"
-         v-bind:key="champion.id"
-    >
-      <button @click="championLink(champion.id)">
-        <div class="champ">Имя персонажа - {{ champion.name_champion }}</div>
-        <div class="champ">
-          Класс - {{ champion.champion_class }}
-        </div>
-        <div class="champ">Расса - {{ champion.race }}</div>
-        <div class="champ">Уровень - {{ champion.level }}</div>
-      </button>
-      <button class="btn btn-primary" @click="deleteChampion(champion.id)">
-        Delete
-      </button>
-    </div>
-  </transition-group>
+    <TransitionGroup name="list" tag="ul">
+        <div v-if="isLoading">Загрузка...</div>
+        <li v-else
+            v-for="champion in characterList"
+            v-bind:key="champion.id"
+            class="border-4 border-black my-1 rounded-md p-2 text-center">
+
+            <button @click="championLink(champion.id)">
+                <div class="font-bold leading-[0.8] italic pb-4">Имя персонажа
+                    -
+                    <div class="inline-block uppercase">{{
+                            champion.name_champion
+                        }}
+                    </div>
+                </div>
+                <div class="font-bold leading-[0.8] italic pb-2">Класс - {{
+                        champion.champion_class
+                    }}
+                </div>
+                <div class="font-bold leading-[0.8] italic pb-2">Расса - {{
+                        champion.race
+                    }}
+                </div>
+                <div class="font-bold leading-[0.8] italic pb-2">Уровень - {{
+                        champion.level
+                    }}
+                </div>
+            </button>
+            <Button variant="destructive"
+                    class="border-2 text-white flex justify-center px-3 w-full rounded-md"
+                    @click="deleteChampion(champion.id)"> Delete
+            </Button>
+        </li>
+    </TransitionGroup>
 </template>
 
 
@@ -28,6 +41,7 @@ import {computed, onMounted} from "vue";
 import {useCharacterList} from "@/stores/list_characters.module.js";
 import {useCharacterStore} from "@/stores/characterStore.js";
 import {useRouter} from 'vue-router';
+import {Button} from "@/components/ui/button/index.js";
 
 
 // Инициализация хранилища
@@ -43,43 +57,34 @@ const router = useRouter();
 
 // Загрузка данных при монтировании компонента
 onMounted(() => {
-  characterListStore.fetchCharacterList();
+    characterListStore.fetchCharacterList();
 });
 
 
 // Функция удаления персонажа
 const deleteChampion = (id) => {
-  console.log('Удаление персонажа с ID:', id);
-  characterListStore.deleteChampion(id); // Вызываем действие из хранилища
+    console.log('Удаление персонажа с ID:', id);
+    characterListStore.deleteChampion(id); // Вызываем действие из хранилища
 };
 // Функция перехода к деталям персонажа
 const championLink = (id) => {
-  localStorage.setItem("champion_id", id);
-  console.log('Переход к персонажу с ID:', id);
-  // characterStore.fetchCharacter(id);
-  router.push({path: '/character'}); // Перенаправляем на страницу персонажа
+    localStorage.setItem("champion_id", id);
+    console.log('Переход к персонажу с ID:', id);
+    // characterStore.fetchCharacter(id);
+    router.push({path: '/character'}); // Перенаправляем на страницу персонажа
 };
 
 </script>
 
 <style scoped>
-.champion {
-  border: solid 1px black;
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
 }
 
-.list-champions-item {
-  display: inline-block;
-  margin-right: 10px;
-}
-
-.list-champions-enter-active,
-.list-champions-leave-active {
-  transition: all 1s ease;
-}
-
-.list-champions-enter-from,
-.list-champions-leave-to {
-  opacity: 0;
-  transform: translateY(30px);
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
 }
 </style>

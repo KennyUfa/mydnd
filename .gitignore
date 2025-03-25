@@ -1,8 +1,10 @@
 /backend/rez.sqlite3
 /backend/db.sqlite3
 /backend/заметки
-/test/
+/testcode/
 /frontend/
 /backend/parser/
 /.vscode/
 /.idea/
+/front/src/views/CharacterView/test.vue
+/.

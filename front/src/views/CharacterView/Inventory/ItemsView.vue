@@ -2,14 +2,14 @@
   <div class="container mx-auto p-4">
     <form id="search">Search <input name="query" v-model="search"/></form>
     <!-- Колонки -->
-    <div class="gap-4">
+    <div class="gap-4 ">
       <!-- Цикл для каждой буквы -->
       <div v-for="(group, letter) in groupedItems" :key="letter"
            class="col-span-1">
         <h2 class="text-lg font-bold mb-2">{{ letter }}</h2>
-        <ul class="list-disc list-inside grid grid-cols-4">
+        <ul class="list-disc list-inside grid grid-cols-2">
           <!-- Цикл для предметов в группе -->
-          <li v-for="item in group" :key="item.id" class="mb-1">
+          <li v-for="item in group" :key="item.id" class="mb-1 list-outside">
             <span @click="patchItem(item)">{{ item.name }}</span>
             <Badge
               type="button"

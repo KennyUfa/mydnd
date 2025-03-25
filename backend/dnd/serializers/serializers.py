@@ -1,7 +1,9 @@
+from rest_framework.relations import RelatedField
+
 from .background_serializers import BackgroundSerializer
 from .class_serializers import *
 from .race_serializers import *
-from .spellbook import CharacterSpellSlotsSerializer
+from .spellbook import CharacterSpellSlotLevelSerializer, CharacterSpellSlotsSerializer
 from ..db.inventory import Properties, TypeItem, Rarity, SubType, Weapon, \
     Equipment, Armor, MagicItems
 from ..db.lineament import CustomLineament
@@ -26,10 +28,10 @@ class SkillStateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ChampionSpellSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Spell
-        fields = '__all__'
+# class ChampionSpellSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Spell
+#         fields = '__all__'
 
 
 class PropertiesSerializer(serializers.ModelSerializer):
@@ -152,16 +154,18 @@ class ItemsSerializer(serializers.ModelSerializer):
         return data
 
 
-class SpellBookSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Spell
-        fields = ['id', 'name', 'lvl', 'class_actor']
-
-
-class SpellSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Spell
-        fields = "__all__"
+# class SpellBookSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Spell
+#         fields = ['id', 'name', 'lvl', 'class_actor']
+#
+#
+# class SpellSerializer(serializers.ModelSerializer):
+#     class_actor = serializers.StringRelatedField(many=True)
+#     archetype = serializers.StringRelatedField(many=True)
+#     class Meta:
+#         model = Spell
+#         fields = "__all__"
 
 
 class InventorySerializer(serializers.ModelSerializer):
@@ -256,11 +260,12 @@ class CharacterSerializer(serializers.ModelSerializer):
     spell_slots = CharacterSpellSlotsSerializer(read_only=True)
 
 
+
     class Meta:
         model = Character
         fields = [
             'id', 'champion_class', 'archetype', 'race', 'sub_race', 'skill_state', 'possession_bonus', 'protect_state', 'inspiration',
-            'protection_class', 'speed', 'account', 'name_champion', 'level', 'world_outlook', 'skills', 'background','my_items', 'spell_slots',
+            'protection_class', 'speed', 'account', 'name_champion', 'level', 'world_outlook', 'skills', 'background','my_items','spell_slots'
         ]
 
     #     https://riptutorial.com/django-rest-framework/example/25521/updatable-nested-serializers

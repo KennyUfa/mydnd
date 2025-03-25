@@ -3,6 +3,7 @@ import api from "@/services/api.js";
 import {useClassInformationStore} from "@/stores/classStore.js";
 import {useRaceStore} from "@/stores/raceStore.js";
 import {useBackground} from "@/stores/BackgroundStore.js";
+import {useSpellBook} from "@/stores/SpellBookStore.js";
 
 export const useCharacterStore = defineStore('character', {
     state: () => {
@@ -27,6 +28,7 @@ export const useCharacterStore = defineStore('character', {
                 const class_store = useClassInformationStore();
                 const race_store = useRaceStore();
                 const background = useBackground();
+                const spellbook = useSpellBook();
 
                 const response = await api.get("dnd/character/" + characterId + "/");
                 this.character = response.data; // Обновляем список персонажей
@@ -35,6 +37,7 @@ export const useCharacterStore = defineStore('character', {
                 class_store.setArchetype(response.data.archetype)
                 race_store.setRace(response.data.race)
                 background.setBackground(response.data.background)
+                spellbook.setSpellbook(response.data.spell_slots)
 
                 localStorage.setItem("champion_id", characterId);
             } catch (error) {
@@ -85,12 +88,14 @@ export const useCharacterStore = defineStore('character', {
                 const race_store = useRaceStore();
                 const class_store = useClassInformationStore();
                 const background = useBackground();
+                const spellbook = useSpellBook();
                 const response = await api.patch("dnd/character/" + this.character_id + "/", data);
                 this.character = response.data;
                 class_store.setClassInfo(response.data.champion_class)
                 class_store.setArchetype(response.data.archetype)
                 background.setBackground(response.data.background)
                 race_store.setRace(response.data.race)
+                spellbook.setSpellbook(response.data.spell_slots)
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);
             }

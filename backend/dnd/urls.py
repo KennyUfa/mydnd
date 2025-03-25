@@ -60,4 +60,10 @@ urlpatterns = [
 
     # обновление способности класса персонажа
     path('character/custom-ability/update/<int:pk>/', CharacterCustomAbilityUpdateView.as_view(), name='custom-ability-update'),
+    # Заклинания
+    path('spells/search/', SpellSearchView.as_view(), name='spell-search'),
+    path('<int:character_id>/spellbook/patch/', SpellBookPatch.as_view(), name='spellbook-patch'),
+    path('<int:character_id>/spellbook/slot/patch/', SpellBookSlotPatch.as_view(), name='spellbook-slot-patch'),
+    path('archetypes/', Archetypes.as_view(), name='archetypes-list'),
+
 ]
