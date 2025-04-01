@@ -27,10 +27,12 @@
 
 <script setup>
 import {useCharacterStore} from "@/stores/characterStore";
+import {computed} from "vue";
 
 const champion = useCharacterStore();
-const skill_state = champion.character.skill_state;
-const skills = champion.character.skills;
+const skill_state = computed(() => champion.character.skill_state);
+const skills = computed(() => champion.character.skills);
+
 
 const emit = defineEmits(["callRandomWindow"]);
 

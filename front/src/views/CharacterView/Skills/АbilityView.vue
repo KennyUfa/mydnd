@@ -127,19 +127,13 @@
 
 <script setup>
 import AbilityFrame from "@/views/CharacterView/Skills/ui/AbilityFrame.vue";
-import {ref} from "vue";
 import {useCharacterStore} from "@/stores/characterStore.js";
 
-import {Button} from "@/components/ui/button/index.js";
 import ChangeAbility
     from "@/views/CharacterView/Skills/ChangeSkill/ChangeAbility.vue";
 
 const emit = defineEmits(["callRandomWindow"]);
 const champion = useCharacterStore();
-
-const patchAbilitySkills = () => {
-    champion.patchAbilityState();
-}
 
 const handleCallRandomWindow = (data) => {
     emit("callRandomWindow", data);

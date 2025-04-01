@@ -187,7 +187,7 @@ onMounted(() => {
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 5px;
-  width: 800px;
+
 }
 
 .header {

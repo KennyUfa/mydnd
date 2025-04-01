@@ -32,11 +32,11 @@
 </template>
 <script setup>
 import {useCharacterStore} from "@/stores/characterStore.js";
+import {computed} from "vue";
 
 const champion = useCharacterStore();
-const protect_state = champion.character.protect_state;
-const skills = champion.character.skills;
-
+const protect_state = computed(() => champion.character.protect_state);
+const skills = computed(() => champion.character.skills);
 
 const props = defineProps({
     skillName: String,

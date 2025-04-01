@@ -24,7 +24,7 @@ class CharacterProtectStateView(APIView):
         character = get_object_or_404(Character, pk=pk)
         # Проверяем права доступа
         if character.account != request.user:
-            return Response({"error": "You do not have permission to edit this character."}, status=403)
+            return Response({"error": "CharacterProtectStateView"}, status=403)
         # Получаем данные skill_state из запроса
         print(request.data)
         protect_state_data = request.data.get('protect_state', {})
@@ -36,7 +36,7 @@ class CharacterProtectStateView(APIView):
                 defaults=protect_state_data
             )
         except Exception as e:
-            return Response({"error": f"Failed to update skill state: {str(e)}"}, status=400)
+            return Response({"error": f" {str(e)}"}, status=400)
 
         # Присваиваем объект character.skill_state
         character.protect_state = protect_state
@@ -56,7 +56,7 @@ class CharacterSkillStateView(APIView):
 
         # Проверяем права доступа
         if character.account != request.user:
-            return Response({"error": "You do not have permission to edit this character."}, status=403)
+            return Response({"error": "CharacterSkillStateView"}, status=403)
 
         # Получаем данные skill_state из запроса
         skill_state_data = request.data.get('skill_state', {})
@@ -69,7 +69,7 @@ class CharacterSkillStateView(APIView):
                 defaults=skill_state_data
             )
         except Exception as e:
-            return Response({"error": f"Failed to update skill state: {str(e)}"}, status=400)
+            return Response({"error": f" {str(e)}"}, status=400)
 
         # Присваиваем объект character.skill_state
         character.skill_state = skill_state
@@ -137,15 +137,28 @@ class ArchetypeChangeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def patch(self, request, pk):
+        print('patch')
         character = get_object_or_404(Character, pk=pk)
         if character.account != request.user:
-            return Response({"error": "You do not have permission to edit this character."}, status=403)
+            return Response({"error": "ArchetypeChangeView patch"}, status=403)
         else:
             archetype = request.data.get('id')
             change_archetype = get_object_or_404(Archetype, id=archetype)
             character.archetype = change_archetype
             character.save()
             return Response(ArchetypeSerializer(character.archetype, context={'character': character}).data)
+
+    def delete(self, request, pk):
+        print('delete')
+        character = get_object_or_404(Character, pk=pk)
+        if character.account != request.user:
+            return Response({"error": "ArchetypeChangeView delete"}, status=403)
+        else:
+            character.archetype = None
+            character.save()
+            return Response(status=status.HTTP_200_OK)
+
+
 
 
 class SubRaceChangeView(APIView):
@@ -154,7 +167,7 @@ class SubRaceChangeView(APIView):
     def patch(self, request, pk):
         character = get_object_or_404(Character, pk=pk)
         if character.account != request.user:
-            return Response({"error": "You do not have permission to edit this character."}, status=403)
+            return Response({"error": "SubRaceChangeView"}, status=403)
         else:
 
             sub_race_id = request.data.get('id')
@@ -170,7 +183,7 @@ class BackgroundChangeView(APIView):
     def patch(self, request, pk):
         character = get_object_or_404(Character, pk=pk)
         if character.account != request.user:
-            return Response({"error": "You do not have permission to edit this character."}, status=403)
+            return Response({"error": "BackgroundChangeView"}, status=403)
         else:
 
             background_id = request.data.get('id')
@@ -257,11 +270,8 @@ class CharacterHideOriginalAbilityView(APIView):
         character = get_object_or_404(Character, pk=pk)
         original_ability_id = request.data.get('id')
         custom_ability = CustomAbility.objects.filter(ability=original_ability_id, character=character).first()
-        if custom_ability:
-            print("Есть custom_ability_id")
-        # Если custom_ability_id не передан, то создаем новую запись в CustomAbility с hide_original=True
+
         if not custom_ability:
-            print("Нет custom_ability_id")
             original_ability = Ability.objects.filter(id=original_ability_id).first()
             custom_ability = CustomAbility.objects.create(character=character, ability=original_ability, hide_original=False,
                                                           hide_custom=request.data.get('custom_description').get('hide_custom'),
@@ -449,7 +459,6 @@ class SpellSearchView(APIView):
 
         # Создаем Q-объект для хранения всех условий
         query = Q()
-        grouped_spells = defaultdict(list)
 
         # Фильтрация по классам
         if class_names:
@@ -471,8 +480,6 @@ class SpellSearchView(APIView):
             serializer = SpellSerializer(spell)
             grouped_spells[spell.level].append(serializer.data)
 
-        # Сериализация данных
-        # serializer = SpellSerializer(queryset, many=True)
         return Response(dict(grouped_spells))
 
 

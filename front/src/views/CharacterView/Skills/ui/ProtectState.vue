@@ -22,10 +22,13 @@
 <script setup>
 import {useCharacterStore} from "@/stores/characterStore.js";
 import {Badge} from '@/components/ui/badge'
+import {computed} from "vue";
 
 const champion = useCharacterStore();
-const protect_state = champion.character.protect_state;
-const skills = champion.character.skills;
+
+
+const protect_state = computed(() => champion.character.protect_state);
+const skills = computed(() => champion.character.skills);
 
 const emit = defineEmits(["callRandomWindow"]);
 

@@ -23,9 +23,6 @@
             <TabsTrigger value="spell-book">
                 Книга заклинаний
             </TabsTrigger>
-            <TabsTrigger value="test">
-                тест
-            </TabsTrigger>
         </TabsList>
         <TabsContent value="main">
 
@@ -65,9 +62,6 @@
         <TabsContent value="spell-book">
             <spell-book-view></spell-book-view>
         </TabsContent>
-        <TabsContent value="test">
-            <test></test>
-        </TabsContent>
     </Tabs>
 </template>
 
@@ -92,7 +86,7 @@ import ToastContent from "@/views/CharacterView/Skills/ui/ToastContent.vue";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import InventoryView from "@/views/CharacterView/Inventory/InventoryView.vue";
 import SpellBookView from "@/views/CharacterView/SpellBook/SpellBookView.vue";
-import Test from "@/views/CharacterView/test.vue";
+
 
 const router = useRouter();
 const {toast} = useToast();

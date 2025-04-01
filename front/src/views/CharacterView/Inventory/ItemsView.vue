@@ -1,15 +1,17 @@
 <template>
-  <div class="container mx-auto p-4">
-    <form id="search">Search <input name="query" v-model="search"/></form>
+  <div class="">
+    <form id="search">Search
+        <input name="query" class="border-2 w-full px-3" v-model="search"/></form>
     <!-- Колонки -->
-    <div class="gap-4 ">
+    <div class="">
       <!-- Цикл для каждой буквы -->
       <div v-for="(group, letter) in groupedItems" :key="letter"
-           class="col-span-1">
-        <h2 class="text-lg font-bold mb-2">{{ letter }}</h2>
-        <ul class="list-disc list-inside grid grid-cols-2">
+           class="">
+        <h2 class="">{{ letter }}</h2>
+        <ul class="">
           <!-- Цикл для предметов в группе -->
-          <li v-for="item in group" :key="item.id" class="mb-1 list-outside">
+          <li v-for="item in group" :key="item.id"
+              class="border-2 mb-2 p-1 flex justify-between">
             <span @click="patchItem(item)">{{ item.name }}</span>
             <Badge
               type="button"
@@ -21,7 +23,7 @@
             <Badge
               v-if="isItemInMyList(item.id)"
               type="button"
-              class="btn btn-danger"
+              class=""
               @click="deleteItem(item.id)"
             >
               -

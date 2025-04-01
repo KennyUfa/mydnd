@@ -56,18 +56,27 @@ export const useClassInformationStore = defineStore("classInformation", {
             try {
                 const response = await api.get("dnd/class-archetype-list/" + this.class_info.id + "/");
                 this.archetype_list = response.data;
+                this.archetype_list.push({name: "без подкласса"})
             } catch (error) {
                 console.error('Ошибка при получении списка archetypes:', error);
             }
         },
         async changeArchetype(id) {
             const characterStore = useCharacterStore();
-            try {
-                const response = await api.patch("dnd/character/" + characterStore.get_character_id + "/archetype-change/", id);
-                this.archetype = response.data;
-            } catch (error) {
-                console.error('Ошибка при смене архетипа: error', error);
+            console.log(id);
+            if (id.name === "без подкласса") {
+                console.log("удаляем архетип");
+                const response = await api.delete("dnd/character/" + characterStore.get_character_id + "/archetype-change/");
+                this.archetype = null;
+            } else {
+                try {
+                    const response = await api.patch("dnd/character/" + characterStore.get_character_id + "/archetype-change/", id);
+                    this.archetype = response.data;
+                } catch (error) {
+                    console.error('Ошибка при смене архетипа: error', error);
+                }
             }
+
         },
     },
     getters: {
