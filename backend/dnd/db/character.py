@@ -1,10 +1,15 @@
 from django.db import models
 
+class MiniDescriptions(models.Model):
+    name = models.CharField(max_length=255, verbose_name="Название небольшого описания класса")
+    description = models.TextField(verbose_name="Описание", blank=True,
+                                   null=True)
 
 class BaseClass(models.Model):
     name = models.CharField(max_length=255, verbose_name="Название класса")
     description = models.TextField(verbose_name="Описание класса", blank=True,
                                    null=True)
+    mini_descriptions = models.ManyToManyField(MiniDescriptions,related_name="mini_descriptions")
     hit_dice = models.CharField(max_length=10, verbose_name="Кость хитов",
                                 blank=True, null=True)
     hit_at_first_level = models.CharField(max_length=10,
@@ -52,7 +57,7 @@ class Level(models.Model):
     proficiency_bonus = models.PositiveIntegerField()
 
     def __str__(self):
-        return str(f"{self.class_obj} {self.archetype.name if self.archetype else ''} - {self.level}")
+        return str(f"{self.id}  {self.class_obj} {self.archetype.name if self.archetype else ''} - {self.level}")
 
 
 class Ability(models.Model):

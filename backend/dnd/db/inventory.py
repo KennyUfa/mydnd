@@ -1,6 +1,8 @@
 # Общий инвентарь
 from django.db import models
 
+# from dnd.models import Character
+
 
 class Properties(models.Model):
     name = models.CharField(blank=True, null=True, max_length=200, default='')
@@ -22,7 +24,7 @@ class Rarity(models.Model):
     description = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
-        return self.description
+        return f"{self.description}-{self.id}"
 
 
 class Item(models.Model):
@@ -124,3 +126,19 @@ class MagicItems(models.Model):
 
     def __str__(self):
         return self.item.name
+
+    class Meta:
+        ordering=['item']
+
+#
+# class MyEquip(models.Model):
+#     character = models.ForeignKey(Character, on_delete=models.CASCADE, blank=True,null=True, related_name='equipment')
+#     weapon_one = models.ForeignKey(Item, on_delete=models.CASCADE, blank=True,null=True, related_name='weapon_one')
+#     weapon_two = models.ForeignKey(Item, on_delete=models.CASCADE, blank=True,null=True, related_name='weapon_two')
+#     weapon_three = models.ForeignKey(Item, on_delete=models.CASCADE, blank=True,null=True, related_name='weapon_three')
+#     armor = models.ForeignKey(Item, on_delete=models.CASCADE, blank=True,null=True, related_name='armor')
+#     weapon_one_mod = models.BooleanField(default=False)
+#     weapon_two_mod = models.BooleanField(default=False)
+#     weapon_three_mod = models.BooleanField(default=False)
+
+

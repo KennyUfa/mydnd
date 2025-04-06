@@ -2,10 +2,21 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 
+class MagicSchool(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        verbose_name_plural = 'Школы заклинаний'
+        verbose_name = 'Школа заклинаний'
+
+    def __str__(self):
+        return self.name
+
+
 class Spell(models.Model):
     link = models.CharField(max_length=100, verbose_name='ссылка')
     name = models.CharField(max_length=100, verbose_name='название')
-    school = models.CharField(max_length=60, verbose_name='школа')
+    school = models.ForeignKey('MagicSchool', on_delete=models.CASCADE,null=True, blank=True)
     time_cast = models.CharField(max_length=200,
                                  verbose_name='время накладывания')
     distance = models.CharField(max_length=100, verbose_name='дистанция')
@@ -43,7 +54,6 @@ class SpellSlotLevel(models.Model):
         verbose_name = 'Уровень ячеек заклинаний'
         verbose_name_plural = 'Уровни ячеек заклинаний'
 
-
     def __str__(self):
         return f"Level {self.level}: Count={self.count}, Used={self.used}"
 
@@ -69,8 +79,6 @@ class CharacterSpellSlots(models.Model):
         return f"Ячейки заклинаний для {self.character}"
 
 
-
-
 class CharacterSpellSlotLevel(models.Model):
     character_spell_slots = models.ForeignKey(
         CharacterSpellSlots,
@@ -84,7 +92,7 @@ class CharacterSpellSlotLevel(models.Model):
         related_name='character_slots',
         verbose_name='Уровень ячейки'
     )
-    spells = models.JSONField(default=list, blank=True,null=True)
+    spells = models.JSONField(default=list, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Уровень ячеек заклинаний персонажа'

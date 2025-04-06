@@ -128,9 +128,9 @@ class Character(models.Model):
         Archetype, on_delete=models.SET_NULL, blank=True, null=True,
         verbose_name="Архетип"
     )
-    race = models.ForeignKey(Race, on_delete=models.PROTECT, blank=True,
+    race = models.ForeignKey(Race, on_delete=models.SET_NULL, blank=True,
                              null=True)
-    sub_race = models.ForeignKey(SubRace, on_delete=models.PROTECT, blank=True,
+    sub_race = models.ForeignKey(SubRace, on_delete=models.SET_NULL, blank=True,
                                  null=True)
     account = models.ForeignKey('auth.User', related_name='account',
                                 on_delete=models.CASCADE)
@@ -140,12 +140,8 @@ class Character(models.Model):
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     is_active = models.BooleanField(default=True)
     level = models.IntegerField(blank=True, default=1)
-
-    spells = models.ManyToManyField(Spell,
-                                    blank=True, related_name='my_spells')
-
     world_outlook = models.ForeignKey(WorldOutlook,
-                                      on_delete=models.PROTECT,
+                                      on_delete=models.SET_NULL,
                                       blank=True, null=True)
     experience = models.IntegerField(blank=True, default=0)
     protect_state = models.OneToOneField(
@@ -199,24 +195,25 @@ class Character(models.Model):
         if not self.skills:
             self.skills = Skills.objects.create()
         super().save(*args, **kwargs)
-        try:
-            # Создаем CharacterSpellSlots для персонажа
-            character_spell_slots = CharacterSpellSlots.objects.create(character=self)
+        if not self.spell_slots:
+            try:
+                # Создаем CharacterSpellSlots для персонажа
+                character_spell_slots = CharacterSpellSlots.objects.create(character=self)
 
-            # Создаем стандартные уровни ячеек заклинаний
-            for level in range(0, 10):  # Уровни от 1 до 9
-                spell_slot_level, _ = SpellSlotLevel.objects.get_or_create(level=level, defaults={
-                    'count': 0,  # По умолчанию количество ячеек равно 0
-                    'used': 0  # Использованные ячейки тоже равны 0
-                })
+                # Создаем стандартные уровни ячеек заклинаний
+                for level in range(0, 10):  # Уровни от 1 до 9
+                    spell_slot_level, _ = SpellSlotLevel.objects.get_or_create(level=level, defaults={
+                        'count': 0,  # По умолчанию количество ячеек равно 0
+                        'used': 0  # Использованные ячейки тоже равны 0
+                    })
 
-                # Создаем связь между персонажем и уровнем ячеек
-                CharacterSpellSlotLevel.objects.create(
-                    character_spell_slots=character_spell_slots,
-                    spell_slot_level=spell_slot_level
-                )
-        except Exception as e:
-            print(f"Ошибка создания ячеек заклинаний: {e}")
+                    # Создаем связь между персонажем и уровнем ячеек
+                    CharacterSpellSlotLevel.objects.create(
+                        character_spell_slots=character_spell_slots,
+                        spell_slot_level=spell_slot_level
+                    )
+            except Exception as e:
+                print(f"Ошибка создания ячеек заклинаний: {e}")
 
 
     def get_lineament(self):
@@ -250,6 +247,14 @@ class InventoryItem(models.Model):
     character = models.ForeignKey(Character, on_delete=models.CASCADE,
                                   related_name='my_items')
     quantity = models.PositiveIntegerField(default=1)
+    put_on = models.BooleanField(default=False)
+
+
+    class Meta:
+        verbose_name_plural = 'инвентарь'
+        verbose_name = 'предмет'
+        ordering = ['-put_on']
+
 
 
 # эти записи не удалялись при удалении персонажа, поправил таким костылем

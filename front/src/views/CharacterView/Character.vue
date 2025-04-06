@@ -27,22 +27,13 @@
         <TabsContent value="main">
 
             <MainInformation></MainInformation>
+            <hit-view></hit-view>
+            <inform></inform>
+
             <saving-throw-view
                     @callRandomWindow="callRandomWindowMethod"></saving-throw-view>
             <ability-view
                     @callRandomWindow="callRandomWindowMethod"></ability-view>
-
-            <!--        <div class="wrapper">-->
-            <!--          <div class="container">-->
-            <!--            <possession-bonus></possession-bonus>-->
-            <!--            <passive-perception></passive-perception>-->
-            <!--            <inspiration-frame></inspiration-frame>-->
-            <!--            <protection-class-view></protection-class-view>-->
-            <!--            <initiative-view></initiative-view>-->
-            <!--            <speed-view></speed-view>-->
-            <!--          </div>-->
-            <!--        </div>-->
-            <!--        <hit-vue></hit-vue>-->
         </TabsContent>
         <TabsContent value="class-information">
             <class-information-view></class-information-view>
@@ -86,6 +77,8 @@ import ToastContent from "@/views/CharacterView/Skills/ui/ToastContent.vue";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import InventoryView from "@/views/CharacterView/Inventory/InventoryView.vue";
 import SpellBookView from "@/views/CharacterView/SpellBook/SpellBookView.vue";
+import Inform from "@/views/CharacterView/CharacterInfo/Inform.vue";
+import HitView from "@/views/CharacterView/HitView/HitVue.vue";
 
 
 const router = useRouter();

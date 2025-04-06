@@ -27,7 +27,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # Application definition
-
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -81,15 +81,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # vue ip
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8081",
-    "http://localhost:8083",
-    "http://localhost:8080",
-    "http://127.0.0.1:9000",
-    "http://localhost:5173",
-    "http://192.168.0.12:8080"
-]
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:8081",
+#     "http://localhost:8083",
+#     "http://localhost:8080",
+#     "http://127.0.0.1:9000",
+#     "http://localhost:5173",
+#     "http://192.168.0.103:5173"
+#
+# ]
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 

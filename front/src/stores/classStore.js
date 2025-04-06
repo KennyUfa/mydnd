@@ -84,7 +84,7 @@ export const useClassInformationStore = defineStore("classInformation", {
             const abilitiesMap = new Map(); // Используем Map для уникальности
 
             // Функция для добавления способностей
-            const addAbilities = (sourceName, abilities) => {
+            const addAbilities = (sourceName, abilities,level) => {
                 if (abilities && Array.isArray(abilities)) {
                     abilities.forEach(ability => {
                         const uniqueKey = `${ability.name}-${sourceName}`; // Уникальный ключ
@@ -93,6 +93,7 @@ export const useClassInformationStore = defineStore("classInformation", {
                                 ...ability,
                                 source: sourceName,
                                 isEditing: false,
+                                level: level,
                             });
                         }
                     });
@@ -103,7 +104,7 @@ export const useClassInformationStore = defineStore("classInformation", {
             if (this.class_info && Array.isArray(this.class_info.levels)) {
                 this.class_info.levels.forEach(level => {
                     if (level.abilities && Array.isArray(level.abilities)) {
-                        addAbilities('class', level.abilities); // Источник: основной класс
+                        addAbilities(this.class_info.name, level.abilities,level.level); // Источник: основной класс
                     }
                 });
             }
@@ -112,7 +113,7 @@ export const useClassInformationStore = defineStore("classInformation", {
             if (this.archetype && Array.isArray(this.archetype.levels)) {
                 this.archetype.levels.forEach(level => {
                     if (level.abilities && Array.isArray(level.abilities)) {
-                        addAbilities(`archetype-${this.archetype.name}`, level.abilities); // Источник: архетип
+                        addAbilities(`${this.archetype.name}`, level.abilities,level.level); // Источник: архетип
                     }
                 });
             }

@@ -4,7 +4,7 @@
     <form @submit.prevent="handleLogin">
       <input v-model="username" placeholder="Имя пользователя" required />
       <input v-model="password" type="password" placeholder="Пароль" required />
-      <button type="submit">Войти</button>
+      <button type="submit" class="border-2 p-2">Войти</button>
     </form>
     <p v-if="errorMessage">{{ errorMessage }}</p>
   </div>
@@ -21,6 +21,7 @@ const router = useRouter();
 const username = ref('');
 const password = ref('');
 const errorMessage = ref('');
+
 const handleLogin = async () => {
   try {
     await authStore.login(username.value, password.value);

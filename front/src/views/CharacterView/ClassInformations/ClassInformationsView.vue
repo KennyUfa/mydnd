@@ -113,22 +113,19 @@
                 </DropdownMenu>
 
 
-                <strong>{{ ability.name }}</strong>
+                <strong>{{ ability.name }} {{ ability.level }}
+                    уровень - {{ ability.source}}</strong>
                 <!-- Оригинальное описание -->
-                <div v-if="!ability.custom_description?.hide_original">
-                    {{ ability.description }}
+                <div v-if="!ability.custom_description?.hide_original" v-html="renderMarkdown(ability.description)">
                 </div>
 
                 <!-- Кастомное описание -->
                 <div v-if="!ability.custom_description?.hide_custom">
-                    <div v-if="!ability.custom_description?.isEditing">
-                        {{
-                            ability.custom_description.custom_description
-                        }}
+                    <div v-if="!ability.custom_description?.isEditing" v-html="renderMarkdown(ability.custom_description.custom_description)">
                     </div>
                     <textarea
                             v-else
-                            v-model="ability.custom_description.custom_description"
+                            v-html="renderMarkdown(ability.custom_description.custom_description)"
                             rows="4"
                             class="w-full border rounded p-2"
                     ></textarea>
@@ -206,6 +203,7 @@
 
 <script setup>
 import {computed} from "vue";
+import {marked} from "marked";
 import {useClassInformationStore} from "@/stores/classStore.js";
 import {
     DropdownMenu,
@@ -232,12 +230,16 @@ const archetype_list = computed(() => store.archetype_list);
 
 const updateHideOriginal = (ability) => {
     store.updateHideOriginal(ability)
-
 }
 
 const updateHideCustomAbility = (ability) => {
     store.updateHideCustomAbility(ability)
 }
+const renderMarkdown = (text) => {
+  if (!text) return "";
+  return marked(text);
+};
+
 
 
 const toggleEdit = (ability) => {

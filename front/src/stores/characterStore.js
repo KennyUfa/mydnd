@@ -24,7 +24,6 @@ export const useCharacterStore = defineStore('character', {
         async fetchCharacter(characterId) {
             this.isLoading = true; // Начало загрузки
             try {
-                console.log("fetch character")
                 const class_store = useClassInformationStore();
                 const race_store = useRaceStore();
                 const background = useBackground();
@@ -129,8 +128,15 @@ export const useCharacterStore = defineStore('character', {
             }
         },
         async switchAbilityState(data) {
-            console.log(data);
             this.character.skill_state[data] = (this.character.skill_state[data] % 3) + 1;
+        },
+        async updateCharacterHit(max_hit) {
+            try {
+                const response = await api.patch("dnd/character/" + this.character_id + "/max_hit/", {max_hit: max_hit});
+                this.character.hit = response.data;
+            } catch (error) {
+                console.error('Ошибка при получении списка персонажей:', error);
+            }
         },
         async switchProtectState(data) {
             this.character.protect_state[data] = this.character.protect_state[data] === 1 ? 2 : 1;
@@ -156,6 +162,38 @@ export const useCharacterStore = defineStore('character', {
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);
             }
-        }
+        },
+        async patchPossessionBonus() {
+            try {
+                await api.patch("dnd/character/" + this.character_id + "/possession_bonus/", {'possession_bonus': this.character.possession_bonus});
+            } catch (error) {
+                console.error('Ошибка patchPossessionBonus:', error);
+            }
+
+        },
+        async patchInspirationFrame() {
+            try {
+                await api.patch("dnd/character/" + this.character_id + "/inspiration_frame/", {'inspiration': this.character.inspiration});
+            } catch (error) {
+                console.error('Ошибка patchInspirationFrame:', error);
+            }
+
+        },
+        async patchProtectionClass() {
+            try {
+                await api.patch("dnd/character/" + this.character_id + "/protection_class/", {'protection_class': this.character.protection_class});
+            } catch (error) {
+                console.error('Ошибка patchProtectionClass:', error);
+            }
+
+        },
+        async patchSpeed() {
+            try {
+                await api.patch("dnd/character/" + this.character_id + "/speed/", {'speed': this.character.speed});
+            } catch (error) {
+                console.error('Ошибка patchSpeed:', error);
+            }
+
+        },
     }
 })

@@ -15,6 +15,46 @@ from .serializers.serializers import *
 from .serializers.spellbook import CharacterSpellSlotLevelSerializer, SpellSlotLevelSerializer, SpellSerializer
 
 
+class PossessionBonus(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, character_id):
+        character = get_object_or_404(Character, pk=character_id)
+        character.possession_bonus = request.data.get('possession_bonus')
+        character.save()
+        return Response(status.HTTP_200_OK)
+
+
+class Speed(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, character_id):
+        character = get_object_or_404(Character, pk=character_id)
+        character.speed = request.data.get('speed')
+        character.save()
+        return Response(status.HTTP_200_OK)
+
+
+class ProtectionClass(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, character_id):
+        character = get_object_or_404(Character, pk=character_id)
+        character.protection_class = request.data.get('protection_class')
+        character.save()
+        return Response(status.HTTP_200_OK)
+
+
+class InspirationBonus(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, character_id):
+        character = get_object_or_404(Character, pk=character_id)
+        character.inspiration = request.data.get('inspiration')
+        character.save()
+        return Response(status.HTTP_200_OK)
+
+
 class CharacterProtectStateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = ProtectStateSerializer
@@ -137,7 +177,6 @@ class ArchetypeChangeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def patch(self, request, pk):
-        print('patch')
         character = get_object_or_404(Character, pk=pk)
         if character.account != request.user:
             return Response({"error": "ArchetypeChangeView patch"}, status=403)
@@ -149,7 +188,6 @@ class ArchetypeChangeView(APIView):
             return Response(ArchetypeSerializer(character.archetype, context={'character': character}).data)
 
     def delete(self, request, pk):
-        print('delete')
         character = get_object_or_404(Character, pk=pk)
         if character.account != request.user:
             return Response({"error": "ArchetypeChangeView delete"}, status=403)
@@ -157,8 +195,6 @@ class ArchetypeChangeView(APIView):
             character.archetype = None
             character.save()
             return Response(status=status.HTTP_200_OK)
-
-
 
 
 class SubRaceChangeView(APIView):
@@ -401,6 +437,7 @@ class SpellView(viewsets.ReadOnlyModelViewSet):
             queryset = queryset.filter(name__iregex=search_query.strip())
         return queryset
 
+
 class SpellBookSlotPatch(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -418,27 +455,22 @@ class SpellBookSlotPatch(APIView):
         return Response(SpellSlotLevelSerializer(change_level_slot).data)
 
 
-
-
-
 class SpellBookPatch(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def patch(self, request, character_id):
         character = get_object_or_404(Character, id=character_id)
-        level_slot =character.spell_slots.levels.get(level=request.data['level_slots'])
+        level_slot = character.spell_slots.levels.get(level=request.data['level_slots'])
         spell = get_object_or_404(Spell, id=request.data['spell'])
-        spell_book = get_object_or_404(CharacterSpellSlotLevel,spell_slot_level=level_slot,)
-        print(spell_book.spells)
+        spell_book = get_object_or_404(CharacterSpellSlotLevel, spell_slot_level=level_slot, character_spell_slots=character.spell_slots)
         spell_book.spells.append(spell.id)
         spell_book.save()
         return Response(CharacterSpellSlotLevelSerializer(spell_book).data)
 
     def delete(self, request, character_id):
         character = get_object_or_404(Character, id=character_id)
-        # print(request.query_params.get('level_slots[level]'))
         level_slot = character.spell_slots.levels.get(level=request.query_params.get('level_slots[level]'))
-        spell_book = get_object_or_404(CharacterSpellSlotLevel, spell_slot_level=level_slot )
+        spell_book = get_object_or_404(CharacterSpellSlotLevel, spell_slot_level=level_slot)
         spell_book.spells.pop(int(request.query_params.get('spell_index')))
         spell_book.save()
         return Response(CharacterSpellSlotLevelSerializer(spell_book).data)
@@ -473,7 +505,7 @@ class SpellSearchView(APIView):
             query &= Q(name__icontains=search_query) | Q(instruction__icontains=search_query)
 
         # применяем фильтры и группируем результаты
-        queryset = queryset.filter(query)
+        queryset = queryset.filter(query).distinct()
 
         grouped_spells = defaultdict(list)
         for spell in queryset:
@@ -517,12 +549,22 @@ class WorldOutlookView(generics.ListAPIView):
         return WorldOutlook.objects.all()
 
 
+class MaxHitView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, character_id):
+        character = get_object_or_404(Character, pk=character_id)
+        character.max_hit = request.data.get('max_hit')
+        character.save()
+        return Response(status.HTTP_200_OK)
+
+
 class ItemView(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = Item.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter,
                        DjangoFilterBackend]
-    serializer_class = ItemsSerializer
+    serializer_class = ItemListsSerializer
 
     def retrieve(self, request, pk=None):
         item = get_object_or_404(Item, pk=pk)
@@ -530,10 +572,17 @@ class ItemView(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
 
     def get_queryset(self):
+        query = Q()
         search_query = self.request.query_params.get('search', '')
+        rarity_params = self.request.query_params.getlist('rarity[]')
         queryset = Item.objects.all()
+        for rarity in rarity_params:
+            query |= Q(rarity__id=rarity)
+
         if search_query:
-            queryset = queryset.filter(name__iregex=search_query)
+            query &= Q(name__iregex=search_query) | Q(instruction__icontains=search_query)
+            # queryset = queryset.filter(name__iregex=search_query)
+        queryset = queryset.filter(query).distinct()
         return queryset
 
 
@@ -575,10 +624,12 @@ class InventoryItemView(APIView):
         for item in request.data:
             item_id = int(item.get('item').get("id"))
             quantity = int(item.get('quantity'))
+            put_on = item.get('put_on')
             inventory_item = get_object_or_404(InventoryItem,
                                                character=character,
                                                item__id=item_id)
             inventory_item.quantity = quantity
+            inventory_item.put_on = put_on
             if quantity <= 0:
                 inventory_item.delete()
             else:

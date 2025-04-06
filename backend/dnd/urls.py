@@ -1,3 +1,5 @@
+from poplib import POP3_SSL
+
 from django.urls import path, include
 from rest_framework import routers
 
@@ -65,5 +67,11 @@ urlpatterns = [
     path('<int:character_id>/spellbook/patch/', SpellBookPatch.as_view(), name='spellbook-patch'),
     path('<int:character_id>/spellbook/slot/patch/', SpellBookSlotPatch.as_view(), name='spellbook-slot-patch'),
     path('archetypes/', Archetypes.as_view(), name='archetypes-list'),
+    #ЗДОРОВЬЕ
+    path('character/<int:character_id>/max_hit/', MaxHitView.as_view(), name='character-max-hit'),
+    path('character/<int:character_id>/possession_bonus/', PossessionBonus.as_view(), name='character-possession-bonus'),
+    path('character/<int:character_id>/inspiration_frame/', InspirationBonus.as_view(), name='character-inspiration-bonus'),
+    path('character/<int:character_id>/protection_class/', ProtectionClass.as_view(), name='character-protection_class'),
+    path('character/<int:character_id>/speed/', Speed.as_view(), name='character-speed'),
 
 ]
