@@ -69,6 +69,12 @@ urlpatterns = [
     path('archetypes/', Archetypes.as_view(), name='archetypes-list'),
     #ЗДОРОВЬЕ
     path('character/<int:character_id>/max_hit/', MaxHitView.as_view(), name='character-max-hit'),
+    path('character/<int:character_id>/heal/', HealPatch.as_view(), name='character-heal'),
+    path('character/<int:character_id>/damage/', DamagePatch.as_view(), name='character-damage'),
+
+
+
+
     path('character/<int:character_id>/possession_bonus/', PossessionBonus.as_view(), name='character-possession-bonus'),
     path('character/<int:character_id>/inspiration_frame/', InspirationBonus.as_view(), name='character-inspiration-bonus'),
     path('character/<int:character_id>/protection_class/', ProtectionClass.as_view(), name='character-protection_class'),

@@ -555,8 +555,63 @@ class MaxHitView(APIView):
     def patch(self, request, character_id):
         character = get_object_or_404(Character, pk=character_id)
         character.max_hit = request.data.get('max_hit')
+        tmp = request.data.get('temp_hit')
+        if tmp < 0:
+            character.temp_hit = 0
+        else:
+            character.temp_hit = tmp
         character.save()
         return Response(status.HTTP_200_OK)
+
+
+class HealPatch(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, character_id):
+        character = get_object_or_404(Character, pk=character_id)
+        heal = request.data.get('heal')
+        current_hit = character.current_hit
+        current_hit += int(heal)
+        if current_hit > character.max_hit:
+            current_hit = character.max_hit
+        character.current_hit = current_hit
+        character.save()
+        return Response({'current_hit': current_hit}, status.HTTP_200_OK)
+
+
+class DamagePatch(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, character_id):
+        character = get_object_or_404(Character, pk=character_id)
+        damage = request.data.get('damage')
+        # Текущие значения здоровья
+        current_hit = character.current_hit
+        temp_hit = character.temp_hit
+
+        # Логика вычитания урона
+        if temp_hit > 0:
+            # Если есть временное здоровье, вычитаем урон из него
+            if damage >= temp_hit:
+                # Если урон больше или равен временному здоровью, полностью расходуем его
+                damage -= temp_hit
+                temp_hit = 0
+            else:
+                # Если урон меньше временного здоровья, вычитаем только часть
+                temp_hit -= damage
+                damage = 0
+
+        # Если остался урон после временного здоровья, вычитаем его из основного здоровья
+        if damage > 0:
+            current_hit -= damage
+            current_hit = max(current_hit, 0)  # Здоровье не может быть меньше 0
+
+        # Обновляем значения в базе данных
+        character.temp_hit = temp_hit
+        character.current_hit = current_hit
+        character.save()
+
+        return Response({'current_hit': character.current_hit, 'temp_hit': character.temp_hit}, status.HTTP_200_OK)
 
 
 class ItemView(viewsets.ReadOnlyModelViewSet):

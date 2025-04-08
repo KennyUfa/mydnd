@@ -6,14 +6,14 @@
                 placeholder="Имя персонажа"
                 class="border-4 border-black h-300 mb-3"
         />
-        <div class="flex flex-row gap-2">
-            <div class="mb-4 flex-1">
+        <div class="flex flex-row">
+            <div class="mb-4 flex">
                 <DropdownMenu>
                     <Button variant="destructive"
                             class="w-full flex justify-center"
                             as-child>
                         <DropdownMenuTrigger
-                                class="font-bold italic leading-[0.8] ">
+                                class="font-bold italic leading-[0.8] p-1 text-wrap">
                             {{ champion_class.name || "Выбери класс" }}
                         </DropdownMenuTrigger>
                     </Button>
@@ -32,7 +32,7 @@
             </div>
 
             <!-- Выбор расы -->
-            <div class="mb-4  flex-1">
+            <div class="mb-4 mx-1 flex-1">
                 <DropdownMenu>
                     <Button variant="destructive"
                             class="w-full flex justify-center"
@@ -56,10 +56,10 @@
             </div>
 
             <!-- Выбор уровня -->
-            <div class="mb-4 flex-1">
+            <div class="mb-4 flex">
                 <DropdownMenu>
                     <Button variant="destructive"
-                            class="w-full flex justify-center"
+                            class="w-full justify-between"
                             as-child>
                         <DropdownMenuTrigger>
                             Уровень - {{ level }}

@@ -1,4 +1,5 @@
 <template>
+    <momey-view></momey-view>
     <div v-for="item in my_items"
          class="border-2 mb-2 p-1 flex justify-between">
         <div>
@@ -57,6 +58,7 @@
 </template>
 <script setup>
 import {useCharacterStore} from "@/stores/characterStore.js";
+import MomeyView from "@/views/CharacterView/Inventory/MoneyView.vue";
 import {Badge} from "@/components/ui/badge/index.js";
 import {computed, ref} from "vue";
 import {useInventoryStore} from "@/stores/inventoryStore.js";

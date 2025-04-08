@@ -130,9 +130,9 @@ export const useCharacterStore = defineStore('character', {
         async switchAbilityState(data) {
             this.character.skill_state[data] = (this.character.skill_state[data] % 3) + 1;
         },
-        async updateCharacterHit(max_hit) {
+        async updateCharacterHit(max_hit,temp_hit){
             try {
-                const response = await api.patch("dnd/character/" + this.character_id + "/max_hit/", {max_hit: max_hit});
+                const response = await api.patch("dnd/character/" + this.character_id + "/max_hit/", {max_hit: max_hit, temp_hit: temp_hit});
                 this.character.hit = response.data;
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);
@@ -194,6 +194,23 @@ export const useCharacterStore = defineStore('character', {
                 console.error('Ошибка patchSpeed:', error);
             }
 
+        },
+        async heal(heal) {
+            try {
+                const response = await api.patch("dnd/character/" + this.character_id + "/heal/", {heal: heal});
+                this.character.current_hit = response.data.current_hit;
+            } catch (error) {
+                console.error('Ошибка при получении списка персонажей:', error);
+            }
+        },
+        async damage(damage) {
+            try {
+                const response = await api.patch("dnd/character/" + this.character_id + "/damage/", {damage: damage});
+                this.character.current_hit = response.data.current_hit;
+                this.character.temp_hit = response.data.temp_hit;
+            } catch (error) {
+                console.error('Ошибка при получении списка персонажей:', error);
+            }
         },
     }
 })

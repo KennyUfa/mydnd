@@ -60,7 +60,7 @@ class SpellSlotLevel(models.Model):
 
 class CharacterSpellSlots(models.Model):
     character = models.OneToOneField(
-        'Character',  # Предполагается, что есть модель Character
+        'Character',
         on_delete=models.CASCADE,
         related_name='spell_slots',
         verbose_name='Персонаж'
