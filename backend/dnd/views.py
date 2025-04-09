@@ -259,25 +259,25 @@ class BackgroundChangeOriginView(APIView):
         character = get_object_or_404(Character, pk=pk)
         if request.data.get('flaw'):
             flaw = Flaw.objects.get(id=request.data.get('flaw').get('id'))
-            character_selected_origin_options = SelectedOrigin.objects.get(character=character)
+            character_selected_origin_options,_ = SelectedOrigin.objects.get_or_create(character=character)
             character_selected_origin_options.flaw = flaw
             character_selected_origin_options.save()
             return Response(SelectedOriginSerializer(character_selected_origin_options).data)
         if request.data.get('bond'):
             bond = Bond.objects.get(id=request.data.get('bond').get('id'))
-            character_selected_origin_options = SelectedOrigin.objects.get(character=character)
+            character_selected_origin_options,_  = SelectedOrigin.objects.get_or_create(character=character)
             character_selected_origin_options.bond = bond
             character_selected_origin_options.save()
             return Response(SelectedOriginSerializer(character_selected_origin_options).data)
         if request.data.get('trait'):
             trait = Trait.objects.get(id=request.data.get('trait').get('id'))
-            character_selected_origin_options = SelectedOrigin.objects.get(character=character)
+            character_selected_origin_options,_  = SelectedOrigin.objects.get_or_create(character=character)
             character_selected_origin_options.trait = trait
             character_selected_origin_options.save()
             return Response(SelectedOriginSerializer(character_selected_origin_options).data)
         if request.data.get('ideal'):
             ideal = Ideal.objects.get(id=request.data.get('ideal').get('id'))
-            character_selected_origin_options = SelectedOrigin.objects.get(character=character)
+            character_selected_origin_options,_  = SelectedOrigin.objects.get_or_create(character=character)
             character_selected_origin_options.ideal = ideal
             character_selected_origin_options.save()
             return Response(SelectedOriginSerializer(character_selected_origin_options).data)
@@ -635,8 +635,7 @@ class ItemView(viewsets.ReadOnlyModelViewSet):
             query |= Q(rarity__id=rarity)
 
         if search_query:
-            query &= Q(name__iregex=search_query) | Q(instruction__icontains=search_query)
-            # queryset = queryset.filter(name__iregex=search_query)
+            query &= Q(name__iregex=search_query)
         queryset = queryset.filter(query).distinct()
         return queryset
 

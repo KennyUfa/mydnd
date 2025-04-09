@@ -19,8 +19,6 @@ class WorldOutlook(models.Model):
         return self.name
 
 
-
-
 class ProtectStateModel(models.Model):
     protect_state_strength = models.IntegerField(default=1, validators=[
         MaxValueValidator(2), MinValueValidator(1)])
@@ -195,29 +193,27 @@ class Character(models.Model):
         # Сохраняем объект Character
         if not self.skills:
             self.skills = Skills.objects.create()
-        # super().save(*args, **kwargs)
-        # if not self.spell_slots:
-        #     try:
-        #         print('Создание ячеек заклинаний')
-        #         # Создаем CharacterSpellSlots для персонажа
-        #         character_spell_slots = CharacterSpellSlots.objects.create(character=self)
-        #
-        #         # Создаем стандартные уровни ячеек заклинаний
-        #         for level in range(0, 10):  # Уровни от 1 до 9
-        #             spell_slot_level, _ = SpellSlotLevel.objects.get_or_create(level=level, defaults={
-        #                 'count': 0,  # По умолчанию количество ячеек равно 0
-        #                 'used': 0  # Использованные ячейки тоже равны 0
-        #             })
-        #
-        #             # Создаем связь между персонажем и уровнем ячеек
-        #             CharacterSpellSlotLevel.objects.create(
-        #                 character_spell_slots=character_spell_slots,
-        #                 spell_slot_level=spell_slot_level
-        #             )
-        #     except Exception as e:
-        #         print(f"Ошибка создания ячеек заклинаний: {e}")
         super().save(*args, **kwargs)
+        if not hasattr(self, 'spell_slots'):
+            try:
+                # Создаем CharacterSpellSlots для персонажа при первом сохранениич
+                character_spell_slots = CharacterSpellSlots.objects.create(character=self)
 
+                # Создаем стандартные уровни ячеек заклинаний
+                for level in range(0, 10):  # Уровни от 0 до 9
+                    spell_slot_level = SpellSlotLevel.objects.create(
+                        level=level,
+                        count=0,
+                        used=0
+                    )
+
+                    # Создаем связь между персонажем и уровнем ячеек
+                    CharacterSpellSlotLevel.objects.create(
+                        character_spell_slots=character_spell_slots,
+                        spell_slot_level=spell_slot_level
+                    )
+            except Exception as e:
+                print(f"Ошибка создания ячеек заклинаний: {e}")
 
     def get_lineament(self):
         lineament_list = self.lineament.all()
@@ -252,12 +248,10 @@ class InventoryItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     put_on = models.BooleanField(default=False)
 
-
     class Meta:
         verbose_name_plural = 'инвентарь'
         verbose_name = 'предмет'
         ordering = ['-put_on']
-
 
 
 # эти записи не удалялись при удалении персонажа, поправил таким костылем

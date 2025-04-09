@@ -43,7 +43,7 @@ class Spell(models.Model):
 
 
 class SpellSlotLevel(models.Model):
-    level = models.PositiveIntegerField(unique=True, default=0, validators=[
+    level = models.PositiveIntegerField(default=0, validators=[
         MaxValueValidator(9), MinValueValidator(0)])
     count = models.PositiveIntegerField(default=0, validators=[
         MaxValueValidator(12), MinValueValidator(0)])

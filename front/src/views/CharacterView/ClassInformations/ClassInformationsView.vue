@@ -11,7 +11,8 @@
         </div>
     </div>
     <!--описание архетипа-->
-    <div class="bg-white text-slate-900 border-2 border-red-600 rounded-lg p-4 relative">
+    <div
+            class="bg-white text-slate-900 border-2 border-red-600 rounded-lg p-4 relative">
 <!--        выбор архетипа-->
         <DropdownMenu>
             <DropdownMenuTrigger
@@ -44,14 +45,13 @@
         </DropdownMenu>
 
 
-        <div class="font-bold uppercase text-xl italic"
-             v-if="archetype">{{
-                archetype.name
+        <div class="font-bold uppercase text-xl italic">{{
+                archetype?.name || 'подкласс не выбран'
             }}
         </div>
-        <div class="" v-if="archetype">
+        <div class="">
             <p class="">{{
-                    archetype.description
+                    archetype?.description
                 }}</p>
         </div>
     </div>

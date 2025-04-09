@@ -1,15 +1,15 @@
 <template>
-    <Toaster position="boottom-right"/>
+
     <Tabs default-value="main">
-        <TabsList class="grid grid-cols-4">
+        <TabsList class="grid grid-cols-3">
             <TabsTrigger value="main">
                 Главная
             </TabsTrigger>
             <TabsTrigger value="class-information">
-                Информация по классу
+                Класс и уровень
             </TabsTrigger>
             <TabsTrigger value="race-information">
-                Расы и происхождения
+                Раса
             </TabsTrigger>
             <TabsTrigger value="background">
                 Предыстория
@@ -59,7 +59,6 @@
 
 <script setup>
 import {useRouter} from "vue-router";
-
 import MainInformation
     from "@/views/CharacterView/MainInformations/MainInformation.vue";
 import ClassInformationView
@@ -70,10 +69,9 @@ import SavingThrowView from "@/views/CharacterView/Skills/SavingThrowView.vue";
 import RaceAndOrigin
     from "@/views/CharacterView/RaceAndOrigin/RaceAndOrigin.vue"
 import ItemsView from "@/views/CharacterView/Inventory/ItemsView.vue"
-import {Toaster} from "@/components/ui/toast";
 import {useToast} from "@/components/ui/toast/use-toast";
 import {h} from "vue";
-import ToastContent from "@/views/CharacterView/Skills/ui/ToastContent.vue";
+import ToastContent from "@/views/ToastContent.vue";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import InventoryView from "@/views/CharacterView/Inventory/InventoryView.vue";
 import SpellBookView from "@/views/CharacterView/SpellBook/SpellBookView.vue";
@@ -88,11 +86,12 @@ const {toast} = useToast();
 // Метод для показа тоста
 const callRandomWindowMethod = (responseData) => {
     toast({
+        class: "",
         title: "Бросок кубиков!",
-        description: h(ToastContent, {data: responseData}), // Используем компонент
-        variant: "default",
-        position: "bottom-left",
+        description: h(ToastContent, {data: responseData}),
+
     });
+
 };
 
 </script>
