@@ -13,10 +13,6 @@ WORKDIR /backend
 # Copy the requirements file and install dependencies in a virtual environment
 COPY requirements.txt requirements.txt
 # Установка зависимостей
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip setuptools
 RUN pip install --no-cache-dir -r requirements.txt
