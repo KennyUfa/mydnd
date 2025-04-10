@@ -1,0 +1,61 @@
+# .dockerignore file for efficient Docker builds
+
+# General patterns
+.git/
+.gitignore
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python-specific patterns
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+
+# Node.js-specific patterns
+node_modules/
+npm-debug.log
+yarn-debug.log
+
+# Build and output directories
+dist/
+build/
+out/
+
+# Temporary and debug files
+tmp/
+temp/
+*.tmp
+*.log
+
+# Environment and secrets
+.env*
+*.env
+*.pem
+*.key
+*.crt
+
+# Documentation and configuration
+docs/
+*.md
+README*
+config.local.*
+*.local.yml
+
+# Docker-specific files
+Dockerfile*
+docker-compose*
+
+# Project-specific patterns
+*.bak
+*.DS_Store
+
+# Exclude files necessary for the build
+!backend/requirements.txt
+!package.json
+!compose.yaml
+
+# End of .dockerignore file

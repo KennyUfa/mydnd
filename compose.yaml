@@ -1,0 +1,24 @@
+services:
+  backend:
+    build: ./backend
+    container_name: backend-container
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/backend
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=your-secret-key
+
+  frontend:
+    build: ./front
+    container_name: frontend-container
+    ports:
+      - "80:80"
+    volumes:
+      - ./front/dist:/usr/share/nginx/html
+    depends_on:
+      - backend
+
+volumes:
+  sqlite_data:

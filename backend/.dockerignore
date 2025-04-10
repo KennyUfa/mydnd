@@ -1,0 +1,47 @@
+# General Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build and distribution directories
+dist/
+build/
+out/
+
+# Version control
+.git/
+.gitignore
+
+# Environment and secrets
+.env*
+*.env
+*.pem
+*.key
+*.crt
+
+# Documentation and temporary files
+docs/
+*.md
+README*
+tmp/
+temp/
+*.tmp
+
+# Project-specific patterns
+*.DS_Store
+db.sqlite3
+
+# Docker-specific files
+Dockerfile*
+docker-compose*
+
+# Exclude existing .dockerignore
+!.dockerignore
