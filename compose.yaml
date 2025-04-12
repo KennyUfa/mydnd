@@ -11,8 +11,8 @@ services:
     container_name: frontend-container
     ports:
       - "80:80"
-    volumes:
-      - ./front/dist:/usr/share/nginx/html
+#    volumes:
+#      - ./front/dist:/usr/share/nginx/html
     depends_on:
       - backend
 
