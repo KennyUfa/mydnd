@@ -153,7 +153,8 @@
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogAction @click="patchAbilitySkills">Изменить
+                        <AlertDialogAction class="mb-20"
+                                           @click="patchAbilitySkills">Изменить
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
