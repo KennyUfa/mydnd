@@ -13,7 +13,7 @@ const routes = [
     },
 
     {
-        path: "/character", // Используйте параметр ID для гибкости
+        path: "/character",
         component: Character,
         async beforeEnter(to, from, next) {
             console.log("Перед входом в страницу персонажа...");
