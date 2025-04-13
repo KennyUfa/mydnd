@@ -1,5 +1,6 @@
 <template>
-    <div class="col-span-full text-center text-xl italic font-bold tracking-wide">
+    <div
+            class="col-span-full text-center text-xl italic font-bold tracking-wide ">
         <div class="flex items-center justify-between">
             <div class="w-6"></div>
             <div>Навыки</div>
@@ -15,7 +16,7 @@
                         </svg>
                     </button>
                 </AlertDialogTrigger>
-                <AlertDialogContent class="max-w-96 px-2 overflow-y: auto">
+                <AlertDialogContent class="max-h-[90vh] m-2 overflow-y-auto">
                     <AlertDialogHeader>
                         <AlertDialogTitle
                                 class="font-bold uppercase italic">
@@ -153,7 +154,7 @@
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogAction class="mb-20"
+                        <AlertDialogAction class="mb-10"
                                            @click="patchAbilitySkills">Изменить
                         </AlertDialogAction>
                     </AlertDialogFooter>

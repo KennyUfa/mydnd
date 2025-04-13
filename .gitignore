@@ -7,6 +7,7 @@
 /.vscode/
 /.idea/
 /front/src/views/CharacterView/test.vue
+/front/src/services/api.js
 /.
 /backend/dnd/inventory/
 /parser/

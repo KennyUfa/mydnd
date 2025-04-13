@@ -4,12 +4,12 @@
             <button  v-if="protect_state[skillValue] === 1"
                     class="bg-sky-300 rounded-lg w-full flex items-center justify-center"
                     @click="switchProtectState(skillValue)">
-                {{ protect_state[skillValue] }}
+                Базовая проверка
             </button>
             <button  v-if="protect_state[skillValue] === 2"
                     class="bg-sky-900 text-white rounded-lg w-full flex items-center justify-center"
                     @click="switchProtectState(skillValue)">
-                {{ protect_state[skillValue] }}
+                Спасбросок
             </button>
         </div>
         <div>
