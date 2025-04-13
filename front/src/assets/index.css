@@ -69,9 +69,3 @@
         @apply bg-background text-foreground;
     }
 }
-
-body {
-    background-image: url(./PaperTextureBg.jpg);
-    background-repeat: repeat;
-    background-size: 500px 500px;
-}
