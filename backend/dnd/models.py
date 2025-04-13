@@ -183,7 +183,6 @@ class Character(models.Model):
         return self.name_champion
 
     def save(self, *args, **kwargs):
-        # print(self.spell_slots)
         # Если protect_state ещё не задан, создаём запись
         if not self.protect_state:
             self.protect_state = ProtectStateModel.objects.create()
@@ -261,3 +260,5 @@ def delete_related_states(sender, instance, **kwargs):
         instance.protect_state.delete()
     if instance.skill_state:
         instance.skill_state.delete()
+    if instance.skills:
+        instance.skills.delete()

@@ -127,7 +127,7 @@
         <CardTitle>{{ feature.name }}</CardTitle>
         <CardDescription>{{ feature.description }}</CardDescription>
         <CardTitle>{{
-                feature.selected_options[0]?.option_name ||
+                feature.selected_options?.option_name ||
                 ''
             }}
         </CardTitle>

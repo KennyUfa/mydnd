@@ -24,8 +24,8 @@ class FeatureSerializer(serializers.ModelSerializer):
 
     def get_selected_options(self, obj):
         # Получаем все выбранные опции для данной особенности
-        selected_options = SelectedFeatureOption.objects.filter(feature=obj)
-        return SelectedFeatureOptionSerializer(selected_options, many=True).data
+        selected_options = SelectedFeatureOption.objects.filter(feature=obj).first()
+        return SelectedFeatureOptionSerializer(selected_options).data
 
     class Meta:
         model = Feature

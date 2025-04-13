@@ -237,7 +237,7 @@ class BackgroundChangeOptionsView(APIView):
         character = get_object_or_404(Character, pk=pk)
         option = get_object_or_404(FeatureOption, id=request.data.get('option'))
         feature = get_object_or_404(Feature, id=request.data.get('feature'))
-        existing_option = SelectedFeatureOption.objects.get(character=character, feature=feature)
+        existing_option = SelectedFeatureOption.objects.filter(character=character, feature=feature).first()
         if existing_option:
             # Обновляем существующую запись
             existing_option.option = option
