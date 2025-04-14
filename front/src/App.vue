@@ -5,38 +5,39 @@
     <Toaster/>
     <DropdownMenu>
         <DropdownMenuTrigger>
-            <Button variant="outline">
-                Open
+            <Button variant="outline"
+                    class="fixed bottom-0 w-16 h-16 rounded-lg mb-2">
+                <img src="./assets/152068.svg"  alt="Куб" class="w-10 h-10">
             </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent class="w-1 ml-2">
+        <DropdownMenuContent class="relative w-1 ml-2">
             <DropdownMenuLabel class="bg-green-500 rounded-xl"
                                v-if="rollStatus" @click="roll">Бросить кубы
             </DropdownMenuLabel>
             <DropdownMenuSeparator/>
             <DropdownMenuGroup>
                 <DropdownMenuItem>
-                    <div @click.stop="d4+=1">D4</div>
+                    <div @click.stop="d4+=1" class="w-full">D4</div>
                     <DropdownMenuShortcut>{{ d4 }}</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                    <div @click.stop="d6+=1">D6</div>
+                    <div @click.stop="d6+=1" class="w-full">D6</div>
                     <DropdownMenuShortcut>{{ d6 }}</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                    <div @click.stop="d8+=1">D8</div>
+                    <div @click.stop="d8+=1" class="w-full">D8</div>
                     <DropdownMenuShortcut>{{ d8 }}</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                    <div @click.stop="d10+=1">D10</div>
+                    <div @click.stop="d10+=1" class="w-full">D10</div>
                     <DropdownMenuShortcut>{{ d10 }}</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                    <div @click.stop="d12+=1">D12</div>
+                    <div @click.stop="d12+=1" class="w-full">D12</div>
                     <DropdownMenuShortcut>{{ d12 }}</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                    <div @click.stop="d20+=1">D20</div>
+                    <div @click.stop="d20+=1" class="w-full">D20</div>
                     <DropdownMenuShortcut>{{ d20 }}</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator/>

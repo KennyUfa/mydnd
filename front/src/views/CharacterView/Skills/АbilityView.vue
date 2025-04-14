@@ -1,6 +1,6 @@
 <template>
     <div
-            class="grid grid-cols-2 gap-1 bg-white text-slate-900 border-2 border-red-600 rounded-lg p-4 overflow-y-auto">
+            class="grid grid-cols-2 gap-1 bg-white text-slate-900 border-2 border-red-600 rounded-lg p-4 overflow-y-auto mb-20">
         <change-ability></change-ability>
         <ability-frame
                 @callRandomWindow="handleCallRandomWindow"
