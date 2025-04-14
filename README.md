@@ -9,3 +9,5 @@
 # Frontend:
 * ### Vue3 - фрэймворк
 * Pinia - стор
+* использовал готовые компоненты с shadcn 
+* Tailwind
