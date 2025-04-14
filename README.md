@@ -1,11 +1,11 @@
-Личные проект 
-Интерактивный лист персонажа для игры Dungeons & Dragons
+# Личные проект
+# Интерактивный лист персонажа для игры Dungeons & Dragons
 
-Backend:
-DjangoREST - фрэймворк
-Simple JWT - для авторизации
-BeautifulSoup - для парсинга данных
+# Backend:
+* ### DjangoREST - фрэймворк
+* Simple JWT - для авторизации
+* BeautifulSoup - для парсинга данных
 
-Frontend:
-Vue3 - фрэймворк
-Pinia - стор
+# Frontend:
+* ### Vue3 - фрэймворк
+* Pinia - стор
