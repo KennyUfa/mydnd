@@ -221,11 +221,18 @@ class BackgroundChangeView(APIView):
         if character.account != request.user:
             return Response({"error": "BackgroundChangeView"}, status=403)
         else:
-
             background_id = request.data.get('id')
             change = get_object_or_404(Background, id=background_id)
-            character.background = change
-            character.save()
+
+            if character.background.id != background_id:
+                character_selected_origin_options, _ = SelectedOrigin.objects.get_or_create(character=character)
+                character_selected_origin_options.bond=None
+                character_selected_origin_options.flaw=None
+                character_selected_origin_options.ideal=None
+                character_selected_origin_options.trait=None
+                character_selected_origin_options.save()
+                character.background = change
+                character.save()
             return Response(BackgroundSerializer(character.background, context={'character': character}).data)
 
 
