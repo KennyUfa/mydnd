@@ -122,6 +122,7 @@
             }}
         </CardDescription>
     </CardHeader>
+<!--    выбор опции -->
     <CardHeader v-for="feature in background?.features" :key="feature.id"
                 class="p-2">
         <CardTitle>{{ feature.name }}</CardTitle>
@@ -134,7 +135,7 @@
         <DropdownMenu>
             <DropdownMenuTrigger v-if="feature.has_choice">
                 <Button variant="outline">
-                    {{ feature?.name || 'Выбрать подрасу' }}
+                    {{ feature?.name || 'Выбрать' }}
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
