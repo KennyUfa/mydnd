@@ -120,7 +120,7 @@ export const useCharacterStore = defineStore('character', {
         },
         async getRandomAbility(data) {
             try {
-                const response = await api.post("dnd/random_protect/", data);
+                const response = await api.post("dnd/random-skill/", data);
                 return response.data
 
             } catch (error) {
@@ -130,9 +130,12 @@ export const useCharacterStore = defineStore('character', {
         async switchAbilityState(data) {
             this.character.skill_state[data] = (this.character.skill_state[data] % 3) + 1;
         },
-        async updateCharacterHit(max_hit,temp_hit){
+        async updateCharacterHit(max_hit, temp_hit) {
             try {
-                const response = await api.patch("dnd/character/" + this.character_id + "/max_hit/", {max_hit: max_hit, temp_hit: temp_hit});
+                const response = await api.patch("dnd/character/" + this.character_id + "/max_hit/", {
+                    max_hit: max_hit,
+                    temp_hit: temp_hit
+                });
                 this.character.hit = response.data;
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);
@@ -212,5 +215,21 @@ export const useCharacterStore = defineStore('character', {
                 console.error('Ошибка при получении списка персонажей:', error);
             }
         },
+        async rollDice(d4, d6, d8, d10, d12, d20) {
+            try {
+                const response = await api.post("dnd/random-dice/", {
+                    'd4': d4,
+                    'd6': d6,
+                    'd8': d8,
+                    'd10': d10,
+                    'd12': d12,
+                    'd20': d20
+                });
+                return response.data
+
+            } catch (error) {
+                console.error('Ошибка при получении списка персонажей:', error);
+            }
+        }
     }
 })

@@ -17,11 +17,23 @@
                 <ul class="">
                     <!-- Цикл для предметов в группе -->
                     <li v-for="item in group" :key="item.id"
-                        class="border-2 mb-2 p-1 flex justify-between">
+
+                        :class="['border-2 mb-1 flex justify-between',
+                            item.rarity.id=== 2 ?'bg-stone-200 border-stone-300' :
+                            item.rarity.id=== 3
+                            ?'bg-blue-200 border-blue-300' :
+                            item.rarity.id=== 4
+                            ?'bg-purple-200 border-purple-300' :
+                            item.rarity.id=== 5
+                            ?'bg-amber-200 border-amber-300' :
+                            item.rarity.id=== 6
+                            ?'bg-red-200 border-red-300' :
+                            'bg-grey-100 border-grey-200']">
                         <Dialog>
-                            <DialogTrigger class=""
-                                           as-child
-                                           @click="getDescriptionItem(item)">
+                            <DialogTrigger
+                                    as-child
+                                    @click="getDescriptionItem(item)"
+                            >
                                 <Button variant="outline "
                                         class="text-balance"
                                 >
@@ -51,20 +63,22 @@
 
                         <div class="flex">
                             <Badge
-                                    type="button"
-                                    class="mr-2"
-                                    @click="patchItem(item)"
-                            >
-                                +
-                            </Badge>
-                            <Badge
                                     v-if="isItemInMyList(item.id)"
                                     type="button"
-                                    class="mr-2"
+                                    class="mr-2 bg-green-500"
                                     @click="deleteItem(item.id)"
                             >
                                 -
                             </Badge>
+                            <Badge
+                                    v-else
+                                    type="button"
+                                    class="mr-2 bg-red-500"
+                                    @click="patchItem(item)"
+                            >
+                                +
+                            </Badge>
+
                         </div>
                     </li>
                 </ul>

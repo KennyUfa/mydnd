@@ -43,8 +43,6 @@ export const useBackground = defineStore("background", {
             async change(origin) {
                 try {
                     const response = await api.patch("dnd/character/" + useCharacterStore().get_character_id + "/background-origin/", origin);
-
-                    console.log(response)
                     this.background.selected_origins = response.data
                 } catch (error) {
                     console.error('Ошибка при смене опций: error', error);

@@ -8,8 +8,8 @@ const props = defineProps({
 </script>
 
 <template>
-    <p>Total: {{ data.total }}</p>
-    <p>Skill Value: {{ data.skillValue }}</p>
-    <p>Random Result: {{ data.random_result }}</p>
-    <p>Possession Bonus: {{ data.possession_bonus }}</p>
+    <strong>Итого: {{ data.total }}</strong>
+    <p>Значение навыка: {{ data.skillValue }}</p>
+    <p>Результат броска: {{ data.random_result }}</p>
+    <p>Бонус мастерства: {{ data.possession_bonus }}</p>
 </template>

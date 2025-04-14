@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue';
 
 const TOAST_LIMIT = 3;
-const TOAST_REMOVE_DELAY = 1000000;
+const TOAST_REMOVE_DELAY = 2000000;
 
 const actionTypes = {
   ADD_TOAST: 'ADD_TOAST',

@@ -6,12 +6,11 @@ from rest_framework import routers
 from .views import *
 
 router = routers.SimpleRouter()
-# router.register('character', CharacterListView)
 router.register('prots', ProtectStateView)
 router.register('skillstate', SkillStateView)
 router.register('spell', SpellView, basename='spell')
 router.register('items', ItemView, basename='item')
-# router.register('character', CharacterView, basename='character')
+
 
 
 urlpatterns = [
@@ -52,8 +51,10 @@ urlpatterns = [
     path('characters/create/', CharacterCreateView.as_view(), name='character-create'),
     path('characters/delete/<int:pk>/', CharacterDeleteView.as_view(), name='character-delete'),
 
-    # path('origin/', OriginView.as_view(), name='origin-list'),
-    path('random_protect/', RandomSaveView.as_view(), name='random'),
+    #рандомайзер навыков
+    path('random-skill/', RandomSaveView.as_view(), name='random'),
+    #рандомайзер кубов
+    path('random-dice/', RandomDiceView.as_view(), name='random-dice'),
     # список мировоззрений
     path('world-outlook-list/', WorldOutlookView.as_view(), name='world-outlook-list'),
 
@@ -71,9 +72,6 @@ urlpatterns = [
     path('character/<int:character_id>/max_hit/', MaxHitView.as_view(), name='character-max-hit'),
     path('character/<int:character_id>/heal/', HealPatch.as_view(), name='character-heal'),
     path('character/<int:character_id>/damage/', DamagePatch.as_view(), name='character-damage'),
-
-
-
 
     path('character/<int:character_id>/possession_bonus/', PossessionBonus.as_view(), name='character-possession-bonus'),
     path('character/<int:character_id>/inspiration_frame/', InspirationBonus.as_view(), name='character-inspiration-bonus'),

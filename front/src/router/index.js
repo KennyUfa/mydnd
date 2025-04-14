@@ -23,7 +23,6 @@ const routes = [
             try {
                 // Проверяем, загружены ли данные персонажа
                 if (!characterStore.character || characterStore.character.id !== championId) {
-                    console.log("Загрузка данных персонажа...");
                     await characterStore.fetchCharacter(championId); // Загружаем данные
                 }
 

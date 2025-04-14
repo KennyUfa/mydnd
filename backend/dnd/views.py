@@ -759,3 +759,31 @@ class RandomSaveView(APIView):
                         'possession_bonus': possession_bonus,
                     }
                     return Response(resp)
+
+
+class RandomDiceView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        # Получаем количество кубов из запроса
+        dice_data = request.data
+        result = {}
+        total_sum = 0
+
+        # Список типов кубов
+        dice_types = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20']
+
+        for dice_type in dice_types:
+            # Количество кубов для текущего типа
+            count = dice_data.get(dice_type, 0)
+
+            if count > 0:
+                # Генерируем случайные числа для кубов
+                rolls = [random.randint(1, int(dice_type[1:])) for _ in range(count)]
+                result[dice_type] = rolls
+                total_sum += sum(rolls)
+
+        # Добавляем общую сумму в результат
+        result['total'] = total_sum
+
+        return Response(result)
