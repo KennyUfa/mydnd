@@ -31,7 +31,11 @@ export const useBackground = defineStore("background", {
             async changeOptions(options) {
                 try {
                     const response = await api.patch("dnd/character/" + useCharacterStore().get_character_id + "/background-options/", options);
-                    this.background = response.data
+                    const newSelectedOption = response.data;
+                    const featureToUpdate = this.background.features.find(
+                        (feature) => feature.id === newSelectedOption.feature
+                    );
+                    featureToUpdate.selected_options = newSelectedOption;
                 } catch (error) {
                     console.error('Ошибка при смене опций: error', error);
                 }

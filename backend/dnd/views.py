@@ -1,7 +1,6 @@
 import math
 import random
 from collections import defaultdict
-from pprint import pprint
 
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -11,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .db.background import SelectedFeatureOption, FeatureOption, Feature, Flaw, SelectedOrigin, Bond, Trait, Ideal
-from .serializers.background_serializers import BackgroundListSerializer, SelectedOriginSerializer
+from .serializers.background_serializers import BackgroundListSerializer, SelectedOriginSerializer, SelectedFeatureOptionSerializer
 from .serializers.serializers import *
 from .serializers.spellbook import CharacterSpellSlotLevelSerializer, SpellSlotLevelSerializer, SpellSerializer
 
@@ -242,17 +241,17 @@ class BackgroundChangeOptionsView(APIView):
             # Обновляем существующую запись
             existing_option.option = option
             existing_option.save()
-            return Response(BackgroundSerializer(character.background, context={'character': character}).data)
+            return Response(SelectedFeatureOptionSerializer(existing_option).data)
         else:
 
-        # Создаем новую запись
+            # Создаем новую запись
 
-            SelectedFeatureOption.objects.create(
+            res = SelectedFeatureOption.objects.create(
                 character=character,
                 feature=feature,
                 option=option
             )
-            return Response(BackgroundSerializer(character.background, context={'character': character}).data)
+            return Response(SelectedFeatureOptionSerializer(res).data)
 
 
 class BackgroundChangeOriginView(APIView):
@@ -262,25 +261,25 @@ class BackgroundChangeOriginView(APIView):
         character = get_object_or_404(Character, pk=pk)
         if request.data.get('flaw'):
             flaw = Flaw.objects.get(id=request.data.get('flaw').get('id'))
-            character_selected_origin_options,_ = SelectedOrigin.objects.get_or_create(character=character)
+            character_selected_origin_options, _ = SelectedOrigin.objects.get_or_create(character=character)
             character_selected_origin_options.flaw = flaw
             character_selected_origin_options.save()
             return Response(SelectedOriginSerializer(character_selected_origin_options).data)
         if request.data.get('bond'):
             bond = Bond.objects.get(id=request.data.get('bond').get('id'))
-            character_selected_origin_options,_  = SelectedOrigin.objects.get_or_create(character=character)
+            character_selected_origin_options, _ = SelectedOrigin.objects.get_or_create(character=character)
             character_selected_origin_options.bond = bond
             character_selected_origin_options.save()
             return Response(SelectedOriginSerializer(character_selected_origin_options).data)
         if request.data.get('trait'):
             trait = Trait.objects.get(id=request.data.get('trait').get('id'))
-            character_selected_origin_options,_  = SelectedOrigin.objects.get_or_create(character=character)
+            character_selected_origin_options, _ = SelectedOrigin.objects.get_or_create(character=character)
             character_selected_origin_options.trait = trait
             character_selected_origin_options.save()
             return Response(SelectedOriginSerializer(character_selected_origin_options).data)
         if request.data.get('ideal'):
             ideal = Ideal.objects.get(id=request.data.get('ideal').get('id'))
-            character_selected_origin_options,_  = SelectedOrigin.objects.get_or_create(character=character)
+            character_selected_origin_options, _ = SelectedOrigin.objects.get_or_create(character=character)
             character_selected_origin_options.ideal = ideal
             character_selected_origin_options.save()
             return Response(SelectedOriginSerializer(character_selected_origin_options).data)
