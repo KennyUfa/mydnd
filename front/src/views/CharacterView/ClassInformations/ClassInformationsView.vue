@@ -287,26 +287,34 @@
                                  champion_class.specific_columns"
                                  :key="'specific-column-value-' + colIndex">
                                 <strong>{{ specificColumn.name }}:</strong>
-                                {{ specificColumn.value[allLevelsWithAbilities.length - 1 - index] }}
+                                {{
+                                    specificColumn.value[allLevelsWithAbilities.length - 1 - index]
+                                }}
                             </div>
                             <div class="card-row"
                                  v-if="archetype?.specific_columns?.length > 0"
                                  v-for="(specificColumn, colIndex) in archetype.specific_columns"
                                  :key="'specific-column-value-' + colIndex">
                                 <strong>{{ specificColumn.name }}:</strong>
-                                {{ specificColumn.value[allLevelsWithAbilities.length - 1 - index] }}
+                                {{
+                                    specificColumn.value[allLevelsWithAbilities.length - 1 - index]
+                                }}
                             </div>
                             <div class="card-row"
                                  v-if="archetype?.spell_slots?.length > 0"
                                  v-for="(i,j) in archetype.spell_slots[0].slots">
                                 <strong>Ячейки заклинаний {{ j }}:</strong>
-                                {{ i[allLevelsWithAbilities.length - 1 - index] }}
+                                {{
+                                    i[allLevelsWithAbilities.length - 1 - index]
+                                }}
                             </div>
                             <div class="card-row"
                                  v-if="champion_class?.spell_slots?.length > 0"
                                  v-for="(i,j) in (champion_class.spell_slots[0].slots)">
                                 <strong>Ячейки заклинаний {{ j }}:</strong>
-                                {{ i[allLevelsWithAbilities.length - 1 - index] }}
+                                {{
+                                    i[allLevelsWithAbilities.length - 1 - index]
+                                }}
                             </div>
                         </AccordionContent>
                     </AccordionItem>
