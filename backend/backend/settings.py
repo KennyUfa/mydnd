@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     "corsheaders",
     'authapp',
     'dnd',
+    'spellbook',
+    'race',
+    'champion_class',
 ]
 
 MIDDLEWARE = [

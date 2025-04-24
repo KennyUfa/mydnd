@@ -4,11 +4,11 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
 from dnd.db.background import Background
-from dnd.db.character import BaseClass, Archetype
+from dnd.db.temp.character import BaseClass, Archetype
 from dnd.db.inventory import Item
 from dnd.db.lineament import LineamentModel
-from dnd.db.magic import Spell, CharacterSpellSlots, SpellSlotLevel, CharacterSpellSlotLevel
-from dnd.db.race import Race, SubRace
+from race.models import Race, SubRace
+from spellbook.models import Spell, CharacterSpellSlots, SpellSlotLevel, CharacterSpellSlotLevel
 
 
 class WorldOutlook(models.Model):

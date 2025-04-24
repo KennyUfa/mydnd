@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from dnd.db.character import *
+from dnd.db.temp.character import *
 
 
 class BaseClassListSerializer(serializers.ModelSerializer):

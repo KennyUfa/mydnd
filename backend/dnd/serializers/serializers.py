@@ -1,9 +1,8 @@
-from rest_framework.relations import RelatedField
-
+from race.serializers import RaceListSerializer, RaceSerializer
+from spellbook.serializers import CharacterSpellSlotsSerializer
 from .background_serializers import BackgroundSerializer
 from .class_serializers import *
-from .race_serializers import *
-from .spellbook import CharacterSpellSlotLevelSerializer, CharacterSpellSlotsSerializer
+# from dnd.serializers.temp.spellbook import CharacterSpellSlotsSerializer
 from ..db.inventory import Properties, TypeItem, Rarity, SubType, Weapon, \
     Equipment, Armor, MagicItems
 from ..db.lineament import CustomLineament

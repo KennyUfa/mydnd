@@ -1,6 +1,5 @@
 import math
 import random
-from collections import defaultdict
 
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -12,7 +11,9 @@ from rest_framework.views import APIView
 from .db.background import SelectedFeatureOption, FeatureOption, Feature, Flaw, SelectedOrigin, Bond, Trait, Ideal
 from .serializers.background_serializers import BackgroundListSerializer, SelectedOriginSerializer, SelectedFeatureOptionSerializer
 from .serializers.serializers import *
-from .serializers.spellbook import CharacterSpellSlotLevelSerializer, SpellSlotLevelSerializer, SpellSerializer
+
+
+# from dnd.serializers.temp.spellbook import CharacterSpellSlotLevelSerializer, SpellSlotLevelSerializer, SpellSerializer
 
 
 class PossessionBonus(APIView):
@@ -137,80 +138,10 @@ class CharacterSkillsView(APIView):
         return Response(SkillsSerializer(character.skills).data)
 
 
-class CharacterCustomAbilityUpdateView(APIView):
-    """ Update a custom ability"""
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = AbilitySerializer
-
-    def patch(self, request, pk):
-        ability = get_object_or_404(CustomAbility, pk=pk)
-        ability.custom_description = request.data.get('custom_description')
-        ability.save()
-        return Response(CustomAbilitySerializer(ability).data)
-
-        # if not custom_ability_id:
-
-
-class BaseClassChViewSet(generics.ListAPIView):
-    queryset = BaseClass.objects.all()
-    serializer_class = BaseClassListSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
 class BackgroundListView(generics.ListAPIView):
     queryset = Background.objects.all()
     serializer_class = BackgroundListSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-
-class ArchetypeViewSet(generics.ListAPIView):
-    serializer_class = ArchetypeListSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        pk = self.kwargs.get('pk')
-        # Фильтруем и сортируем queryset
-        return Archetype.objects.filter(character_class=pk)
-
-
-class ArchetypeChangeView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def patch(self, request, pk):
-        character = get_object_or_404(Character, pk=pk)
-        if character.account != request.user:
-            return Response({"error": "ArchetypeChangeView patch"}, status=403)
-        else:
-            archetype = request.data.get('id')
-            change_archetype = get_object_or_404(Archetype, id=archetype)
-            character.archetype = change_archetype
-            character.save()
-            return Response(ArchetypeSerializer(character.archetype, context={'character': character}).data)
-
-    def delete(self, request, pk):
-        character = get_object_or_404(Character, pk=pk)
-        if character.account != request.user:
-            return Response({"error": "ArchetypeChangeView delete"}, status=403)
-        else:
-            character.archetype = None
-            character.save()
-            return Response(status=status.HTTP_200_OK)
-
-
-class SubRaceChangeView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def patch(self, request, pk):
-        character = get_object_or_404(Character, pk=pk)
-        if character.account != request.user:
-            return Response({"error": "SubRaceChangeView"}, status=403)
-        else:
-
-            sub_race_id = request.data.get('id')
-            change_sub_race = get_object_or_404(SubRace, id=sub_race_id)
-            character.sub_race = change_sub_race
-            character.save()
-            return Response(SubRaceSerializer(character.sub_race, context={'character': character}).data)
 
 
 class BackgroundChangeView(APIView):
@@ -224,12 +155,12 @@ class BackgroundChangeView(APIView):
             background_id = request.data.get('id')
             change = get_object_or_404(Background, id=background_id)
 
-            if hasattr(character.background,'id') and character.background.id != background_id:
+            if hasattr(character.background, 'id') and character.background.id != background_id:
                 character_selected_origin_options, _ = SelectedOrigin.objects.get_or_create(character=character)
-                character_selected_origin_options.bond=None
-                character_selected_origin_options.flaw=None
-                character_selected_origin_options.ideal=None
-                character_selected_origin_options.trait=None
+                character_selected_origin_options.bond = None
+                character_selected_origin_options.flaw = None
+                character_selected_origin_options.ideal = None
+                character_selected_origin_options.trait = None
                 character_selected_origin_options.save()
             character.background = change
             character.save()
@@ -290,61 +221,6 @@ class BackgroundChangeOriginView(APIView):
             character_selected_origin_options.ideal = ideal
             character_selected_origin_options.save()
             return Response(SelectedOriginSerializer(character_selected_origin_options).data)
-
-
-class RaceListView(generics.ListAPIView):
-    queryset = Race.objects.all()
-    serializer_class = RaceListSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-class SubRaceListView(generics.ListAPIView):
-    serializer_class = SubRaceSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        pk = self.kwargs.get('pk')
-        return SubRace.objects.filter(race=pk)
-
-
-class CharacterHideOriginalAbilityView(APIView):
-    """Обновления описания способностей класса персонажа"""
-    permission_classes = [permissions.IsAuthenticated]
-
-    def patch(self, request, pk):
-        character = get_object_or_404(Character, pk=pk)
-        original_ability_id = request.data.get('id')
-        custom_ability = CustomAbility.objects.filter(ability=original_ability_id, character=character).first()
-
-        if not custom_ability:
-            original_ability = Ability.objects.filter(id=original_ability_id).first()
-            custom_ability = CustomAbility.objects.create(character=character, ability=original_ability, hide_original=False,
-                                                          hide_custom=request.data.get('custom_description').get('hide_custom'),
-                                                          custom_description=f"Своё описание способности: {original_ability.description}")
-            # Изменяем hide_original
-        custom_ability.hide_original = not custom_ability.hide_original
-        custom_ability.save()
-        serializer = CustomAbilityPatchSerializer(custom_ability)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class CharacterHideCustomAbilityView(APIView):
-    """Обновления описания способностей класса персонажа"""
-    permission_classes = [permissions.IsAuthenticated]
-
-    def patch(self, request, pk):
-        character = get_object_or_404(Character, pk=pk)
-        original_ability_id = request.data.get('id')
-        custom_ability_id = CustomAbility.objects.filter(ability=original_ability_id, character=character).first()
-        if not custom_ability_id:
-            original_ability = Ability.objects.filter(id=original_ability_id).first()
-            custom_ability_id = CustomAbility.objects.create(character=character, ability=original_ability, hide_original=True,
-                                                             hide_custom=True,
-                                                             custom_description=f"Своё описание способности: {original_ability.description}")
-        custom_ability_id.hide_custom = not custom_ability_id.hide_custom
-        custom_ability_id.save()
-        serializer = CustomAbilityPatchSerializer(custom_ability_id)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CharacterWorldOutlookView(APIView):
@@ -425,116 +301,6 @@ class CharacterCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-class SpellView(viewsets.ReadOnlyModelViewSet):
-    queryset = Spell.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter,
-                       DjangoFilterBackend]
-    serializer_class = SpellSerializer
-
-    def retrieve(self, request, pk=None):
-        spell = get_object_or_404(Spell, pk=pk)
-        serializer = SpellSerializer(spell)
-        return Response(serializer.data)
-
-    def get_queryset(self):
-        search_query = self.request.query_params.get('search', '')
-        queryset = Spell.objects.all()
-
-        if search_query:
-            queryset = queryset.filter(name__iregex=search_query.strip())
-        return queryset
-
-
-class SpellBookSlotPatch(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def patch(self, request, character_id):
-        character = get_object_or_404(Character, id=character_id)
-        slot_data = request.data.get('level_slots')
-        level = slot_data.get('level')
-        count = slot_data.get('count')
-        used = slot_data.get('used')
-        change_level_slot = character.spell_slots.levels.get(level=level)
-        change_level_slot.count = count
-        change_level_slot.used = used
-        change_level_slot.save()
-
-        return Response(SpellSlotLevelSerializer(change_level_slot).data)
-
-
-class SpellBookPatch(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def patch(self, request, character_id):
-        character = get_object_or_404(Character, id=character_id)
-        level_slot = character.spell_slots.levels.get(level=request.data['level_slots'])
-        spell = get_object_or_404(Spell, id=request.data['spell'])
-        spell_book = get_object_or_404(CharacterSpellSlotLevel, spell_slot_level=level_slot, character_spell_slots=character.spell_slots)
-        spell_book.spells.append(spell.id)
-        spell_book.save()
-        return Response(CharacterSpellSlotLevelSerializer(spell_book).data)
-
-    def delete(self, request, character_id):
-        character = get_object_or_404(Character, id=character_id)
-        level_slot = character.spell_slots.levels.get(level=request.query_params.get('level_slots[level]'))
-        spell_book = get_object_or_404(CharacterSpellSlotLevel, spell_slot_level=level_slot)
-        spell_book.spells.pop(int(request.query_params.get('spell_index')))
-        spell_book.save()
-        return Response(CharacterSpellSlotLevelSerializer(spell_book).data)
-
-
-class SpellSearchView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-
-        # Получаем параметры из запроса
-        class_names = request.query_params.getlist('class_actor[]', [])
-        archetype = request.query_params.getlist('archetype[]', [])
-        search_query = request.query_params.get('search', '').strip()
-
-        # Начинаем с базового запроса
-        queryset = Spell.objects.all()
-
-        # Создаем Q-объект для хранения всех условий
-        query = Q()
-
-        # Фильтрация по классам
-        if class_names:
-            for class_name in class_names:
-                query |= Q(class_actor__id=class_name)
-        if archetype:
-            for arh in archetype:
-                query |= Q(archetype__id=arh)
-
-        # Поиск по названию или описанию
-        if search_query:
-            query &= Q(name__icontains=search_query) | Q(instruction__icontains=search_query)
-
-        # применяем фильтры и группируем результаты
-        queryset = queryset.filter(query).distinct()
-
-        grouped_spells = defaultdict(list)
-        for spell in queryset:
-            serializer = SpellSerializer(spell)
-            grouped_spells[spell.level].append(serializer.data)
-
-        return Response(dict(grouped_spells))
-
-
-class Archetypes(APIView):
-    def get(self, request):
-        class_names = request.query_params.getlist('class_actor[]', [])
-        query = Q()
-        queryset = Archetype.objects.all()
-        if class_names:
-            for class_name in class_names:
-                query |= Q(character_class__id=class_name)
-
-        queryset = queryset.filter(query)
-        return Response(ArchetypeListSerializer(queryset, many=True).data)
 
 
 class ProtectStateView(viewsets.ModelViewSet):

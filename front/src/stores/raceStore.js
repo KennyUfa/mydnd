@@ -14,7 +14,7 @@ export const useRaceStore = defineStore("race_information", {
             },
             async loadSubRace() {
                 try {
-                    const response = await api.get("dnd/sub-race-list/" + this.race.id + "/");
+                    const response = await api.get("dnd/race/sub-race-list/" + this.race.id + "/");
                     this.sub_race_list = response.data;
                 } catch (error) {
                     console.error('Ошибка при получении списка archetypes:', error);
@@ -23,7 +23,7 @@ export const useRaceStore = defineStore("race_information", {
             async changeSubRace(id) {
                 const characterStore = useCharacterStore();
                 try {
-                    const response = await api.patch("dnd/character/" + characterStore.get_character_id + "/sub-race-change/", id);
+                    const response = await api.patch("dnd/race/character/" + characterStore.get_character_id + "/sub-race-change/", id);
                     this.race.sub_race = response.data;
                 } catch (error) {
                     console.error('Ошибка при смене архетипа: error', error);
