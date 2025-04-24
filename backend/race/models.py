@@ -15,7 +15,7 @@ class SmallFeaturesRace(models.Model):
 
 class CustomSmallFeaturesRace(models.Model):
     character = models.ForeignKey(
-        'dnd.Character', on_delete=models.CASCADE, related_name='custom_features'
+        'character.Character', on_delete=models.CASCADE, related_name='custom_features'
     )
     feature = models.ForeignKey(
         SmallFeaturesRace, on_delete=models.CASCADE, related_name='custom_features'
@@ -48,7 +48,7 @@ class RaceBackground(models.Model):
 
 class CustomRaceBackground(models.Model):
     character = models.ForeignKey(
-        'dnd.Character', on_delete=models.CASCADE,
+        'character.Character', on_delete=models.CASCADE,
         related_name='custom_history_race_backgrounds'
     )
     race_background = models.ForeignKey(

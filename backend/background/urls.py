@@ -2,6 +2,8 @@ from django.urls import path
 
 from background.views import BackgroundListView, BackgroundChangeView, BackgroundChangeOptionsView, BackgroundChangeOriginView
 
+app_name = 'background'
+
 urlpatterns = [
     path('background-list/', BackgroundListView.as_view(), name='background-list'),
     # установить выбор происхождения

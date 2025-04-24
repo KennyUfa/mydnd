@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'item',
     'lineaments',
     'worldoutlook',
+    'character',
 ]
 
 MIDDLEWARE = [

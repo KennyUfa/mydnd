@@ -2,7 +2,7 @@ import csv
 
 from django.core.management import BaseCommand
 
-from dnd.db.temp.character import BaseClass, Archetype
+from champion_class.models import BaseClass, Archetype
 from spellbook.models import MagicSchool, Spell
 
 
@@ -19,7 +19,7 @@ class Command(BaseCommand):
     help = 'Добавление заклинаний'
 
     def handle(self, *args, **options):
-        with open('dnd/migrations/spells.csv', 'r', newline='', encoding="UTF-8") as csvfile:
+        with open('spellbook/management/commands/spells.csv', 'r', newline='', encoding="UTF-8") as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
                 if row[2] == "Заговор" or row[2] == "заговор":
@@ -29,7 +29,7 @@ class Command(BaseCommand):
                 try:
                     school_choice, _ = MagicSchool.objects.get_or_create(name=row[3].split()[0])
 
-                    spell = Spell.objects.create(
+                    spell,_ = Spell.objects.get_or_create(
                         link=row[0],
                         name=row[1],
                         level=level,
@@ -72,6 +72,7 @@ class Command(BaseCommand):
                             archetypes.append(archetype)
 
                     spell.archetype.set(archetypes)
+
 
 
 

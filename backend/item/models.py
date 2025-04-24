@@ -1,7 +1,6 @@
 # Общий инвентарь
 from django.db import models
-
-from dnd.models import Character
+from character.models import Character
 
 
 class Properties(models.Model):

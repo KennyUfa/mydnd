@@ -1,7 +1,6 @@
 from django.urls import path
-
 from race.views import RaceListView, SubRaceListView, SubRaceChangeView
-from spellbook.views import SpellSearchView, SpellBookPatch, SpellBookSlotPatch, SpellView
+
 
 app_name = 'race'
 

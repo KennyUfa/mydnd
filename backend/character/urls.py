@@ -1,12 +1,11 @@
-from django.urls import path, include
-from rest_framework import routers
+from django.urls import path
 
 from .views import *
 
 # router = routers.SimpleRouter()
 # router.register('prots', ProtectStateView)
 # router.register('skillstate', SkillStateView)
-
+app_name = 'character'
 
 urlpatterns = [
     # path('', include(router.urls)),

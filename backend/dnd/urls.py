@@ -10,7 +10,6 @@ from .views import *
 
 urlpatterns = [
     # path('', include(router.urls)),
-
     # рандомайзер навыков
     path('random-skill/', RandomSaveView.as_view(), name='random'),
     # рандомайзер кубов

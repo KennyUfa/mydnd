@@ -73,7 +73,7 @@ class Ability(models.Model):
 
 
 class CustomAbility(models.Model):
-    character = models.ForeignKey('dnd.Character', on_delete=models.CASCADE,
+    character = models.ForeignKey('character.Character', on_delete=models.CASCADE,
                                   related_name='custom_abilities')
     ability = models.ForeignKey(Ability, on_delete=models.CASCADE,
                                 related_name='custom_versions')

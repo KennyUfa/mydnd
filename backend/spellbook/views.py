@@ -7,7 +7,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from dnd.models import Character
+from character.models import Character
 from spellbook.models import Spell,CharacterSpellSlotLevel
 from spellbook.serializers import SpellSerializer, SpellSlotLevelSerializer, CharacterSpellSlotLevelSerializer
 

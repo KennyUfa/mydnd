@@ -1,12 +1,14 @@
 from rest_framework import serializers
 
 from background.serializers import BackgroundSerializer
+from champion_class.models import BaseClass
 from champion_class.serializers import BaseClassSerializer, ArchetypeSerializer, BaseClassListSerializer
+from character.models import ProtectStateModel, SkillStateModel, Skills, Character
 from item.serializers import InventorySerializer
+from race.models import Race
 from race.serializers import RaceListSerializer, RaceSerializer
 from spellbook.serializers import CharacterSpellSlotsSerializer
 from worldoutlook.serializers import WorldOutlookSerializer
-from ..models import *
 
 
 class ProtectStateSerializer(serializers.ModelSerializer):
@@ -19,7 +21,6 @@ class SkillStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = SkillStateModel
         fields = '__all__'
-
 
 
 class SkillsSerializer(serializers.ModelSerializer):

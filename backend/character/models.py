@@ -6,7 +6,7 @@ from background.models import Background
 from champion_class.models import Archetype, BaseClass
 from lineaments.models import LineamentModel
 from race.models import Race, SubRace
-from spellbook.models import Spell, CharacterSpellSlots, SpellSlotLevel, CharacterSpellSlotLevel
+from spellbook.models import CharacterSpellSlots, SpellSlotLevel, CharacterSpellSlotLevel
 from worldoutlook.models import WorldOutlook
 
 
