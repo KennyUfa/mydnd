@@ -20,7 +20,7 @@ export const useInventoryStore = defineStore("Inventory", {
     }),
     actions: {
         async getInventory(search = "") {
-            const response = await api.get("dnd/items", {
+            const response = await api.get("/item/items", {
                 params: {
                     'search': search,
                     'rarity': this.searchListRarity,
@@ -30,24 +30,24 @@ export const useInventoryStore = defineStore("Inventory", {
         },
         async patchItem(data) {
             const characterStore = useCharacterStore();
-            const response = await api.post('dnd/character/' + characterStore.get_character_id + '/inventory/' + data.id + '/');
+            const response = await api.post('item/' + characterStore.get_character_id + '/inventory/' + data.id + '/');
             characterStore.character.my_items.push(response.data);
 
         },
         async deleteItem(data) {
             const characterStore = useCharacterStore();
-            const response = await api.delete('dnd/character/' + characterStore.get_character_id + '/inventory/' + data + '/');
+            const response = await api.delete('item/' + characterStore.get_character_id + '/inventory/' + data + '/');
             characterStore.character.my_items = characterStore.character.my_items.filter(
                 (item) => item.item.id !== data
             );
         },
         async patchInventoryItem() {
             const characterStore = useCharacterStore();
-            const response = await api.patch('dnd/character/' + characterStore.get_character_id + '/inventory/', characterStore.character.my_items);
+            const response = await api.patch('item/' + characterStore.get_character_id + '/inventory/', characterStore.character.my_items);
             characterStore.character.my_items = response.data;
         },
         async getDescriptionItem(item) {
-            const response = await api.get('dnd/items/' + item.id + '/');
+            const response = await api.get('item/items/' + item.id + '/');
             this.item_details = response.data;
         }
     }

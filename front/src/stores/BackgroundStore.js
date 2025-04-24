@@ -13,7 +13,7 @@ export const useBackground = defineStore("background", {
             },
             async loadBackgrounds() {
                 try {
-                    const response = await api.get("dnd/background-list/");
+                    const response = await api.get("background/background-list/");
                     this.background_list = response.data;
                 } catch (error) {
                     console.error('Ошибка при получении списка archetypes:', error);
@@ -22,7 +22,7 @@ export const useBackground = defineStore("background", {
             async changeBackground(id) {
                 const characterStore = useCharacterStore();
                 try {
-                    const response = await api.patch("dnd/character/" + characterStore.get_character_id + "/background-change/", id);
+                    const response = await api.patch("background/" + characterStore.get_character_id + "/background-change/", id);
                     this.background = response.data;
                 } catch (error) {
                     console.error('Ошибка при смене архетипа: error', error);
@@ -30,7 +30,7 @@ export const useBackground = defineStore("background", {
             },
             async changeOptions(options) {
                 try {
-                    const response = await api.patch("dnd/character/" + useCharacterStore().get_character_id + "/background-options/", options);
+                    const response = await api.patch("background/" + useCharacterStore().get_character_id + "/background-options/", options);
                     const newSelectedOption = response.data;
                     const featureToUpdate = this.background.features.find(
                         (feature) => feature.id === newSelectedOption.feature
@@ -42,7 +42,7 @@ export const useBackground = defineStore("background", {
             },
             async change(origin) {
                 try {
-                    const response = await api.patch("dnd/character/" + useCharacterStore().get_character_id + "/background-origin/", origin);
+                    const response = await api.patch("background/" + useCharacterStore().get_character_id + "/background-origin/", origin);
                     this.background.selected_origins = response.data
                 } catch (error) {
                     console.error('Ошибка при смене опций: error', error);

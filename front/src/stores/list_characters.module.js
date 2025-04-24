@@ -15,7 +15,7 @@ export const useCharacterList = defineStore('characterList', {
         async fetchCharacterList() {
             this.isLoading = true; // Начало загрузки
             try {
-                const response = await api.get("dnd/character-list/");
+                const response = await api.get("character/character-list/");
                 this.characterList = response.data; // Обновляем список персонажей
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);
@@ -26,7 +26,7 @@ export const useCharacterList = defineStore('characterList', {
         },
         async deleteChampion(id) {
             try {
-                await api.delete(`dnd/characters/delete/${id}/`);
+                await api.delete(`character/delete/${id}/`);
                 this.characterList = this.characterList.filter(champion => champion.id !== id);
             } catch (error) {
                 console.error('Ошибка при удалении персонажа:', error);

@@ -16,7 +16,7 @@ export const useCreateCharacter = defineStore('createChampion', {
         async fetchClassList() {
             this.isLoading = true; // Начало загрузки
             try {
-                const response = await api.get("dnd/class-list/");
+                const response = await api.get("class/class-list/");
                 this.class_list = response.data; // Обновляем список персонажей
                 this.isLoading = false; // Завершение загрузки
             } catch (error) {
@@ -26,7 +26,7 @@ export const useCreateCharacter = defineStore('createChampion', {
         async fetchRaceList() {
             this.isLoading = true; // Начало загрузки
             try {
-                const response = await api.get("dnd/race/list/");
+                const response = await api.get("race/race-list/");
                 this.race_list = response.data; // Обновляем список персонажей
                 this.isLoading = false; // Завершение загрузки
             } catch (error) {
@@ -36,7 +36,7 @@ export const useCreateCharacter = defineStore('createChampion', {
         async createCharacter(data) {
 
             try {
-                const response = await api.post("dnd/characters/create/", data);
+                const response = await api.post("character/create/", data);
                 const characterListStore = useCharacterList();
                 characterListStore.addCharacter(response.data);
                 this.Character = response.data;

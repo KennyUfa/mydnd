@@ -29,7 +29,7 @@ export const useCharacterStore = defineStore('character', {
                 const background = useBackground();
                 const spellbook = useSpellBook();
 
-                const response = await api.get("dnd/character/" + characterId + "/");
+                const response = await api.get("character/" + characterId + "/");
                 this.character = response.data; // Обновляем список персонажей
                 this.character_id = characterId;
                 class_store.setClassInfo(response.data.champion_class)
@@ -110,7 +110,7 @@ export const useCharacterStore = defineStore('character', {
                 id: this.character.skills.id,
             };
             try {
-                const response = await api.patch("dnd/character/" + this.character_id + "/skills/", data);
+                const response = await api.patch("character/" + this.character_id + "/skills/", data);
                 this.character.skills = response.data;
 
             } catch (error) {
@@ -149,7 +149,7 @@ export const useCharacterStore = defineStore('character', {
                 skill_state: this.character.skill_state
             }
             try {
-                const response = await api.patch("dnd/character/" + this.character_id + "/skill_state/", data);
+                const response = await api.patch("character/" + this.character_id + "/skill_state/", data);
                 this.character.skill_state = response.data;
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);
@@ -160,7 +160,7 @@ export const useCharacterStore = defineStore('character', {
                 protect_state: this.character.protect_state
             }
             try {
-                const response = await api.patch("dnd/character/" + this.character_id + "/protect_state/", data);
+                const response = await api.patch("character/" + this.character_id + "/protect_state/", data);
                 this.character.protect_state = response.data;
             } catch (error) {
                 console.error('Ошибка при получении списка персонажей:', error);

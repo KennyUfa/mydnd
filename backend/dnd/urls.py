@@ -1,15 +1,8 @@
-from django.urls import path, include
-from rest_framework import routers
-
+from django.urls import path
 from .views import *
-
-# router = routers.SimpleRouter()
-# router.register('prots', ProtectStateView)
-# router.register('skillstate', SkillStateView)
 
 
 urlpatterns = [
-    # path('', include(router.urls)),
     # рандомайзер навыков
     path('random-skill/', RandomSaveView.as_view(), name='random'),
     # рандомайзер кубов
@@ -23,5 +16,4 @@ urlpatterns = [
     path('character/<int:character_id>/inspiration_frame/', InspirationBonus.as_view(), name='character-inspiration-bonus'),
     path('character/<int:character_id>/protection_class/', ProtectionClass.as_view(), name='character-protection_class'),
     path('character/<int:character_id>/speed/', Speed.as_view(), name='character-speed'),
-
 ]

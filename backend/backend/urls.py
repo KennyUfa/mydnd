@@ -16,21 +16,17 @@ Including another URLconf
 from django.contrib import admin
 
 from django.urls import include, path
-from rest_framework import routers
-
-
-
-
-router = routers.DefaultRouter()
-# router.register(r'users', views.UserViewSet)
-# router.register(r'groups', views.GroupViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(router.urls)),
     path('api-authapp/',
          include('rest_framework.urls', namespace='rest_framework')),
     path('dnd/', include('dnd.urls')),
+    path('race/', include('race.urls')),
+    path('class/', include('champion_class.urls')),
+    path('item/', include('item.urls')),
+    path('character/', include('character.urls')),
     path('spellbook/', include('spellbook.urls')),
+    path('background/', include('background.urls')),
     path('authapp/', include('authapp.urls')),
 ]

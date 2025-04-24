@@ -19,7 +19,7 @@ export const useClassInformationStore = defineStore("classInformation", {
             const characterStore = useCharacterStore();
             try {
                 const response = await api.patch(
-                    "/dnd/characters/" + characterStore.get_character_id + "/custom-ability/hide-original/",
+                    "class/" + characterStore.get_character_id + "/custom-ability/hide-original/",
                     data
                 );
             } catch (error) {
@@ -30,7 +30,7 @@ export const useClassInformationStore = defineStore("classInformation", {
             const characterStore = useCharacterStore();
             try {
                 const response = await api.patch(
-                    "/dnd/characters/" + characterStore.get_character_id + "/custom-ability/hide-custom/",
+                    "class/" + characterStore.get_character_id + "/custom-ability/hide-custom/",
                     ability
                 );
                 const ab = this.allAbilities.find(ability => ability.id === response.data.ability);
@@ -45,7 +45,7 @@ export const useClassInformationStore = defineStore("classInformation", {
         async updateCustomDescriptionOnServer(custom_description) {
             try {
                 const response = await api.patch(
-                    "/dnd/character/custom-ability/update/" + custom_description.id + "/",
+                    "class/custom-ability/update/" + custom_description.id + "/",
                     custom_description
                 );
             } catch (error) {
@@ -54,7 +54,7 @@ export const useClassInformationStore = defineStore("classInformation", {
         },
         async loadArchetypes() {
             try {
-                const response = await api.get("dnd/class-archetype-list/" + this.class_info.id + "/");
+                const response = await api.get("class/class-archetype-list/" + this.class_info.id + "/");
                 this.archetype_list = response.data;
                 this.archetype_list.push({name: "без подкласса"})
             } catch (error) {
@@ -66,11 +66,11 @@ export const useClassInformationStore = defineStore("classInformation", {
             console.log(id);
             if (id.name === "без подкласса") {
                 console.log("удаляем архетип");
-                const response = await api.delete("dnd/character/" + characterStore.get_character_id + "/archetype-change/");
+                const response = await api.delete("class/" + characterStore.get_character_id + "/archetype-change/");
                 this.archetype = null;
             } else {
                 try {
-                    const response = await api.patch("dnd/character/" + characterStore.get_character_id + "/archetype-change/", id);
+                    const response = await api.patch("class/" + characterStore.get_character_id + "/archetype-change/", id);
                     this.archetype = response.data;
                 } catch (error) {
                     console.error('Ошибка при смене архетипа: error', error);

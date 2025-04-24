@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from background.models import Background, SelectedOrigin, FeatureOption, Feature, SelectedFeatureOption, Flaw, Bond, Trait, Ideal
 from background.serializers import BackgroundListSerializer, BackgroundSerializer, SelectedFeatureOptionSerializer, SelectedOriginSerializer
-from dnd.models import Character
+from character.models import Character
 
 
 class BackgroundListView(generics.ListAPIView):
