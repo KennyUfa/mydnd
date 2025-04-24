@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from dnd.db.background import Background, SkillsProficiency, Feature, FeatureOption, SelectedFeatureOption, Trait, Ideal, Bond, Flaw, \
+from background.models import Background, SkillsProficiency, Feature, FeatureOption, SelectedFeatureOption, Trait, Ideal, Bond, Flaw, \
     SelectedOrigin
 
 
@@ -90,7 +90,6 @@ class BackgroundSerializer(serializers.ModelSerializer):
     ideal = IdealSerializer(many=True, read_only=True, source='ideals')
     bond = BondSerializer(many=True, read_only=True, source='bonds')
     flaw = FlawSerializer(many=True, read_only=True, source='flaws')
-
 
     def get_selected_origins(self, obj):
         character = self.context.get('character')

@@ -73,7 +73,7 @@ class SelectedFeatureOption(models.Model):
     Модель для хранения выбранного варианта особенности.
     """
     character = models.ForeignKey(
-        'Character',
+        'dnd.Character',
         on_delete=models.CASCADE,
         related_name="selected_feature_options",
         verbose_name="Персонаж"
@@ -181,7 +181,7 @@ class Flaw(models.Model):
 
 class SelectedOrigin(models.Model):
     character = models.ForeignKey(
-        'Character',
+        'dnd.Character',
         on_delete=models.CASCADE,
         related_name="selected_origin_options",
         verbose_name="Выбор предыстории"

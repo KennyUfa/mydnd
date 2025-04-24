@@ -12,7 +12,7 @@ class LineamentModel(models.Model):
 class CustomLineament(models.Model
                       ):
     character = models.ForeignKey(
-        'Character', on_delete=models.CASCADE,
+        'dnd.Character', on_delete=models.CASCADE,
         related_name='lineament_custom'
     )
     lineament = models.ForeignKey(

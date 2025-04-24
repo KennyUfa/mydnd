@@ -1,7 +1,7 @@
 # Общий инвентарь
 from django.db import models
 
-# from dnd.models import Character
+from dnd.models import Character
 
 
 class Properties(models.Model):
@@ -130,15 +130,17 @@ class MagicItems(models.Model):
     class Meta:
         ordering=['item']
 
-#
-# class MyEquip(models.Model):
-#     character = models.ForeignKey(Character, on_delete=models.CASCADE, blank=True,null=True, related_name='equipment')
-#     weapon_one = models.ForeignKey(Item, on_delete=models.CASCADE, blank=True,null=True, related_name='weapon_one')
-#     weapon_two = models.ForeignKey(Item, on_delete=models.CASCADE, blank=True,null=True, related_name='weapon_two')
-#     weapon_three = models.ForeignKey(Item, on_delete=models.CASCADE, blank=True,null=True, related_name='weapon_three')
-#     armor = models.ForeignKey(Item, on_delete=models.CASCADE, blank=True,null=True, related_name='armor')
-#     weapon_one_mod = models.BooleanField(default=False)
-#     weapon_two_mod = models.BooleanField(default=False)
-#     weapon_three_mod = models.BooleanField(default=False)
 
+
+class InventoryItem(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    character = models.ForeignKey(Character, on_delete=models.CASCADE,
+                                  related_name='my_items')
+    quantity = models.PositiveIntegerField(default=1)
+    put_on = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name_plural = 'инвентарь'
+        verbose_name = 'предмет'
+        ordering = ['-put_on']
 

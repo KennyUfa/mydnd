@@ -22,10 +22,10 @@ class Spell(models.Model):
     distance = models.CharField(max_length=100, verbose_name='дистанция')
     components = models.CharField(max_length=400, verbose_name='компоненты')
     timing = models.CharField(max_length=100, verbose_name='Длительность')
-    class_actor = models.ManyToManyField('dnd.BaseClass',
+    class_actor = models.ManyToManyField('champion_class.BaseClass',
                                          related_name="class_spells",
                                          blank=True)
-    archetype = models.ManyToManyField('dnd.Archetype',
+    archetype = models.ManyToManyField('champion_class.Archetype',
                                        related_name='archetype_spells',
                                        blank=True)
     origin = models.CharField(blank=True, null=True, max_length=100,

@@ -27,7 +27,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # Application definition
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,6 +44,10 @@ INSTALLED_APPS = [
     'spellbook',
     'race',
     'champion_class',
+    'background',
+    'item',
+    'lineaments',
+    'worldoutlook',
 ]
 
 MIDDLEWARE = [
