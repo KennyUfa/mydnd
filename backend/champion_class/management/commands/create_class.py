@@ -12,6 +12,8 @@ from .champ_class_create_bace.rogue.rogue_base import create_rogue
 from .champ_class_create_bace.sorcerer.sorcerer_base import create_sorcerer
 from .champ_class_create_bace.var.var_base import create_var_base
 from .champ_class_create_bace.varavar.varvar_base import create_varvar
+from .champ_class_create_bace.pal.pallad import create_pal_base
+from .champ_class_create_bace.dru.dru_base import create_dru_base
 
 
 class Command(BaseCommand):
@@ -31,3 +33,5 @@ class Command(BaseCommand):
         sorcerer = create_sorcerer()
         artif = create_artif()
         kold = create_kold_base()
+        pal=create_pal_base()
+        dru=create_dru_base()
