@@ -2,19 +2,19 @@ from champion_class.models import BaseClass, MiniDescriptions, SpecificColumn, L
 
 
 def create_cleric():
-    cleric, _ = BaseClass.objects.get_or_create(name='жрец')
-    cleric.description = ("Жрецы являются посредниками между миром смертных и далёкими мирами богов. Настолько же разные, насколько боги, "
+    prist, _ = BaseClass.objects.get_or_create(name='жрец')
+    prist.description = ("Жрецы являются посредниками между миром смертных и далёкими мирами богов. Настолько же разные, насколько боги, "
                           "которым они служат, жрецы воплощают работу своих божеств. В отличие от обычного проповедника, жрец наделён божественной магией.")
 
-    cleric.hit_dice = "1d8"
-    cleric.hit_at_first_level = "8 + модификатор телосложения"
-    cleric.hit_at_next_level = "1к8 (или 5) + модификатор Телосложения (суммарно минимум 1) за каждый уровень жреца после первого"
-    cleric.possession_armor = "Лёгкие доспехи, средние доспехи, щиты"
-    cleric.possession_weapon = "Простое оружие"
-    cleric.possession_instrument = "Нет"
-    cleric.saving_throws = "Мудрость, Харизма"
-    cleric.class_skills = "Выберите два навыка из следующих: История, Медицина, Проницательность, Религия, Убеждение"
-    cleric.save()
+    prist.hit_dice = "1d8"
+    prist.hit_at_first_level = "8 + модификатор телосложения"
+    prist.hit_at_next_level = "1к8 (или 5) + модификатор Телосложения (суммарно минимум 1) за каждый уровень жреца после первого"
+    prist.possession_armor = "Лёгкие доспехи, средние доспехи, щиты"
+    prist.possession_weapon = "Простое оружие"
+    prist.possession_instrument = "Нет"
+    prist.saving_throws = "Мудрость, Харизма"
+    prist.class_skills = "Выберите два навыка из следующих: История, Медицина, Проницательность, Религия, Убеждение"
+    prist.save()
 
     mini_description = [
         {"name": "ЦЕЛИТЕЛИ И ВОИТЕЛИ",
@@ -28,11 +28,11 @@ def create_cleric():
     ]
     for i in mini_description:
         x, _ = MiniDescriptions.objects.get_or_create(name=i['name'], description=i['description'])
-        cleric.mini_descriptions.add(x)
+        prist.mini_descriptions.add(x)
 
     values = [3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
     SpecificColumn.objects.get_or_create(
-        class_obj=cleric,
+        class_obj=prist,
         name="Известные заговоры",
         value=values
     )
@@ -40,7 +40,7 @@ def create_cleric():
     for level_num in range(1, 21):
         proficiency_bonus = (level_num - 1) // 4 + 2
         Level.objects.get_or_create(
-            class_obj=cleric,
+            class_obj=prist,
             level=level_num,
             proficiency_bonus=proficiency_bonus
         )
@@ -56,7 +56,7 @@ def create_cleric():
         9: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
     }
     SpellSlot.objects.get_or_create(
-        class_obj=cleric,
+        class_obj=prist,
         slots=spell_slots
     )
 
@@ -120,7 +120,7 @@ def create_cleric():
                                                                            "помощь, которую вы ждёте, и киньте процентную кость. Если выпадет число, не превышающее ваш уровень жреца, ваше божество вмешается. Мастер сам выбирает природу вмешательства; подойдёт эффект какого-либо заклинания жреца или заклинания домена. Если божество вмешивается, вы не можете использовать это умение в течение 7 дней. В противном случае вы можете использовать это умение после продолжительного отдыха. На 20-м уровне ваше воззвание автоматически успешно и не требует проверки."}, ]
 
     for ability_info in abilities_data:
-        level, _ = Level.objects.get_or_create(class_obj=cleric, level=ability_info["level"])
+        level, _ = Level.objects.get_or_create(class_obj=prist, level=ability_info["level"])
 
         Ability.objects.get_or_create(
             level_id=level,
