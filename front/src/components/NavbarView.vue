@@ -1,6 +1,6 @@
 <template>
-    <header class="bg-white shadow-md flex justify-between items-center">
-
+    <header
+            class="bg-white shadow-md flex justify-between items-center">
         <!-- Логотип -->
         <div class=" text-xl font-bold text-gray-800 space-x-6 items-center ">
             <router-link class="text-lg font-bold p-2"

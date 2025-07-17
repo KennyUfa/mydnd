@@ -11,6 +11,15 @@ export const useAuthStore = defineStore('auth', {
     };
   },
   actions: {
+    // Инициализация store при загрузке приложения
+    init() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        this.user = user;
+        this.isLoggedIn = true;
+      }
+    },
+
     // Авторизация пользователя
     async login(username, password) {
       try {
@@ -29,6 +38,7 @@ export const useAuthStore = defineStore('auth', {
       this.user = null;
       this.isLoggedIn = false;
       TokenService.removeUser(); // Удаляем токен из localStorage
+      localStorage.removeItem('champion_id'); // Удаляем ID персонажа
     },
 
     // Регистрация пользователя
