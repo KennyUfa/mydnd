@@ -123,7 +123,10 @@ const patchSearch = () => {
 }
 
 onMounted(() => {
-    store.getInventory()
+    if (!item_list.value) {
+        store.getInventory()
+    }
+
 });
 
 function getDescriptionItem(item) {

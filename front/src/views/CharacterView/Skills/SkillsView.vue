@@ -1,7 +1,7 @@
 <template>
-    <div class="relative">
+    <div class="relative my-6">
         <change-skills></change-skills>
-        <div class="grid grid-cols-6">
+        <div class="grid grid-cols-6 gap-4">
             <BaseSkill
                     skill-name="СИЛ"
                     v-model:skill-value="skills.strength"
@@ -35,7 +35,6 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
 import {useCharacterStore} from "@/stores/characterStore";
 import BaseSkill
     from "@/views/CharacterView/MainInformations/ChangeSkills/BaseSkill.vue";
@@ -44,18 +43,9 @@ import ChangeSkills
 
 const champion = useCharacterStore();
 const skills = champion.character.skills
-const show = ref(false);
 
-const postSkills = async () => {
-    await champion.postSkills();
-    show.value = !show.value;
-}
+
 </script>
 
 <style scoped>
-.wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 5px;
-}
 </style>

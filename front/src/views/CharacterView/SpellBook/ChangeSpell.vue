@@ -1,7 +1,7 @@
 <template>
     <Sheet>
         <SheetTrigger as-child>
-            <Button variant="outline">
+            <Button variant="outline" class="text-black">
                 Добавить заклинание
             </Button>
         </SheetTrigger>

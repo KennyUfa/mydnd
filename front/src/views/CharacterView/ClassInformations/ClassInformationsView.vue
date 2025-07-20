@@ -20,7 +20,7 @@
                     >
 
 
-                        <div class="bg-white border-2 border-red-600 rounded-lg p-4 mb-3 relative">
+                        <div class="border-2 border-red-600 rounded-lg p-4 mb-3 relative">
                             <DropdownMenu>
                                 <DropdownMenuTrigger
                                         class="absolute right-1.5 top-0.5 mt-2">

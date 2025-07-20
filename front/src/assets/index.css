@@ -65,7 +65,9 @@
         font-family: Kanit, sans-serif;
     }
 
-    body {
+    html, body {
         @apply bg-background text-foreground;
+        min-height: 100vh;
+        background: linear-gradient(to bottom right, #111827, #6b7280);
     }
 }

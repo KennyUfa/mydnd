@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-mb_c521$4njpgnqdmb$c!v_)2y58_p4p3&9cp+dzbye*2&it10
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+
 
 # Application definition
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
@@ -88,6 +88,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 # vue ip
 CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = ['*']
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:8081",
 #     "http://localhost:8083",

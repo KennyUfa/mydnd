@@ -25,7 +25,7 @@ const errorMessage = ref('');
 const handleLogin = async () => {
   try {
     await authStore.login(username.value, password.value);
-    router.push('/characters'); // Перенаправляем на защищенную страницу
+    router.push('/characters');
   } catch (error) {
     errorMessage.value = 'Ошибка входа: ' + error.message;
   }
