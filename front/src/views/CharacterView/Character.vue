@@ -34,7 +34,7 @@
 
     <!--    книга заклинаний   -->
     <div v-if="activeTab === 'spells'">
-      <h3 class="text-2xl font-bold mb-4 mt-4 text-center">
+      <h3 class="text-2xl font-bold my-4 text-center">
         Книга Заклинаний
       </h3>
       <spell-book-view></spell-book-view>
@@ -42,7 +42,7 @@
 
     <!--    класс и уровень   -->
     <div v-if="activeTab === 'class-information'">
-      <h3 class="text-2xl font-bold mb-4 text-yellow-400">
+      <h3 class="text-2xl font-bold my-4 text-center">
         Класс
       </h3>
       <class-information-view></class-information-view>
@@ -51,7 +51,7 @@
 
     <!-- раса -->
     <div v-if="activeTab === 'race'">
-      <h3 class="text-2xl font-bold mb-4 text-yellow-400">
+      <h3 class="text-2xl font-bold my-4 text-center">
         Раса
       </h3>
       <race-and-origin></race-and-origin>
@@ -60,14 +60,14 @@
     <!--    предыстория    -->
 
     <div v-if="activeTab === 'background'">
-      <h3 class="text-2xl font-bold mb-4 text-yellow-400">
+      <h3 class="text-2xl font-bold my-4 text-center">
         Предыстория
       </h3>
       <background-view></background-view>
     </div>
     <!--    база предметов    -->
     <div v-if="activeTab === 'item-list'">
-      <h3 class="text-2xl font-bold mb-4 text-yellow-400">
+      <h3 class="text-2xl font-bold my-4 text-center">
         База предметов
       </h3>
       <ItemsView></ItemsView>

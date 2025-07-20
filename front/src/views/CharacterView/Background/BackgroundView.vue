@@ -7,7 +7,7 @@
     <!--  выбор предыстории-->
     <DropdownMenu>
         <DropdownMenuTrigger v-on:click="loadBackgrounds">
-            <Button variant="outline">
+            <Button variant="outline" class="text-slate-900">
                 {{ background?.name || 'Нет предыстории' }}
             </Button>
         </DropdownMenuTrigger>
@@ -35,7 +35,7 @@
 
         <DropdownMenu>
             <DropdownMenuTrigger>
-                <Button variant="outline">
+                <Button variant="outline" class="text-slate-900">
                     сменить
                 </Button>
             </DropdownMenuTrigger>
@@ -56,7 +56,7 @@
         </CardTitle>
         <DropdownMenu>
             <DropdownMenuTrigger>
-                <Button variant="outline">
+                <Button variant="outline" class="text-slate-900">
                     сменить
                 </Button>
             </DropdownMenuTrigger>
@@ -76,7 +76,7 @@
         </CardTitle>
         <DropdownMenu>
             <DropdownMenuTrigger>
-                <Button variant="outline">
+                <Button variant="outline" class="text-slate-900">
                     сменить
                 </Button>
             </DropdownMenuTrigger>
@@ -98,7 +98,7 @@
         </CardTitle>
         <DropdownMenu>
             <DropdownMenuTrigger>
-                <Button variant="outline">
+                <Button variant="outline" class="text-slate-900">
                     сменить
                 </Button>
             </DropdownMenuTrigger>
@@ -134,7 +134,7 @@
         </CardTitle>
         <DropdownMenu>
             <DropdownMenuTrigger v-if="feature.has_choice">
-                <Button variant="outline">
+                <Button variant="outline" class="text-slate-900">
                     {{ feature?.name || 'Выбрать' }}
                 </Button>
             </DropdownMenuTrigger>

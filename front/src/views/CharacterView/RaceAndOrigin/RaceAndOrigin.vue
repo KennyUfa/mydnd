@@ -32,7 +32,7 @@
 
         <!-- Блок для подрасы -->
         <AccordionItem value="subrace-info"
-                       class="border border-black-100 rounded-2xl">
+                       class="border border-black-100 rounded-2xl mb-20">
             <AccordionTrigger class="ml-4">Информация о подрасе: {{
                     sub_race?.name || 'Нет подрасы'
                 }}
@@ -40,7 +40,7 @@
             <!--ВЫБОР ПОДРАСЫ-->
             <DropdownMenu>
                 <DropdownMenuTrigger v-on:click="loadSubRace">
-                    <Button variant="outline">
+                    <Button variant="outline" class="text-slate-900">
                         {{ sub_race?.name || 'Выбрать подрасу' }}
                     </Button>
                 </DropdownMenuTrigger>
