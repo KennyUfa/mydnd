@@ -18,10 +18,10 @@
           </button>
         </div>
         <span class="level-title" v-if="levelSlots.spell_slot_level.level === 0"
-          >Фокусы</span
+        >Фокусы</span
         >
         <span class="level-title" v-else
-          >Ячейки {{ levelSlots.spell_slot_level.level }}го уровня</span
+        >Ячейки {{ levelSlots.spell_slot_level.level }}го уровня</span
         >
       </div>
 
@@ -30,7 +30,7 @@
         <div
           v-for="(slot, index) in Array(levelSlots.spell_slot_level.count)"
           :key="index"
-          class="slot"
+          class="slot mb-2"
           :class="{ used: isSlotUsed(levelSlots, index) }"
           @click="toggleSlotUsage(levelSlots, index)"
         ></div>
@@ -46,8 +46,8 @@
           <Dialog>
             <DialogTrigger class="spell-block" as-child>
               <Button
-                variant="outline "
-                class="text-balance"
+                variant="outline"
+                class="text-slate-900"
                 @click="getSpellDetails(spell)"
               >
                 {{ spell.name }}
@@ -56,7 +56,7 @@
             <DialogContent class="overflow-y-auto max-h-[80vh]">
               <DialogHeader v-if="spell_details">
                 <DialogTitle
-                  >{{ spell_details.name }} - Уровень:
+                >{{ spell_details.name }} - Уровень:
                   {{ spell_details.level }}
                 </DialogTitle>
                 <DialogDescription>
@@ -87,10 +87,10 @@
 </template>
 
 <script setup>
-import { useSpellBook } from '@/stores/SpellBookStore.js';
-import { computed, onMounted, ref } from 'vue';
+import {useSpellBook} from '@/stores/SpellBookStore.js';
+import {computed, onMounted, ref} from 'vue';
 import ChangeSpell from '@/views/CharacterView/SpellBook/ChangeSpell.vue';
-import { useCreateCharacter } from '@/stores/create.character.js';
+import {useCreateCharacter} from '@/stores/create.character.js';
 import {
   Dialog,
   DialogContent,
@@ -99,7 +99,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog/index.js';
-import { Button } from '@/components/ui/button/index.js';
+import {Button} from '@/components/ui/button/index.js';
 
 const polling = ref(null);
 const spellBook = useSpellBook();

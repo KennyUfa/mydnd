@@ -34,7 +34,7 @@
 
     <!--    книга заклинаний   -->
     <div v-if="activeTab === 'spells'">
-      <h3 class="text-2xl font-bold mb-4 text-yellow-400">
+      <h3 class="text-2xl font-bold mb-4 mt-4 text-center">
         Книга Заклинаний
       </h3>
       <spell-book-view></spell-book-view>
