@@ -1,11 +1,12 @@
 <template>
-<div class="rounded-2xl">
-    <div class="flex border-b border-gray-700 bg-gray-900 ">
+<div class="rounded-2xl px-1">
+    <div
+      class="grid grid-cols-3 md:grid-cols-7 border-b border-gray-700 bg-gray-900 ">
       <button
         v-for="(tab, index) in tabs"
         :key="index"
         @click="activeTab = tab.value"
-        class="flex-1 py-3 text-center font-medium transition-colors"
+        class="flex-1 py-2 text-center font-medium transition-colors md:py-3"
         :class="{
             'border-b-2 border-yellow-500 text-yellow-400':
               activeTab === tab.value,

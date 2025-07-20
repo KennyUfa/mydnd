@@ -1,7 +1,7 @@
 <template>
     <div class="relative my-6">
         <change-skills></change-skills>
-        <div class="grid grid-cols-6 gap-4">
+        <div class="grid grid-cols-3 md:grid-cols-6  gap-4">
             <BaseSkill
                     skill-name="СИЛ"
                     v-model:skill-value="skills.strength"

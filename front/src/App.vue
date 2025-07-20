@@ -7,6 +7,6 @@
 </template>
 
 <script setup>
-import NavbarView from './components/NavbarView.vue';
+import NavbarView from '@/views/NavbarView.vue';
 import Toaster from '@/components/ui/toast/Toaster.vue';
 </script>

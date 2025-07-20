@@ -1,6 +1,6 @@
 <template>
     <div
-            class="border-2 border-red-600 flex items-center justify-between rounded-xl px-2">
+            class="bg-gray-800 p-2 rounded-lg border border-gray-700 flex items-center justify-between">
         <div>Скорость</div>
         <div>{{ character.speed }}</div>
     </div>

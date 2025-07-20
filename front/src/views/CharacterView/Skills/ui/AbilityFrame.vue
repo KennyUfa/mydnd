@@ -1,13 +1,13 @@
 <template>
     <div
             :class="[
-        'bg-white text-slate-900 border-2  rounded-lg p-2',
-        skill_state[skillValue] === 3 ? 'bg-amber-200 border-amber-600' :
-        skill_state[skillValue] === 2 ? 'bg-amber-100 border-amber-400' : ''
+        'bg-amber-100 border-amber-200  rounded-lg p-2 text-slate-900',
+        skill_state[skillValue] === 3 ? 'bg-amber-400 border-amber-600' :
+        skill_state[skillValue] === 2 ? 'bg-amber-800 border-amber-400' : ''
     ]">
     <div class="flex flex-row items-center justify-between"
          @click="random_save">
-        <div class="font-stretch-ultra-condensed text-xs font-bold text-center">
+        <div class="font-stretch-ultra-condensed text-xl font-bold text-center">
             {{ skillName }}
         </div>
         <div class="">
