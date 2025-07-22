@@ -1,12 +1,9 @@
 from django.core.management import BaseCommand
 
 from background.models import Background, SkillsProficiency, Feature, FeatureOption, Trait, Ideal, Bond, Flaw
-from race.models import SmallFeaturesRace, RaceBackground, Race
 
 
 class Command(BaseCommand):
-    help = 'Добавление заклинаний'
-
     def handle(self, *args, **options):
         background,_ = Background.objects.get_or_create(
             name="Артист",
